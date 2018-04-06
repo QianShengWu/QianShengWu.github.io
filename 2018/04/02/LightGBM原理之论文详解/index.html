@@ -29,17 +29,17 @@
 <meta property="og:site_name" content="wuqiansheng">
 <meta property="og:description" content="提升树是利用加模型与前向分布算法实现学习的优化过程，它有一些高效实现，如XGBoost, pGBRT，GBDT等。其中GBDT采用负梯度作为划分的指标（信息增益），XGBoost则利用到二阶导数。他们共同的不足是，计算信息增益需要扫描所有样本，从而找到最优划分点。在面对大量数据或者特征维度很高时，他们的效率和扩展性很难使人满意。微软开源的LightGBM（基于GBDT的）则很好的解决这些问题，它主">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2018/04/02/LightGBM原理之论文详解/GOSS.png">
-<meta property="og:image" content="http://yoursite.com/2018/04/02/LightGBM原理之论文详解/3.1.png">
-<meta property="og:image" content="http://yoursite.com/2018/04/02/LightGBM原理之论文详解/3.2.png">
+<meta property="og:image" content="http://yoursite.com/images/LightGBM/GOSS.png">
+<meta property="og:image" content="http://yoursite.com/images/LightGBM/3.1.png">
+<meta property="og:image" content="http://yoursite.com/images/LightGBM/3.2.png">
 <meta property="og:image" content="http://lightgbm.apachecn.org/cn/latest/_images/level-wise.png">
 <meta property="og:image" content="http://lightgbm.apachecn.org/cn/latest/_images/leaf-wise.png">
-<meta property="og:image" content="http://yoursite.com/2018/04/02/LightGBM原理之论文详解/4.png">
-<meta property="og:updated_time" content="2018-04-02T09:29:20.000Z">
+<meta property="og:image" content="http://yoursite.com/images/LightGBM/4.png">
+<meta property="og:updated_time" content="2018-04-06T11:10:39.906Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LightGBM原理之论文详解">
 <meta name="twitter:description" content="提升树是利用加模型与前向分布算法实现学习的优化过程，它有一些高效实现，如XGBoost, pGBRT，GBDT等。其中GBDT采用负梯度作为划分的指标（信息增益），XGBoost则利用到二阶导数。他们共同的不足是，计算信息增益需要扫描所有样本，从而找到最优划分点。在面对大量数据或者特征维度很高时，他们的效率和扩展性很难使人满意。微软开源的LightGBM（基于GBDT的）则很好的解决这些问题，它主">
-<meta name="twitter:image" content="http://yoursite.com/2018/04/02/LightGBM原理之论文详解/GOSS.png">
+<meta name="twitter:image" content="http://yoursite.com/images/LightGBM/GOSS.png">
     
         <link rel="alternate" type="application/atom+xml" title="wuqiansheng" href="/atom.xml">
     
@@ -96,13 +96,6 @@
             </li>
         
             <li class="waves-block waves-effect">
-              <a href="/categories"  >
-                <i class="icon icon-lg icon-th-list"></i>
-                Categories
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
               <a href="https://github.com/QianShengWu" target="_blank" >
                 <i class="icon icon-lg icon-github"></i>
                 Github
@@ -110,9 +103,9 @@
             </li>
         
             <li class="waves-block waves-effect">
-              <a href="/custom"  >
+              <a href="/friends" target="_blank" >
                 <i class="icon icon-lg icon-link"></i>
-                测试
+                友链
               </a>
             </li>
         
@@ -207,11 +200,12 @@
 <p>为了减少特征，通常做的是PCA降维，但是这些方法都假设特征是冗余的，这并不一直正确。</p>
 <p>一般大型数据集都是稀疏的，基于pre-sorted的GBDT可以通过忽略零值特征，从而减少训练代价。但是，基于histogram的则没有针对稀疏特性的优化方案，它只是计算累加值，不管你是0还是非0。所以，利用稀疏性的GBDT是很必要的。</p>
 <p>接下来就要细细说说这两个算法。</p>
+<a id="more"></a>
 <h4 id="GOSS"><a href="#GOSS" class="headerlink" title="GOSS"></a>GOSS</h4><p>在AdaBoost中采用权重很好诠释了样本的重要性，GBDT没有这种权重，但是我们注意到每个数据样本的梯度可以被用来做采样的信息。也就是，如果一个样本的梯度小，那么表明这个样本已经训练好了，它的训练误差很小了，我们可以丢弃这些数据。当然，改变数据分布会造成模型的精度损失。GOSS则通过保存大梯度样本，随机选取小梯度样本，并为其弥补上一个常数权重。这样，GOSS更关注训练不足的样本，同时也不会改变原始数据太多。</p>
 <p>具体算法如下：<br><figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
-                    <img src=".\GOSS.png" alt="GOSS" title="">
+                    <img src="/images/LightGBM/GOSS.png" alt="GOSS" title="">
                 </div>
                 <div class="image-caption">GOSS</div>
             </figure></p>
@@ -220,7 +214,7 @@
 <figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
-                    <img src=".\3.1.png" alt="3.1" title="">
+                    <img src="/images/LightGBM/3.1.png" alt="3.1" title="">
                 </div>
                 <div class="image-caption">3.1</div>
             </figure>
@@ -228,7 +222,7 @@
 <figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
-                    <img src=".\3.2.png" alt="3.2" title="">
+                    <img src="/images/LightGBM/3.2.png" alt="3.2" title="">
                 </div>
                 <div class="image-caption">3.2</div>
             </figure>
@@ -261,7 +255,7 @@
 <figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
-                    <img src=".\4.png" alt="4" title="">
+                    <img src="/images/LightGBM/4.png" alt="4" title="">
                 </div>
                 <div class="image-caption">4</div>
             </figure>
@@ -277,7 +271,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2018-04-02T09:29:20.000Z" itemprop="dateUpdated">2018-04-02 17:29:20</time>
+    最后更新时间：<time datetime="2018-04-06T11:10:39.906Z" itemprop="dateUpdated">2018-04-06 19:10:39</time>
 </span><br>
 
 
@@ -323,7 +317,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2018/04/02/LightGBM原理之论文详解/&title=《LightGBM原理之论文详解》 — wuqiansheng&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2018/04/02/LightGBM原理之论文详解/&title=《LightGBM原理之论文详解》 — wuqiansheng&source=提升树是利用加模型与前向分布算法实现学习的优化过程，它有一些高效实现，如XGBoost, pGBRT，GBDT等。其中GBDT采用负梯度作为划分的指标（信..." data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -358,21 +352,14 @@
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between">
-  
-    <div class="waves-block waves-effect prev">
-      <a href="/2018/04/06/test/" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">test</h4>
-      </a>
-    </div>
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
   
 
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/04/03/Tensorflow-Solve-Mnist-2/" id="post-next" class="post-nav-link">
+      <a href="/2017/12/22/剑指offer题解/" id="post-next" class="post-nav-link">
         <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">Tensorflow Solve Mnist 2</h4>
+        <h4 class="title">牛客网《剑指Offer》66题 题解</h4>
       </a>
     </div>
   
@@ -413,7 +400,7 @@
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <h3 class="reward-title">
         <i class="icon icon-quote-left"></i>
-        谢谢大爷~
+        谢谢支持~
         <i class="icon icon-quote-right"></i>
     </h3>
     <div class="reward-content">
@@ -460,10 +447,9 @@
         </p>
     </div>
     <div class="bottom">
-        <p><span>wqs &copy; 2014 - 2018</span>
+        <p><span>wqs &copy; 2015 - 2018</span>
             <span>
                 
-                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
             </span>
         </p>
     </div>
@@ -488,7 +474,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2018/04/02/LightGBM原理之论文详解/&title=《LightGBM原理之论文详解》 — wuqiansheng&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2018/04/02/LightGBM原理之论文详解/&title=《LightGBM原理之论文详解》 — wuqiansheng&source=提升树是利用加模型与前向分布算法实现学习的优化过程，它有一些高效实现，如XGBoost, pGBRT，GBDT等。其中GBDT采用负梯度作为划分的指标（信..." data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -551,6 +537,27 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
 
 
 
@@ -563,10 +570,10 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
     var OriginTitile = document.title, titleTime;
     document.addEventListener('visibilitychange', function() {
         if (document.hidden) {
-            document.title = '哈哈';
+            document.title = '一路走好！';
             clearTimeout(titleTime);
         } else {
-            document.title = '(つェ⊂)咦!又好了!';
+            document.title = '欢迎再来!';
             titleTime = setTimeout(function() {
                 document.title = OriginTitile;
             },2000);

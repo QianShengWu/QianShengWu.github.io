@@ -84,13 +84,6 @@
             </li>
         
             <li class="waves-block waves-effect">
-              <a href="/categories"  >
-                <i class="icon icon-lg icon-th-list"></i>
-                Categories
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
               <a href="https://github.com/QianShengWu" target="_blank" >
                 <i class="icon icon-lg icon-github"></i>
                 Github
@@ -98,9 +91,9 @@
             </li>
         
             <li class="waves-block waves-effect">
-              <a href="/custom"  >
+              <a href="/friends" target="_blank" >
                 <i class="icon icon-lg icon-link"></i>
-                测试
+                友链
               </a>
             </li>
         
@@ -181,10 +174,12 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        首先同一采用utf-8
-1.数据库属性改为utf-8必要时更改mysql的配置文件：default-character-set=utf8character-set-server=utf8
-2.连接数据库：jdbc:mysql://localhost:3306/db_bug?useUnicode=true&amp;characterEncoding=utf8
-3.request中文乱码：get...
+        <p>首先同一采用utf-8</p>
+<p>1.数据库属性改为utf-8<br>必要时更改mysql的配置文件：<br>default-character-set=utf8<br>character-set-server=utf8</p>
+<p>2.连接数据库：jdbc:mysql://localhost:3306/db_bug?useUnicode=true&amp;characterEncoding=utf8</p>
+<p>3.request中文乱码：<br>get请求的编码方式为:ISO-8859-1<br>doGet方法：例子：String spotName=new String(request.getParameter(“spotName”).getBytes(“ISO-8859-1”),”UTF-8”);<br>doPost方法:request.setCharacterEncoding(“UTF-8”);</p>
+<p>4.response中文乱码：response.setCharacterEncoding(“UTF-8”);</p>
+
     
 
         <a href="/2016/04/06/JavaWeb-Mysql/" class="post-more waves-effect waves-button">
@@ -229,14 +224,29 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Environment
-Python3.X
-Django1.9.X
-Sublime Text 3
+        <h1 id="Environment"><a href="#Environment" class="headerlink" title="Environment"></a>Environment</h1><ul>
+<li>Python3.X</li>
+<li>Django1.9.X</li>
+<li>Sublime Text 3</li>
+</ul>
+<p>#Usage</p>
+<p>You can use the example by doing step by step below:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/wqs123/my_blog.git</span><br><span class="line">$ cd my_blog</span><br><span class="line">$ pip install -r requirement.txt</span><br><span class="line">$ python manage.py runserver</span><br></pre></td></tr></table></figure>
+<p>Then you will  see<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Performing system checks...</span><br><span class="line"></span><br><span class="line">System check identified no issues (0 silenced).</span><br><span class="line">March 18, 2016 - 19:40:42</span><br><span class="line">Django version 1.9, using settings &apos;my_blog.settings&apos;</span><br><span class="line">Starting development server at http://127.0.0.1:8000/</span><br><span class="line">Quit the server with CTRL-BREAK.</span><br></pre></td></tr></table></figure></p>
+<p>Now open browser and input  :  <a href="http://127.0.0.1:8000/article/" target="_blank" rel="noopener">http://127.0.0.1:8000/article/</a> ,you will see the main page like below:<br><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7xso5r.com2.z0.glb.clouddn.com/1458301520319.png" alt="Alt text" title="">
+                </div>
+                <div class="image-caption">Alt text</div>
+            </figure><br>and <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener">http://127.0.0.1:8000/admin/</a> you can see the admin page:<br><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7xso5r.com2.z0.glb.clouddn.com/1458301561606.png" alt="Alt text" title="">
+                </div>
+                <div class="image-caption">Alt text</div>
+            </figure></p>
 
-#Usage
-You can use the example by doing step by step below:
-1234$ git clone https://github.com/wqs123/my_blog.git$ cd my_blog$ pip install -r requi...
     
 
         <a href="/2016/04/06/My-Blog-With-Django/" class="post-more waves-effect waves-button">
@@ -287,10 +297,9 @@ You can use the example by doing step by step below:
         </p>
     </div>
     <div class="bottom">
-        <p><span>wqs &copy; 2014 - 2018</span>
+        <p><span>wqs &copy; 2015 - 2018</span>
             <span>
                 
-                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
             </span>
         </p>
     </div>
@@ -378,6 +387,27 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
 
 
 
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
 
 
 
@@ -390,10 +420,10 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
     var OriginTitile = document.title, titleTime;
     document.addEventListener('visibilitychange', function() {
         if (document.hidden) {
-            document.title = '哈哈';
+            document.title = '一路走好！';
             clearTimeout(titleTime);
         } else {
-            document.title = '(つェ⊂)咦!又好了!';
+            document.title = '欢迎再来!';
             titleTime = setTimeout(function() {
                 document.title = OriginTitile;
             },2000);

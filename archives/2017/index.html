@@ -84,13 +84,6 @@
             </li>
         
             <li class="waves-block waves-effect">
-              <a href="/categories"  >
-                <i class="icon icon-lg icon-th-list"></i>
-                Categories
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
               <a href="https://github.com/QianShengWu" target="_blank" >
                 <i class="icon icon-lg icon-github"></i>
                 Github
@@ -98,9 +91,9 @@
             </li>
         
             <li class="waves-block waves-effect">
-              <a href="/custom"  >
+              <a href="/friends" target="_blank" >
                 <i class="icon icon-lg icon-link"></i>
-                测试
+                友链
               </a>
             </li>
         
@@ -153,6 +146,42 @@
 
     
             
+            <h3 class="archive-separator">十二月, 2017</h3>
+            <div class="waterfall">
+    
+
+        <div class="waterfall-item">
+  <article class="article-card archive-article">
+    <div class="post-meta">
+      <time class="post-time" title="2017-12-22 19:12:11" datetime="2017-12-22T11:12:11.000Z"  itemprop="datePublished">2017-12-22</time>
+
+      
+
+
+    </div>
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/12/22/剑指offer题解/">牛客网《剑指Offer》66题 题解</a>
+    </h3>
+  
+
+
+
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/剑指Offer/">剑指Offer</a></li></ul>
+
+    </div>
+    
+  </article>
+</div>
+
+    
+            </div> 
             <h3 class="archive-separator">四月, 2017</h3>
             <div class="waterfall">
     
@@ -282,10 +311,9 @@
         </p>
     </div>
     <div class="bottom">
-        <p><span>wqs &copy; 2014 - 2018</span>
+        <p><span>wqs &copy; 2015 - 2018</span>
             <span>
                 
-                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
             </span>
         </p>
     </div>
@@ -373,6 +401,27 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
 
 
 
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
 
 
 
@@ -385,10 +434,10 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
     var OriginTitile = document.title, titleTime;
     document.addEventListener('visibilitychange', function() {
         if (document.hidden) {
-            document.title = '哈哈';
+            document.title = '一路走好！';
             clearTimeout(titleTime);
         } else {
-            document.title = '(つェ⊂)咦!又好了!';
+            document.title = '欢迎再来!';
             titleTime = setTimeout(function() {
                 document.title = OriginTitile;
             },2000);

@@ -89,13 +89,6 @@
             </li>
         
             <li class="waves-block waves-effect">
-              <a href="/categories"  >
-                <i class="icon icon-lg icon-th-list"></i>
-                Categories
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
               <a href="https://github.com/QianShengWu" target="_blank" >
                 <i class="icon icon-lg icon-github"></i>
                 Github
@@ -103,9 +96,9 @@
             </li>
         
             <li class="waves-block waves-effect">
-              <a href="/custom"  >
+              <a href="/friends" target="_blank" >
                 <i class="icon icon-lg icon-link"></i>
-                测试
+                友链
               </a>
             </li>
         
@@ -347,7 +340,7 @@
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <h3 class="reward-title">
         <i class="icon icon-quote-left"></i>
-        谢谢大爷~
+        谢谢支持~
         <i class="icon icon-quote-right"></i>
     </h3>
     <div class="reward-content">
@@ -394,10 +387,9 @@
         </p>
     </div>
     <div class="bottom">
-        <p><span>wqs &copy; 2014 - 2018</span>
+        <p><span>wqs &copy; 2015 - 2018</span>
             <span>
                 
-                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
             </span>
         </p>
     </div>
@@ -487,6 +479,27 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
 
 
 
@@ -499,10 +512,10 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
     var OriginTitile = document.title, titleTime;
     document.addEventListener('visibilitychange', function() {
         if (document.hidden) {
-            document.title = '哈哈';
+            document.title = '一路走好！';
             clearTimeout(titleTime);
         } else {
-            document.title = '(つェ⊂)咦!又好了!';
+            document.title = '欢迎再来!';
             titleTime = setTimeout(function() {
                 document.title = OriginTitile;
             },2000);
