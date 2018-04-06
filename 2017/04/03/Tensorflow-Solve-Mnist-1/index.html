@@ -21,18 +21,18 @@
     
     
     <meta name="keywords" content="tensorflow,python">
-    <meta name="description" content="单层神经网络解决MNIST识别12345678910111213141516171819202122232425import tensorflow as tffrom tensorflow.examples.tutorials.mnist import input_datamnist = input_data.read_data_sets(&quot;MNIST_data/&quot;, one_hot=True)x">
+    <meta name="description" content="单层神经网络解决MNIST识别 12345678910111213141516171819202122232425import tensorflow as tffrom tensorflow.examples.tutorials.mnist import input_datamnist = input_data.read_data_sets(&quot;MNIST_data/&quot;, one_hot=True">
 <meta name="keywords" content="tensorflow,python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tensorflow Solve Mnist 1">
 <meta property="og:url" content="http://yoursite.com/2017/04/03/Tensorflow-Solve-Mnist-1/index.html">
 <meta property="og:site_name" content="wuqiansheng">
-<meta property="og:description" content="单层神经网络解决MNIST识别12345678910111213141516171819202122232425import tensorflow as tffrom tensorflow.examples.tutorials.mnist import input_datamnist = input_data.read_data_sets(&quot;MNIST_data/&quot;, one_hot=True)x">
+<meta property="og:description" content="单层神经网络解决MNIST识别 12345678910111213141516171819202122232425import tensorflow as tffrom tensorflow.examples.tutorials.mnist import input_datamnist = input_data.read_data_sets(&quot;MNIST_data/&quot;, one_hot=True">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2017-04-03T07:37:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tensorflow Solve Mnist 1">
-<meta name="twitter:description" content="单层神经网络解决MNIST识别12345678910111213141516171819202122232425import tensorflow as tffrom tensorflow.examples.tutorials.mnist import input_datamnist = input_data.read_data_sets(&quot;MNIST_data/&quot;, one_hot=True)x">
+<meta name="twitter:description" content="单层神经网络解决MNIST识别 12345678910111213141516171819202122232425import tensorflow as tffrom tensorflow.examples.tutorials.mnist import input_datamnist = input_data.read_data_sets(&quot;MNIST_data/&quot;, one_hot=True">
     
         <link rel="alternate" type="application/atom+xml" title="wuqiansheng" href="/atom.xml">
     
@@ -96,7 +96,7 @@
             </li>
         
             <li class="waves-block waves-effect">
-              <a href="/friends" target="_blank" >
+              <a href="/friends"  >
                 <i class="icon icon-lg icon-link"></i>
                 友链
               </a>
@@ -158,7 +158,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#单层神经网络解决MNIST识别"><span class="post-toc-number">1.</span> <span class="post-toc-text">单层神经网络解决MNIST识别</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#单层神经网络解决mnist识别"><span class="post-toc-number">1.</span> <span class="post-toc-text">单层神经网络解决MNIST识别</span></a></li></ol>
         </nav>
     </aside>
 
@@ -182,7 +182,8 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h4 id="单层神经网络解决MNIST识别"><a href="#单层神经网络解决MNIST识别" class="headerlink" title="单层神经网络解决MNIST识别"></a>单层神经网络解决MNIST识别</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line">mnist = input_data.read_data_sets(<span class="string">"MNIST_data/"</span>, one_hot=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">x = tf.placeholder(<span class="string">"float"</span>, [<span class="keyword">None</span>, <span class="number">784</span>])</span><br><span class="line">W = tf.Variable(tf.zeros([<span class="number">784</span>,<span class="number">10</span>]))</span><br><span class="line">b = tf.Variable(tf.zeros([<span class="number">10</span>]))</span><br><span class="line">y = tf.nn.softmax(tf.matmul(x,W) + b)</span><br><span class="line"></span><br><span class="line">y_ = tf.placeholder(<span class="string">"float"</span>, [<span class="keyword">None</span>,<span class="number">10</span>])</span><br><span class="line">cross_entropy = -tf.reduce_sum(y_*tf.log(y))</span><br><span class="line">train_step = tf.train.GradientDescentOptimizer(<span class="number">0.01</span>).minimize(cross_entropy)</span><br><span class="line"></span><br><span class="line">init = tf.initialize_all_variables()</span><br><span class="line">sess = tf.Session()</span><br><span class="line">sess.run(init)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">  batch_xs, batch_ys = mnist.train.next_batch(<span class="number">100</span>)</span><br><span class="line">  sess.run(train_step, feed_dict=&#123;x: batch_xs, y_: batch_ys&#125;)</span><br><span class="line"></span><br><span class="line">correct_prediction = tf.equal(tf.argmax(y,<span class="number">1</span>), tf.argmax(y_,<span class="number">1</span>))</span><br><span class="line">accuracy = tf.reduce_mean(tf.cast(correct_prediction, <span class="string">"float"</span>))</span><br><span class="line">print(sess.run(accuracy, feed_dict=&#123;x: mnist.test.images, y_: mnist.test.labels&#125;))</span><br></pre></td></tr></table></figure>
+            <h4 id="单层神经网络解决mnist识别">单层神经网络解决MNIST识别</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line">mnist = input_data.read_data_sets(<span class="string">"MNIST_data/"</span>, one_hot=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">x = tf.placeholder(<span class="string">"float"</span>, [<span class="keyword">None</span>, <span class="number">784</span>])</span><br><span class="line">W = tf.Variable(tf.zeros([<span class="number">784</span>,<span class="number">10</span>]))</span><br><span class="line">b = tf.Variable(tf.zeros([<span class="number">10</span>]))</span><br><span class="line">y = tf.nn.softmax(tf.matmul(x,W) + b)</span><br><span class="line"></span><br><span class="line">y_ = tf.placeholder(<span class="string">"float"</span>, [<span class="keyword">None</span>,<span class="number">10</span>])</span><br><span class="line">cross_entropy = -tf.reduce_sum(y_*tf.log(y))</span><br><span class="line">train_step = tf.train.GradientDescentOptimizer(<span class="number">0.01</span>).minimize(cross_entropy)</span><br><span class="line"></span><br><span class="line">init = tf.initialize_all_variables()</span><br><span class="line">sess = tf.Session()</span><br><span class="line">sess.run(init)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">  batch_xs, batch_ys = mnist.train.next_batch(<span class="number">100</span>)</span><br><span class="line">  sess.run(train_step, feed_dict=&#123;x: batch_xs, y_: batch_ys&#125;)</span><br><span class="line"></span><br><span class="line">correct_prediction = tf.equal(tf.argmax(y,<span class="number">1</span>), tf.argmax(y_,<span class="number">1</span>))</span><br><span class="line">accuracy = tf.reduce_mean(tf.cast(correct_prediction, <span class="string">"float"</span>))</span><br><span class="line">print(sess.run(accuracy, feed_dict=&#123;x: mnist.test.images, y_: mnist.test.labels&#125;))</span><br></pre></td></tr></table></figure>
 
         </div>
 
@@ -196,7 +197,7 @@
 
 
         
-        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2017/04/03/Tensorflow-Solve-Mnist-1/" target="_blank" rel="external">http://yoursite.com/2017/04/03/Tensorflow-Solve-Mnist-1/</a>
+        本文链接：<a href="/2017/04/03/Tensorflow-Solve-Mnist-1/" target="_blank" rel="external">http://yoursite.com/2017/04/03/Tensorflow-Solve-Mnist-1/</a>
         
     </div>
     

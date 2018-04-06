@@ -21,18 +21,18 @@
     
     
     <meta name="keywords" content="hexo">
-    <meta name="description" content="我使用的主题是yilia，在此以此为例。 第一步: 编写打赏模块主题文件 layout\_partial 下新建 donate.ejs , 内容如下 : 123456789101112131415161718192021222324&amp;lt;! -- 添加捐赠图标 --&amp;gt;&amp;lt;div class =&amp;quot;post-donate&amp;quot;&amp;gt;    &amp;lt;div id=&amp;quot">
+    <meta name="description" content="我使用的主题是yilia，在此以此为例。 第一步: 编写打赏模块 主题文件 layout\_partial 下新建 donate.ejs , 内容如下 : 123456789101112131415161718192021222324&amp;lt;! -- 添加捐赠图标 --&amp;gt;&amp;lt;div class =&amp;quot;post-donate&amp;quot;&amp;gt;    &amp;lt;div id=&amp;">
 <meta name="keywords" content="hexo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="博客添加打赏功能">
 <meta property="og:url" content="http://yoursite.com/2016/09/23/博客添加打赏功能/index.html">
 <meta property="og:site_name" content="wuqiansheng">
-<meta property="og:description" content="我使用的主题是yilia，在此以此为例。 第一步: 编写打赏模块主题文件 layout\_partial 下新建 donate.ejs , 内容如下 : 123456789101112131415161718192021222324&amp;lt;! -- 添加捐赠图标 --&amp;gt;&amp;lt;div class =&amp;quot;post-donate&amp;quot;&amp;gt;    &amp;lt;div id=&amp;quot">
+<meta property="og:description" content="我使用的主题是yilia，在此以此为例。 第一步: 编写打赏模块 主题文件 layout\_partial 下新建 donate.ejs , 内容如下 : 123456789101112131415161718192021222324&amp;lt;! -- 添加捐赠图标 --&amp;gt;&amp;lt;div class =&amp;quot;post-donate&amp;quot;&amp;gt;    &amp;lt;div id=&amp;">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2016-09-23T11:42:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="博客添加打赏功能">
-<meta name="twitter:description" content="我使用的主题是yilia，在此以此为例。 第一步: 编写打赏模块主题文件 layout\_partial 下新建 donate.ejs , 内容如下 : 123456789101112131415161718192021222324&amp;lt;! -- 添加捐赠图标 --&amp;gt;&amp;lt;div class =&amp;quot;post-donate&amp;quot;&amp;gt;    &amp;lt;div id=&amp;quot">
+<meta name="twitter:description" content="我使用的主题是yilia，在此以此为例。 第一步: 编写打赏模块 主题文件 layout\_partial 下新建 donate.ejs , 内容如下 : 123456789101112131415161718192021222324&amp;lt;! -- 添加捐赠图标 --&amp;gt;&amp;lt;div class =&amp;quot;post-donate&amp;quot;&amp;gt;    &amp;lt;div id=&amp;">
     
         <link rel="alternate" type="application/atom+xml" title="wuqiansheng" href="/atom.xml">
     
@@ -96,7 +96,7 @@
             </li>
         
             <li class="waves-block waves-effect">
-              <a href="/friends" target="_blank" >
+              <a href="/friends"  >
                 <i class="icon icon-lg icon-link"></i>
                 友链
               </a>
@@ -183,15 +183,22 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <p>我使用的主题是yilia，在此以此为例。</p>
-<h4 id="第一步-编写打赏模块"><a href="#第一步-编写打赏模块" class="headerlink" title="第一步: 编写打赏模块"></a>第一步: 编写打赏模块</h4><p>主题文件 layout\_partial 下新建 donate.ejs , 内容如下 :</p>
+<h4 id="第一步-编写打赏模块">第一步: 编写打赏模块</h4>
+<p>主题文件 layout\_partial 下新建 donate.ejs , 内容如下 :</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;! -- 添加捐赠图标 --&gt;</span><br><span class="line">&lt;div class =&quot;post-donate&quot;&gt;</span><br><span class="line">    &lt;div id=&quot;donate_board&quot; class=&quot;donate_bar center&quot;&gt;</span><br><span class="line">        &lt;a id=&quot;btn_donate&quot; class=&quot;btn_donate&quot; href=&quot;javascript:;&quot; title=&quot;打赏&quot;&gt;&lt;/a&gt;</span><br><span class="line">        &lt;span class=&quot;donate_txt&quot;&gt;</span><br><span class="line">           &amp;uarr;&lt;br&gt;</span><br><span class="line">		   &lt;%=theme.donate_message%&gt;</span><br><span class="line">        &lt;/span&gt;</span><br><span class="line">        &lt;br&gt;</span><br><span class="line">      &lt;/div&gt;  </span><br><span class="line">	&lt;div id=&quot;donate_guide&quot; class=&quot;donate_bar center hidden&quot; &gt;</span><br><span class="line">		&lt;!-- 支付宝打赏图案 --&gt;</span><br><span class="line">		&lt;img src=&quot;支付宝支付图片链接&quot; alt=&quot;支付宝打赏&quot;&gt; </span><br><span class="line">		&lt;!-- 微信打赏图案 --&gt;</span><br><span class="line">		&lt;img src=&quot;微信支付图片链接&quot; alt=&quot;微信打赏&quot;&gt;  </span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">	&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">		document.getElementById(&apos;btn_donate&apos;).onclick = function()&#123;</span><br><span class="line">			$(&apos;#donate_board&apos;).addClass(&apos;hidden&apos;);</span><br><span class="line">			$(&apos;#donate_guide&apos;).removeClass(&apos;hidden&apos;);</span><br><span class="line">		&#125;</span><br><span class="line">	&lt;/script&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;! -- 添加捐赠图标 --&gt;</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
-<h4 id="第二步-设置大赏模块的样式"><a href="#第二步-设置大赏模块的样式" class="headerlink" title="第二步 : 设置大赏模块的样式"></a>第二步 : 设置大赏模块的样式</h4><p>source\css\_partial 下新建 donate.styl 输入如下内容 :</p>
+<h4 id="第二步-设置大赏模块的样式">第二步 : 设置大赏模块的样式</h4>
+<p>source\css\_partial 下新建 donate.styl 输入如下内容 :</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.donate_bar</span> &#123;</span><br><span class="line">	<span class="attribute">text-align</span>: center;</span><br><span class="line">	<span class="attribute">margin-top</span>: <span class="number">5%</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.donate_bar</span> <span class="selector-tag">a</span><span class="selector-class">.btn_donate</span> &#123;</span><br><span class="line">	<span class="attribute">display</span>: inline-block;</span><br><span class="line">	<span class="attribute">width</span>: <span class="number">82px</span>;</span><br><span class="line">	<span class="attribute">height</span>: <span class="number">82px</span>;</span><br><span class="line">	<span class="attribute">margin-left</span>: auto;</span><br><span class="line">	<span class="attribute">margin-right</span>: auto;</span><br><span class="line">	<span class="attribute">background</span>: <span class="built_in">url</span>(http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif)<span class="built_in">no-repeat</span>;</span><br><span class="line">	<span class="attribute">-webkit-transition</span>: background <span class="number">0s</span>;</span><br><span class="line">	<span class="attribute">-moz-transition</span>: background <span class="number">0s</span>;</span><br><span class="line">	<span class="attribute">-o-transition</span>: background <span class="number">0s</span>;</span><br><span class="line">	<span class="attribute">-ms-transition</span>: background <span class="number">0s</span>;</span><br><span class="line">	<span class="attribute">transition</span>: background <span class="number">0s</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.donate_bar</span> <span class="selector-tag">a</span><span class="selector-class">.btn_donate</span><span class="selector-pseudo">:hover</span> &#123;</span><br><span class="line">	<span class="attribute">background-position</span>: <span class="number">0</span> -<span class="number">82px</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.donate_bar</span> <span class="selector-class">.donate_txt</span> &#123;</span><br><span class="line">	<span class="attribute">display</span>: block;</span><br><span class="line">	<span class="attribute">color</span>: <span class="number">#9d9d9d</span>;</span><br><span class="line">	<span class="attribute">font</span>: <span class="number">14px</span>/<span class="number">2</span> <span class="string">"Microsoft Yahei"</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.donate_bar</span><span class="selector-class">.hidden</span>&#123;</span><br><span class="line">	<span class="attribute">display</span>: none</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.post-donate</span>&#123;</span><br><span class="line">	<span class="attribute">margin-top</span>: <span class="number">80px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-id">#donate_guide</span>&#123;</span><br><span class="line">	<span class="attribute">height</span>: <span class="number">210px</span>;</span><br><span class="line">	<span class="attribute">width</span>: <span class="number">420px</span>;</span><br><span class="line">	<span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-id">#donate_guide</span> <span class="selector-tag">img</span>&#123;</span><br><span class="line">	<span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">	<span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>最后在 source\css\style.styl 中添加 @import  ‘_partial/donate’</p>
-<h5 id="第三步-将打赏模块整合到文章中"><a href="#第三步-将打赏模块整合到文章中" class="headerlink" title="第三步 : 将打赏模块整合到文章中"></a>第三步 : 将打赏模块整合到文章中</h5><p>在layout\_partial\article.ejs的 <article></article> 标签中添加 :</p>
+<p>最后在 source\css\style.styl 中添加 <span class="citation" data-cites="import">@import</span> ’_partial/donate’</p>
+<h5 id="第三步-将打赏模块整合到文章中">第三步 : 将打赏模块整合到文章中</h5>
+在layout\_partial\article.ejs的
+<article>
+</article>
+<p>标签中添加 :</p>
 <figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;% <span class="keyword">if</span> (!index &amp;&amp; theme.donate &amp;&amp; post.donate!=<span class="keyword">false</span>)&#123; %&gt;</span><br><span class="line">	&lt;%- partial(<span class="string">'donate'</span>) %&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br></pre></td></tr></table></figure>
-<h5 id="第四步-编写配置"><a href="#第四步-编写配置" class="headerlink" title="第四步 : 编写配置"></a>第四步 : 编写配置</h5><p>修改 _config.yml 如下:</p>
+<h5 id="第四步-编写配置">第四步 : 编写配置</h5>
+<p>修改 _config.yml 如下:</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#是否开启打赏功能</span><br><span class="line"><span class="selector-tag">donate</span>: <span class="selector-tag">true</span></span><br><span class="line">#打赏文案</span><br><span class="line"><span class="selector-tag">donate_message</span>: 欣赏此文？求鼓励，求支持！</span><br></pre></td></tr></table></figure>
 <p>Over.</p>
 
@@ -207,7 +214,7 @@
 
 
         
-        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2016/09/23/博客添加打赏功能/" target="_blank" rel="external">http://yoursite.com/2016/09/23/博客添加打赏功能/</a>
+        本文链接：<a href="/2016/09/23/博客添加打赏功能/" target="_blank" rel="external">http://yoursite.com/2016/09/23/博客添加打赏功能/</a>
         
     </div>
     
@@ -249,8 +256,8 @@
       </li>
       <li>
         <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2016/09/23/博客添加打赏功能/&title=《博客添加打赏功能》 — wuqiansheng&source=我使用的主题是yilia，在此以此为例。
-第一步: 编写打赏模块主题文件 layout\_partial 下新建 donate.ejs , 内容如下 :
-..." data-title=" QQ">
+第一步: 编写打赏模块
+主题文件 layout\_partial 下新建 donate.ejs , 内容如下..." data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -415,8 +422,8 @@
       </li>
       <li>
         <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2016/09/23/博客添加打赏功能/&title=《博客添加打赏功能》 — wuqiansheng&source=我使用的主题是yilia，在此以此为例。
-第一步: 编写打赏模块主题文件 layout\_partial 下新建 donate.ejs , 内容如下 :
-..." data-title=" QQ">
+第一步: 编写打赏模块
+主题文件 layout\_partial 下新建 donate.ejs , 内容如下..." data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
