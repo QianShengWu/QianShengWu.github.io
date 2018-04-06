@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>LightGBM原理之论文详解 | wuqiansheng</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="LightGBM,GBDT,GOSS,EFB">
+    <meta name="description" content="提升树是利用加模型与前向分布算法实现学习的优化过程，它有一些高效实现，如XGBoost, pGBRT，GBDT等。其中GBDT采用负梯度作为划分的指标（信息增益），XGBoost则利用到二阶导数。他们共同的不足是，计算信息增益需要扫描所有样本，从而找到最优划分点。在面对大量数据或者特征维度很高时，他们的效率和扩展性很难使人满意。微软开源的LightGBM（基于GBDT的）则很好的解决这些问题，它主">
+<meta name="keywords" content="LightGBM,GBDT,GOSS,EFB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LightGBM原理之论文详解">
+<meta property="og:url" content="http://yoursite.com/2018/04/02/LightGBM原理之论文详解/index.html">
+<meta property="og:site_name" content="wuqiansheng">
+<meta property="og:description" content="提升树是利用加模型与前向分布算法实现学习的优化过程，它有一些高效实现，如XGBoost, pGBRT，GBDT等。其中GBDT采用负梯度作为划分的指标（信息增益），XGBoost则利用到二阶导数。他们共同的不足是，计算信息增益需要扫描所有样本，从而找到最优划分点。在面对大量数据或者特征维度很高时，他们的效率和扩展性很难使人满意。微软开源的LightGBM（基于GBDT的）则很好的解决这些问题，它主">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2018/04/02/LightGBM原理之论文详解/GOSS.png">
+<meta property="og:image" content="http://yoursite.com/2018/04/02/LightGBM原理之论文详解/3.1.png">
+<meta property="og:image" content="http://yoursite.com/2018/04/02/LightGBM原理之论文详解/3.2.png">
+<meta property="og:image" content="http://lightgbm.apachecn.org/cn/latest/_images/level-wise.png">
+<meta property="og:image" content="http://lightgbm.apachecn.org/cn/latest/_images/leaf-wise.png">
+<meta property="og:image" content="http://yoursite.com/2018/04/02/LightGBM原理之论文详解/4.png">
+<meta property="og:updated_time" content="2018-04-02T09:29:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LightGBM原理之论文详解">
+<meta name="twitter:description" content="提升树是利用加模型与前向分布算法实现学习的优化过程，它有一些高效实现，如XGBoost, pGBRT，GBDT等。其中GBDT采用负梯度作为划分的指标（信息增益），XGBoost则利用到二阶导数。他们共同的不足是，计算信息增益需要扫描所有样本，从而找到最优划分点。在面对大量数据或者特征维度很高时，他们的效率和扩展性很难使人满意。微软开源的LightGBM（基于GBDT的）则很好的解决这些问题，它主">
+<meta name="twitter:image" content="http://yoursite.com/2018/04/02/LightGBM原理之论文详解/GOSS.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="wuqiansheng" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="http://7xso5r.com1.z0.glb.clouddn.com/avstar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">wqs</h5>
+          <a href="mailto:wuqiansheng@foxmail.com" title="wuqiansheng@foxmail.com" class="mail">wuqiansheng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/QianShengWu" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom"  >
+                <i class="icon icon-lg icon-link"></i>
+                测试
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">LightGBM原理之论文详解</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">LightGBM原理之论文详解</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-04-02T07:14:09.000Z" itemprop="datePublished" class="page-time">
+  2018-04-02
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#GOSS"><span class="post-toc-number">1.</span> <span class="post-toc-text">GOSS</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#Leaf-wise-Best-first-的决策树生长策略"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">Leaf-wise (Best-first) 的决策树生长策略</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-LightGBM原理之论文详解"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">LightGBM原理之论文详解</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-04-02 15:14:09" datetime="2018-04-02T07:14:09.000Z"  itemprop="datePublished">2018-04-02</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>提升树是利用加模型与前向分布算法实现学习的优化过程，它有一些高效实现，如XGBoost, pGBRT，GBDT等。其中GBDT采用负梯度作为划分的指标（信息增益），XGBoost则利用到二阶导数。他们共同的不足是，计算信息增益需要扫描所有样本，从而找到最优划分点。在面对大量数据或者特征维度很高时，他们的效率和扩展性很难使人满意。微软开源的LightGBM（基于GBDT的）则很好的解决这些问题，它主要包含两个算法：</p>
+<ol>
+<li>GOSS（从减少样本角度）：排除大部分小梯度的样本，仅用剩下的样本计算信息增益。</li>
+<li>EFB（从减少特征角度）：捆绑互斥特征，也就是他们很少同时取非零值（也就是用一个合成特征代替）。</li>
+</ol>
+<p>前言：</p>
+<p>GBDT是基于决策树的集成算法，采用前向分布算法，在每次迭代中，都是通过负梯度拟合残差，从而学习一颗决策树，最耗时的步骤就是找最优划分点。一种流行的方法就是预排序，核心是在已经排好序的特征值上枚举所有可能的特征点。另一种改进则是直方图算法，他把连续特征值划分到k个桶中取，划分点则在这k个点中选取。k&lt;&lt;d，所以在内存消耗和训练速度都更佳，且在实际的数据集上表明，离散化的分裂点对最终的精度影响并不大，甚至会好一些。原因在于决策树本身就是一个弱学习器，采用Histogram算法会起到正则化的效果，有效地防止模型的过拟合。LightGBM也是基于直方图的。</p>
+<p>为了减少训练数据，最直接的方法就是欠采样(down sample)，比如说过滤掉权重低于阈值的样本。SGB(随机梯度下降)采用的是在每轮迭代中选取随机子集进行训练弱分类器，AdaBoost则采用的是动态调整采样率。SGB可以应用到GBDT，但会影响精度，其他的则不能直接引入，因为GBDT中没有这种内在的权重。</p>
+<p>为了减少特征，通常做的是PCA降维，但是这些方法都假设特征是冗余的，这并不一直正确。</p>
+<p>一般大型数据集都是稀疏的，基于pre-sorted的GBDT可以通过忽略零值特征，从而减少训练代价。但是，基于histogram的则没有针对稀疏特性的优化方案，它只是计算累加值，不管你是0还是非0。所以，利用稀疏性的GBDT是很必要的。</p>
+<p>接下来就要细细说说这两个算法。</p>
+<h4 id="GOSS"><a href="#GOSS" class="headerlink" title="GOSS"></a>GOSS</h4><p>在AdaBoost中采用权重很好诠释了样本的重要性，GBDT没有这种权重，但是我们注意到每个数据样本的梯度可以被用来做采样的信息。也就是，如果一个样本的梯度小，那么表明这个样本已经训练好了，它的训练误差很小了，我们可以丢弃这些数据。当然，改变数据分布会造成模型的精度损失。GOSS则通过保存大梯度样本，随机选取小梯度样本，并为其弥补上一个常数权重。这样，GOSS更关注训练不足的样本，同时也不会改变原始数据太多。</p>
+<p>具体算法如下：<br><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src=".\GOSS.png" alt="GOSS" title="">
+                </div>
+                <div class="image-caption">GOSS</div>
+            </figure></p>
+<p>先根据梯度对样本进行排序，选取 a <em> 100% 的top样本，再从剩余数据中随机选取 b </em> 100% 的样本，并乘以 $$\frac{1-a}{b}$$的系数放大。</p>
+<p>以前计算特征j在d值点的信息增益是这样的：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src=".\3.1.png" alt="3.1" title="">
+                </div>
+                <div class="image-caption">3.1</div>
+            </figure>
+<p>现在是这样的：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src=".\3.2.png" alt="3.2" title="">
+                </div>
+                <div class="image-caption">3.2</div>
+            </figure>
+<p>通过证明，近似误差很好，很贴近使用所有数据的模型。</p>
+<p>这也解释了LightGBM的 leaf-wise 生成策略。</p>
+<h5 id="Leaf-wise-Best-first-的决策树生长策略"><a href="#Leaf-wise-Best-first-的决策树生长策略" class="headerlink" title="Leaf-wise (Best-first) 的决策树生长策略"></a>Leaf-wise (Best-first) 的决策树生长策略</h5><p>大部分决策树的学习算法通过 level(depth)-wise 策略生长树，如下图一样：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://lightgbm.apachecn.org/cn/latest/_images/level-wise.png" alt="_images/level-wise.png" title="">
+                </div>
+                <div class="image-caption">_images/level-wise.png</div>
+            </figure>
+<p>LightGBM 通过 leaf-wise (best-first)<a href="http://lightgbm.apachecn.org/cn/latest/Features.html#references" target="_blank" rel="noopener">[6]</a> 策略来生长树。它将选取具有最大 delta loss 的叶节点来生长。 当生长相同的 <code>#leaf</code>，leaf-wise 算法可以比 level-wise 算法减少更多的损失。</p>
+<p>当 <code>#data</code> 较小的时候，leaf-wise 可能会造成过拟合。 所以，LightGBM 可以利用额外的参数 <code>max_depth</code> 来限制树的深度并避免过拟合（树的生长仍然通过 leaf-wise 策略）。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://lightgbm.apachecn.org/cn/latest/_images/leaf-wise.png" alt="_images/leaf-wise.png" title="">
+                </div>
+                <div class="image-caption">_images/leaf-wise.png</div>
+            </figure>
+<p>####EFB</p>
+<p>高维数据一般是稀疏的，可以设计一种损失最小的特征减少方法。并且，在稀疏特征空间中，许多特征都是互斥的，也就是它们几乎不同时取非0值。因此，我们可以安全的把这些互斥特征绑到一起形成一个特征，然后基于这些特征束构建直方图，这样又可以加速了。</p>
+<p>有两个问题待解决，如何判断哪些特征该绑到一起，如何构建绑定。这是NP难的。</p>
+<p>首先，转换到图着色问题。G=(V, E)，把关联矩阵G的每一行看成特征，从而得到|V|个特征，互斥束就图中颜色相同的顶点。图中点就是特征，边代表两个特征不互斥，也就是特征之间的冲突。如果算法允许小的冲突，可以得到更小的特征束数量，计算效率会更高。证明发现随机污染一小部分特征值，最多影响训练精度 $$O([(1-\gamma)n]^{-2/3})$$，$$\gamma$$是所有束中冲突最大的。通过选取合适的$$\gamma$$，我们可以很好的在效率和精度之间寻找平衡。</p>
+<p>不互斥 =&gt; 可以同时取非0值，不能区分处理 =&gt; 冲突</p>
+<p>最后，排序就按照束的度来进行。当然，更一步优化是不够造图，直接<strong>根据非零值的数量排序</strong>，这个根据度排序很像，因为更多非0值意味着更高概率的冲突。更改了排序策略，可以避免重复。</p>
+<p>第二个问题，合并特征，从而降低训练复杂度，关键是我们可以确保原先特征值可以从特征束中识别出来。因为直方图存储的是特征的离散桶，而不是连续值，我们可以通过把互斥特征放到不同桶，从而构造一个特征束。这可以通过添加偏移实现。如，假设我们有2个特征在一个特征束中，原先特征A的范围为[0,10)，特征B的范围为[0,20)，我们给特征B加上一个偏移10，它就变成[10,30)，这样我们就可以执行安全的合并了，用特征束[0,30)代替特征A和B。具体算法如下。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src=".\4.png" alt="4" title="">
+                </div>
+                <div class="image-caption">4</div>
+            </figure>
+<p>EFB算法可以把很多特征绑到一起，形成更少的稠密特征束，这样可以避免对0特征值的无用的计算。加速计算直方图还可以用一个表记录数据的非0值。</p>
+<p>这样，LightGBM的论文基本讲解结束。</p>
+<p>其他具体特性（并行，类别特征处理等）详情见：</p>
+<p><a href="http://lightgbm.apachecn.org/cn/latest/Features.html" target="_blank" rel="noopener">http://lightgbm.apachecn.org/cn/latest/Features.html</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-02T09:29:20.000Z" itemprop="dateUpdated">2018-04-02 17:29:20</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2018/04/02/LightGBM原理之论文详解/" target="_blank" rel="external">http://yoursite.com/2018/04/02/LightGBM原理之论文详解/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="http://yoursite.com">
+            <img src="http://7xso5r.com1.z0.glb.clouddn.com/avstar.jpg" alt="wqs">
+            wqs
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/EFB/">EFB</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GBDT/">GBDT</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GOSS/">GOSS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LightGBM/">LightGBM</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2018/04/02/LightGBM原理之论文详解/&title=《LightGBM原理之论文详解》 — wuqiansheng&pic=http://7xso5r.com1.z0.glb.clouddn.com/avstar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2018/04/02/LightGBM原理之论文详解/&title=《LightGBM原理之论文详解》 — wuqiansheng&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2018/04/02/LightGBM原理之论文详解/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《LightGBM原理之论文详解》 — wuqiansheng&url=http://yoursite.com/2018/04/02/LightGBM原理之论文详解/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2018/04/02/LightGBM原理之论文详解/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/04/06/test/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">test</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/04/03/Tensorflow-Solve-Mnist-2/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Tensorflow Solve Mnist 2</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'wqs';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="http://7xso5r.com1.z0.glb.clouddn.com/weixin.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="http://7xso5r.com1.z0.glb.clouddn.com/weixin.png" data-alipay="http://7xso5r.com1.z0.glb.clouddn.com/zhifubao.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>wqs &copy; 2014 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2018/04/02/LightGBM原理之论文详解/&title=《LightGBM原理之论文详解》 — wuqiansheng&pic=http://7xso5r.com1.z0.glb.clouddn.com/avstar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2018/04/02/LightGBM原理之论文详解/&title=《LightGBM原理之论文详解》 — wuqiansheng&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2018/04/02/LightGBM原理之论文详解/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《LightGBM原理之论文详解》 — wuqiansheng&url=http://yoursite.com/2018/04/02/LightGBM原理之论文详解/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2018/04/02/LightGBM原理之论文详解/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2018/04/02/LightGBM原理之论文详解/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '哈哈';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>wuqiansheng</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2018-04-06T07:40:58.922Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>wqs</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>test</title>
+    <link href="http://yoursite.com/2018/04/06/test/"/>
+    <id>http://yoursite.com/2018/04/06/test/</id>
+    <published>2018-04-06T07:40:38.000Z</published>
+    <updated>2018-04-06T07:40:58.922Z</updated>
+    
+    <content type="html"><![CDATA[<p>sdfgsdgsdgsd</p><p>dfg<br>dfgdg<br>dfgg<br>dategd<br><a id="more"></a><br>fg<br>dfg</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;sdfgsdgsdgsd&lt;/p&gt;
+&lt;p&gt;dfg&lt;br&gt;dfgdg&lt;br&gt;dfgg&lt;br&gt;dategd&lt;br&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>LightGBM原理之论文详解</title>
+    <link href="http://yoursite.com/2018/04/02/LightGBM%E5%8E%9F%E7%90%86%E4%B9%8B%E8%AE%BA%E6%96%87%E8%AF%A6%E8%A7%A3/"/>
+    <id>http://yoursite.com/2018/04/02/LightGBM原理之论文详解/</id>
+    <published>2018-04-02T07:14:09.000Z</published>
+    <updated>2018-04-02T09:29:20.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>提升树是利用加模型与前向分布算法实现学习的优化过程，它有一些高效实现，如XGBoost, pGBRT，GBDT等。其中GBDT采用负梯度作为划分的指标（信息增益），XGBoost则利用到二阶导数。他们共同的不足是，计算信息增益需要扫描所有样本，从而找到最优划分点。在面对大量数据或者特征维度很高时，他们的效率和扩展性很难使人满意。微软开源的LightGBM（基于GBDT的）则很好的解决这些问题，它主要包含两个算法：</p><ol><li>GOSS（从减少样本角度）：排除大部分小梯度的样本，仅用剩下的样本计算信息增益。</li><li>EFB（从减少特征角度）：捆绑互斥特征，也就是他们很少同时取非零值（也就是用一个合成特征代替）。</li></ol><p>前言：</p><p>GBDT是基于决策树的集成算法，采用前向分布算法，在每次迭代中，都是通过负梯度拟合残差，从而学习一颗决策树，最耗时的步骤就是找最优划分点。一种流行的方法就是预排序，核心是在已经排好序的特征值上枚举所有可能的特征点。另一种改进则是直方图算法，他把连续特征值划分到k个桶中取，划分点则在这k个点中选取。k&lt;&lt;d，所以在内存消耗和训练速度都更佳，且在实际的数据集上表明，离散化的分裂点对最终的精度影响并不大，甚至会好一些。原因在于决策树本身就是一个弱学习器，采用Histogram算法会起到正则化的效果，有效地防止模型的过拟合。LightGBM也是基于直方图的。</p><p>为了减少训练数据，最直接的方法就是欠采样(down sample)，比如说过滤掉权重低于阈值的样本。SGB(随机梯度下降)采用的是在每轮迭代中选取随机子集进行训练弱分类器，AdaBoost则采用的是动态调整采样率。SGB可以应用到GBDT，但会影响精度，其他的则不能直接引入，因为GBDT中没有这种内在的权重。</p><p>为了减少特征，通常做的是PCA降维，但是这些方法都假设特征是冗余的，这并不一直正确。</p><p>一般大型数据集都是稀疏的，基于pre-sorted的GBDT可以通过忽略零值特征，从而减少训练代价。但是，基于histogram的则没有针对稀疏特性的优化方案，它只是计算累加值，不管你是0还是非0。所以，利用稀疏性的GBDT是很必要的。</p><p>接下来就要细细说说这两个算法。</p><h4 id="GOSS"><a href="#GOSS" class="headerlink" title="GOSS"></a>GOSS</h4><p>在AdaBoost中采用权重很好诠释了样本的重要性，GBDT没有这种权重，但是我们注意到每个数据样本的梯度可以被用来做采样的信息。也就是，如果一个样本的梯度小，那么表明这个样本已经训练好了，它的训练误差很小了，我们可以丢弃这些数据。当然，改变数据分布会造成模型的精度损失。GOSS则通过保存大梯度样本，随机选取小梯度样本，并为其弥补上一个常数权重。这样，GOSS更关注训练不足的样本，同时也不会改变原始数据太多。</p><p>具体算法如下：<br><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src=".\GOSS.png" alt="GOSS" title="">                </div>                <div class="image-caption">GOSS</div>            </figure></p><p>先根据梯度对样本进行排序，选取 a <em> 100% 的top样本，再从剩余数据中随机选取 b </em> 100% 的样本，并乘以 $$\frac{1-a}{b}$$的系数放大。</p><p>以前计算特征j在d值点的信息增益是这样的：</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src=".\3.1.png" alt="3.1" title="">                </div>                <div class="image-caption">3.1</div>            </figure><p>现在是这样的：</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src=".\3.2.png" alt="3.2" title="">                </div>                <div class="image-caption">3.2</div>            </figure><p>通过证明，近似误差很好，很贴近使用所有数据的模型。</p><p>这也解释了LightGBM的 leaf-wise 生成策略。</p><h5 id="Leaf-wise-Best-first-的决策树生长策略"><a href="#Leaf-wise-Best-first-的决策树生长策略" class="headerlink" title="Leaf-wise (Best-first) 的决策树生长策略"></a>Leaf-wise (Best-first) 的决策树生长策略</h5><p>大部分决策树的学习算法通过 level(depth)-wise 策略生长树，如下图一样：</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="http://lightgbm.apachecn.org/cn/latest/_images/level-wise.png" alt="_images/level-wise.png" title="">                </div>                <div class="image-caption">_images/level-wise.png</div>            </figure><p>LightGBM 通过 leaf-wise (best-first)<a href="http://lightgbm.apachecn.org/cn/latest/Features.html#references" target="_blank" rel="noopener">[6]</a> 策略来生长树。它将选取具有最大 delta loss 的叶节点来生长。 当生长相同的 <code>#leaf</code>，leaf-wise 算法可以比 level-wise 算法减少更多的损失。</p><p>当 <code>#data</code> 较小的时候，leaf-wise 可能会造成过拟合。 所以，LightGBM 可以利用额外的参数 <code>max_depth</code> 来限制树的深度并避免过拟合（树的生长仍然通过 leaf-wise 策略）。</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="http://lightgbm.apachecn.org/cn/latest/_images/leaf-wise.png" alt="_images/leaf-wise.png" title="">                </div>                <div class="image-caption">_images/leaf-wise.png</div>            </figure><p>####EFB</p><p>高维数据一般是稀疏的，可以设计一种损失最小的特征减少方法。并且，在稀疏特征空间中，许多特征都是互斥的，也就是它们几乎不同时取非0值。因此，我们可以安全的把这些互斥特征绑到一起形成一个特征，然后基于这些特征束构建直方图，这样又可以加速了。</p><p>有两个问题待解决，如何判断哪些特征该绑到一起，如何构建绑定。这是NP难的。</p><p>首先，转换到图着色问题。G=(V, E)，把关联矩阵G的每一行看成特征，从而得到|V|个特征，互斥束就图中颜色相同的顶点。图中点就是特征，边代表两个特征不互斥，也就是特征之间的冲突。如果算法允许小的冲突，可以得到更小的特征束数量，计算效率会更高。证明发现随机污染一小部分特征值，最多影响训练精度 $$O([(1-\gamma)n]^{-2/3})$$，$$\gamma$$是所有束中冲突最大的。通过选取合适的$$\gamma$$，我们可以很好的在效率和精度之间寻找平衡。</p><p>不互斥 =&gt; 可以同时取非0值，不能区分处理 =&gt; 冲突</p><p>最后，排序就按照束的度来进行。当然，更一步优化是不够造图，直接<strong>根据非零值的数量排序</strong>，这个根据度排序很像，因为更多非0值意味着更高概率的冲突。更改了排序策略，可以避免重复。</p><p>第二个问题，合并特征，从而降低训练复杂度，关键是我们可以确保原先特征值可以从特征束中识别出来。因为直方图存储的是特征的离散桶，而不是连续值，我们可以通过把互斥特征放到不同桶，从而构造一个特征束。这可以通过添加偏移实现。如，假设我们有2个特征在一个特征束中，原先特征A的范围为[0,10)，特征B的范围为[0,20)，我们给特征B加上一个偏移10，它就变成[10,30)，这样我们就可以执行安全的合并了，用特征束[0,30)代替特征A和B。具体算法如下。</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src=".\4.png" alt="4" title="">                </div>                <div class="image-caption">4</div>            </figure><p>EFB算法可以把很多特征绑到一起，形成更少的稠密特征束，这样可以避免对0特征值的无用的计算。加速计算直方图还可以用一个表记录数据的非0值。</p><p>这样，LightGBM的论文基本讲解结束。</p><p>其他具体特性（并行，类别特征处理等）详情见：</p><p><a href="http://lightgbm.apachecn.org/cn/latest/Features.html" target="_blank" rel="noopener">http://lightgbm.apachecn.org/cn/latest/Features.html</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;提升树是利用加模型与前向分布算法实现学习的优化过程，它有一些高效实现，如XGBoost, pGBRT，GBDT等。其中GBDT采用负梯度作为划分的指标（信息增益），XGBoost则利用到二阶导数。他们共同的不足是，计算信息增益需要扫描所有样本，从而找到最优划分点。在面对大量
+      
+    
+    </summary>
+    
+    
+      <category term="LightGBM" scheme="http://yoursite.com/tags/LightGBM/"/>
+    
+      <category term="GBDT" scheme="http://yoursite.com/tags/GBDT/"/>
+    
+      <category term="GOSS" scheme="http://yoursite.com/tags/GOSS/"/>
+    
+      <category term="EFB" scheme="http://yoursite.com/tags/EFB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Tensorflow Solve Mnist 2</title>
+    <link href="http://yoursite.com/2017/04/03/Tensorflow-Solve-Mnist-2/"/>
+    <id>http://yoursite.com/2017/04/03/Tensorflow-Solve-Mnist-2/</id>
+    <published>2017-04-03T07:29:26.000Z</published>
+    <updated>2017-04-03T07:30:22.000Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="卷积神经网络解决MNIST识别"><a href="#卷积神经网络解决MNIST识别" class="headerlink" title="卷积神经网络解决MNIST识别"></a>卷积神经网络解决MNIST识别</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># @Time    : 2017/4/3 11:40</span></span><br><span class="line"><span class="comment"># @Author  : wqs</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line"></span><br><span class="line">mnist = input_data.read_data_sets(<span class="string">"MNIST_data/"</span>, one_hot=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">x = tf.placeholder(<span class="string">"float"</span>, [<span class="keyword">None</span>, <span class="number">784</span>])</span><br><span class="line">y_ = tf.placeholder(<span class="string">"float"</span>, [<span class="keyword">None</span>,<span class="number">10</span>])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">weight_variable</span><span class="params">(shape)</span>:</span></span><br><span class="line">    initial = tf.truncated_normal(shape, stddev=<span class="number">0.1</span>)</span><br><span class="line">    <span class="keyword">return</span> tf.Variable(initial)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bias_variable</span><span class="params">(shape)</span>:</span></span><br><span class="line">    initial = tf.constant(<span class="number">0.1</span>, shape=shape)</span><br><span class="line">    <span class="keyword">return</span> tf.Variable(initial)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">conv2d</span><span class="params">(x, W)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> tf.nn.conv2d(x, W, strides=[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>], padding=<span class="string">'SAME'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">max_pool_2x2</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> tf.nn.max_pool(x, ksize=[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>],</span><br><span class="line">                          strides=[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>], padding=<span class="string">'SAME'</span>)</span><br><span class="line"></span><br><span class="line">W_conv1 = weight_variable([<span class="number">5</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">32</span>]) <span class="comment"># patch:5X5, 通道深度为1, 通道输出数目为30</span></span><br><span class="line">b_conv1 = bias_variable([<span class="number">32</span>])</span><br><span class="line"></span><br><span class="line">x_image = tf.reshape(x, [<span class="number">-1</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)</span><br><span class="line">h_pool1 = max_pool_2x2(h_conv1)</span><br><span class="line"></span><br><span class="line">W_conv2 = weight_variable([<span class="number">5</span>, <span class="number">5</span>, <span class="number">32</span>, <span class="number">64</span>])</span><br><span class="line">b_conv2 = bias_variable([<span class="number">64</span>])</span><br><span class="line"></span><br><span class="line">h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)</span><br><span class="line">h_pool2 = max_pool_2x2(h_conv2)</span><br><span class="line"></span><br><span class="line">W_fc1 = weight_variable([<span class="number">7</span> * <span class="number">7</span> * <span class="number">64</span>, <span class="number">1024</span>])</span><br><span class="line">b_fc1 = bias_variable([<span class="number">1024</span>])</span><br><span class="line"></span><br><span class="line">h_pool2_flat = tf.reshape(h_pool2, [<span class="number">-1</span>, <span class="number">7</span>*<span class="number">7</span>*<span class="number">64</span>])</span><br><span class="line">h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)</span><br><span class="line"></span><br><span class="line">keep_prob = tf.placeholder(<span class="string">"float"</span>)</span><br><span class="line">h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)</span><br><span class="line"></span><br><span class="line">W_fc2 = weight_variable([<span class="number">1024</span>, <span class="number">10</span>])</span><br><span class="line">b_fc2 = bias_variable([<span class="number">10</span>])</span><br><span class="line"></span><br><span class="line">y_conv=tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)</span><br><span class="line"></span><br><span class="line">sess = tf.Session()</span><br><span class="line">cross_entropy = tf.reduce_mean(</span><br><span class="line">    tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y_conv))</span><br><span class="line">train_step = tf.train.AdamOptimizer(<span class="number">1e-4</span>).minimize(cross_entropy)</span><br><span class="line">correct_prediction = tf.equal(tf.argmax(y_conv,<span class="number">1</span>), tf.argmax(y_,<span class="number">1</span>))</span><br><span class="line">accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))</span><br><span class="line">sess.run(tf.global_variables_initializer())</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2000</span>):</span><br><span class="line">  batch = mnist.train.next_batch(<span class="number">50</span>)</span><br><span class="line">  <span class="keyword">if</span> i%<span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">    train_accuracy = accuracy.eval(session=sess, feed_dict=&#123;</span><br><span class="line">        x:batch[<span class="number">0</span>], y_: batch[<span class="number">1</span>], keep_prob: <span class="number">1.0</span>&#125;)</span><br><span class="line">    print(<span class="string">"step %d, training accuracy %g"</span>%(i, train_accuracy))</span><br><span class="line">  train_step.run(session=sess, feed_dict=&#123;x: batch[<span class="number">0</span>], y_: batch[<span class="number">1</span>], keep_prob: <span class="number">0.5</span>&#125;)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"test accuracy %g"</span>%accuracy.eval(session=sess, feed_dict=&#123;</span><br><span class="line">    x: mnist.test.images, y_: mnist.test.labels, keep_prob: <span class="number">1.0</span>&#125;))</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;卷积神经网络解决MNIST识别&quot;&gt;&lt;a href=&quot;#卷积神经网络解决MNIST识别&quot; class=&quot;headerlink&quot; title=&quot;卷积神经网络解决MNIST识别&quot;&gt;&lt;/a&gt;卷积神经网络解决MNIST识别&lt;/h4&gt;&lt;figure class=&quot;highli
+      
+    
+    </summary>
+    
+    
+      <category term="tensorflow" scheme="http://yoursite.com/tags/tensorflow/"/>
+    
+      <category term="python" scheme="http://yoursite.com/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Tensorflow Solve Mnist 1</title>
+    <link href="http://yoursite.com/2017/04/03/Tensorflow-Solve-Mnist-1/"/>
+    <id>http://yoursite.com/2017/04/03/Tensorflow-Solve-Mnist-1/</id>
+    <published>2017-04-03T07:27:44.000Z</published>
+    <updated>2017-04-03T07:37:10.000Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="单层神经网络解决MNIST识别"><a href="#单层神经网络解决MNIST识别" class="headerlink" title="单层神经网络解决MNIST识别"></a>单层神经网络解决MNIST识别</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line">mnist = input_data.read_data_sets(<span class="string">"MNIST_data/"</span>, one_hot=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">x = tf.placeholder(<span class="string">"float"</span>, [<span class="keyword">None</span>, <span class="number">784</span>])</span><br><span class="line">W = tf.Variable(tf.zeros([<span class="number">784</span>,<span class="number">10</span>]))</span><br><span class="line">b = tf.Variable(tf.zeros([<span class="number">10</span>]))</span><br><span class="line">y = tf.nn.softmax(tf.matmul(x,W) + b)</span><br><span class="line"></span><br><span class="line">y_ = tf.placeholder(<span class="string">"float"</span>, [<span class="keyword">None</span>,<span class="number">10</span>])</span><br><span class="line">cross_entropy = -tf.reduce_sum(y_*tf.log(y))</span><br><span class="line">train_step = tf.train.GradientDescentOptimizer(<span class="number">0.01</span>).minimize(cross_entropy)</span><br><span class="line"></span><br><span class="line">init = tf.initialize_all_variables()</span><br><span class="line">sess = tf.Session()</span><br><span class="line">sess.run(init)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">  batch_xs, batch_ys = mnist.train.next_batch(<span class="number">100</span>)</span><br><span class="line">  sess.run(train_step, feed_dict=&#123;x: batch_xs, y_: batch_ys&#125;)</span><br><span class="line"></span><br><span class="line">correct_prediction = tf.equal(tf.argmax(y,<span class="number">1</span>), tf.argmax(y_,<span class="number">1</span>))</span><br><span class="line">accuracy = tf.reduce_mean(tf.cast(correct_prediction, <span class="string">"float"</span>))</span><br><span class="line">print(sess.run(accuracy, feed_dict=&#123;x: mnist.test.images, y_: mnist.test.labels&#125;))</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;单层神经网络解决MNIST识别&quot;&gt;&lt;a href=&quot;#单层神经网络解决MNIST识别&quot; class=&quot;headerlink&quot; title=&quot;单层神经网络解决MNIST识别&quot;&gt;&lt;/a&gt;单层神经网络解决MNIST识别&lt;/h4&gt;&lt;figure class=&quot;highli
+      
+    
+    </summary>
+    
+    
+      <category term="tensorflow" scheme="http://yoursite.com/tags/tensorflow/"/>
+    
+      <category term="python" scheme="http://yoursite.com/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>leetcode29. Divide Two Integers</title>
+    <link href="http://yoursite.com/2017/02/22/leetcode29-Divide-Two-Integers/"/>
+    <id>http://yoursite.com/2017/02/22/leetcode29-Divide-Two-Integers/</id>
+    <published>2017-02-22T11:12:11.000Z</published>
+    <updated>2017-02-22T11:23:20.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>Divide two integers without using multiplication, division and mod operator.</p><p>If it is overflow, return MAX_INT.</p></blockquote><p>题目链接：<a href="https://leetcode.com/problems/divide-two-integers/?tab=Description" target="_blank" rel="noopener">https://leetcode.com/problems/divide-two-integers/?tab=Description</a></p><h4 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h4><p>不能用乘除和取模，首先想到得减法，<br>但是减法会超时，我们可以采用指数衰减得减法。<br>b(1+2^1^+2^2^+…)+c = a    </p><a id="more"></a><h4 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">divide</span><span class="params">(self, dividend, divisor)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type dividend: int</span></span><br><span class="line"><span class="string">        :type divisor: int</span></span><br><span class="line"><span class="string">        :rtype: int</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        sign = (dividend &lt; <span class="number">0</span> <span class="keyword">and</span> divisor &gt; <span class="number">0</span>) <span class="keyword">or</span> (dividend &gt; <span class="number">0</span> <span class="keyword">and</span> divisor &lt; <span class="number">0</span>)</span><br><span class="line">        a, b = abs(dividend), abs(divisor)</span><br><span class="line">        ret, c = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> a &gt;= b:</span><br><span class="line">            c = b</span><br><span class="line">            i = <span class="number">0</span></span><br><span class="line">            <span class="keyword">while</span> a &gt;= c:</span><br><span class="line">                a -= c</span><br><span class="line">                ret += (<span class="number">1</span> &lt;&lt; i)</span><br><span class="line">                i += <span class="number">1</span></span><br><span class="line">                c &lt;&lt;= <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> sign:</span><br><span class="line">            ret = -ret</span><br><span class="line">        <span class="keyword">return</span> min(max(<span class="number">-2147483648</span>, ret), <span class="number">2147483647</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">s = Solution()</span><br><span class="line">print(s.divide(<span class="number">5</span>, <span class="number">2</span>))</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;Divide two integers without using multiplication, division and mod operator.&lt;/p&gt;
+&lt;p&gt;If it is overflow, return MAX_INT.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;题目链接：&lt;a href=&quot;https://leetcode.com/problems/divide-two-integers/?tab=Description&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://leetcode.com/problems/divide-two-integers/?tab=Description&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&quot;提示&quot;&gt;&lt;a href=&quot;#提示&quot; class=&quot;headerlink&quot; title=&quot;提示&quot;&gt;&lt;/a&gt;提示&lt;/h4&gt;&lt;p&gt;不能用乘除和取模，首先想到得减法，&lt;br&gt;但是减法会超时，我们可以采用指数衰减得减法。&lt;br&gt;b(1+2^1^+2^2^+…)+c = a    &lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="leetcode" scheme="http://yoursite.com/tags/leetcode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>A Brief Introduction To Recommender System</title>
+    <link href="http://yoursite.com/2016/12/12/A-Brief-Introduction-To-Recommender-System/"/>
+    <id>http://yoursite.com/2016/12/12/A-Brief-Introduction-To-Recommender-System/</id>
+    <published>2016-12-12T07:18:18.000Z</published>
+    <updated>2016-12-12T07:51:04.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="推荐系统简介（一）"><a href="#推荐系统简介（一）" class="headerlink" title="推荐系统简介（一）"></a>推荐系统简介（一）</h2><h3 id="为什么需要需要系统"><a href="#为什么需要需要系统" class="headerlink" title="为什么需要需要系统"></a>为什么需要需要系统</h3><ol><li>信息复杂，不同的用户偏好；</li><li>提高驻留时间、长尾、转化率和收益。</li></ol><h3 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h3><ol><li>信息检索和信息过滤</li><li>手动协同过滤，Tapestry</li><li>自动协同过滤，GroupLens</li></ol><h3 id="分析框架"><a href="#分析框架" class="headerlink" title="分析框架"></a>分析框架</h3><ol><li>领域：商业</li><li>目的：推荐商品、信息</li><li>推荐内容：情景相关</li><li>谁的建议：专家、普通人</li><li>个性化水平：基于人口统计的，非个性化的，个性化的</li><li>隐私和可靠性：隐私保护和推荐是否被商业利用</li><li>接口：输入（清楚|模糊）和输出接口</li><li>推荐算法：基于内容、知识、协同过滤等。</li></ol><h3 id="构成"><a href="#构成" class="headerlink" title="构成"></a>构成</h3><ol><li><p>用户</p></li><li><p>物品</p></li><li><p>评价</p></li><li><p>社区</p><p><img src="A-Brief-Introduction-To-Recommender-System\Component_in_RS.png" alt="Component_in_RS"></p></li></ol><p>待续。。。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;推荐系统简介（一）&quot;&gt;&lt;a href=&quot;#推荐系统简介（一）&quot; class=&quot;headerlink&quot; title=&quot;推荐系统简介（一）&quot;&gt;&lt;/a&gt;推荐系统简介（一）&lt;/h2&gt;&lt;h3 id=&quot;为什么需要需要系统&quot;&gt;&lt;a href=&quot;#为什么需要需要系统&quot; class
+      
+    
+    </summary>
+    
+    
+      <category term="推荐系统" scheme="http://yoursite.com/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>博客添加打赏功能</title>
+    <link href="http://yoursite.com/2016/09/23/%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0%E6%89%93%E8%B5%8F%E5%8A%9F%E8%83%BD/"/>
+    <id>http://yoursite.com/2016/09/23/博客添加打赏功能/</id>
+    <published>2016-09-23T09:48:28.000Z</published>
+    <updated>2016-09-23T11:42:20.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>我使用的主题是yilia，在此以此为例。</p><h4 id="第一步-编写打赏模块"><a href="#第一步-编写打赏模块" class="headerlink" title="第一步: 编写打赏模块"></a>第一步: 编写打赏模块</h4><p>主题文件 layout\_partial 下新建 donate.ejs , 内容如下 :</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;! -- 添加捐赠图标 --&gt;</span><br><span class="line">&lt;div class =&quot;post-donate&quot;&gt;</span><br><span class="line">    &lt;div id=&quot;donate_board&quot; class=&quot;donate_bar center&quot;&gt;</span><br><span class="line">        &lt;a id=&quot;btn_donate&quot; class=&quot;btn_donate&quot; href=&quot;javascript:;&quot; title=&quot;打赏&quot;&gt;&lt;/a&gt;</span><br><span class="line">        &lt;span class=&quot;donate_txt&quot;&gt;</span><br><span class="line">           &amp;uarr;&lt;br&gt;</span><br><span class="line">   &lt;%=theme.donate_message%&gt;</span><br><span class="line">        &lt;/span&gt;</span><br><span class="line">        &lt;br&gt;</span><br><span class="line">      &lt;/div&gt;  </span><br><span class="line">&lt;div id=&quot;donate_guide&quot; class=&quot;donate_bar center hidden&quot; &gt;</span><br><span class="line">&lt;!-- 支付宝打赏图案 --&gt;</span><br><span class="line">&lt;img src=&quot;支付宝支付图片链接&quot; alt=&quot;支付宝打赏&quot;&gt; </span><br><span class="line">&lt;!-- 微信打赏图案 --&gt;</span><br><span class="line">&lt;img src=&quot;微信支付图片链接&quot; alt=&quot;微信打赏&quot;&gt;  </span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">document.getElementById(&apos;btn_donate&apos;).onclick = function()&#123;</span><br><span class="line">$(&apos;#donate_board&apos;).addClass(&apos;hidden&apos;);</span><br><span class="line">$(&apos;#donate_guide&apos;).removeClass(&apos;hidden&apos;);</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;! -- 添加捐赠图标 --&gt;</span><br></pre></td></tr></table></figure><a id="more"></a><h4 id="第二步-设置大赏模块的样式"><a href="#第二步-设置大赏模块的样式" class="headerlink" title="第二步 : 设置大赏模块的样式"></a>第二步 : 设置大赏模块的样式</h4><p>source\css\_partial 下新建 donate.styl 输入如下内容 :</p><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.donate_bar</span> &#123;</span><br><span class="line"><span class="attribute">text-align</span>: center;</span><br><span class="line"><span class="attribute">margin-top</span>: <span class="number">5%</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.donate_bar</span> <span class="selector-tag">a</span><span class="selector-class">.btn_donate</span> &#123;</span><br><span class="line"><span class="attribute">display</span>: inline-block;</span><br><span class="line"><span class="attribute">width</span>: <span class="number">82px</span>;</span><br><span class="line"><span class="attribute">height</span>: <span class="number">82px</span>;</span><br><span class="line"><span class="attribute">margin-left</span>: auto;</span><br><span class="line"><span class="attribute">margin-right</span>: auto;</span><br><span class="line"><span class="attribute">background</span>: <span class="built_in">url</span>(http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif)<span class="built_in">no-repeat</span>;</span><br><span class="line"><span class="attribute">-webkit-transition</span>: background <span class="number">0s</span>;</span><br><span class="line"><span class="attribute">-moz-transition</span>: background <span class="number">0s</span>;</span><br><span class="line"><span class="attribute">-o-transition</span>: background <span class="number">0s</span>;</span><br><span class="line"><span class="attribute">-ms-transition</span>: background <span class="number">0s</span>;</span><br><span class="line"><span class="attribute">transition</span>: background <span class="number">0s</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.donate_bar</span> <span class="selector-tag">a</span><span class="selector-class">.btn_donate</span><span class="selector-pseudo">:hover</span> &#123;</span><br><span class="line"><span class="attribute">background-position</span>: <span class="number">0</span> -<span class="number">82px</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.donate_bar</span> <span class="selector-class">.donate_txt</span> &#123;</span><br><span class="line"><span class="attribute">display</span>: block;</span><br><span class="line"><span class="attribute">color</span>: <span class="number">#9d9d9d</span>;</span><br><span class="line"><span class="attribute">font</span>: <span class="number">14px</span>/<span class="number">2</span> <span class="string">"Microsoft Yahei"</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.donate_bar</span><span class="selector-class">.hidden</span>&#123;</span><br><span class="line"><span class="attribute">display</span>: none</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.post-donate</span>&#123;</span><br><span class="line"><span class="attribute">margin-top</span>: <span class="number">80px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-id">#donate_guide</span>&#123;</span><br><span class="line"><span class="attribute">height</span>: <span class="number">210px</span>;</span><br><span class="line"><span class="attribute">width</span>: <span class="number">420px</span>;</span><br><span class="line"><span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-id">#donate_guide</span> <span class="selector-tag">img</span>&#123;</span><br><span class="line"><span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line"><span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>最后在 source\css\style.styl 中添加 @import  ‘_partial/donate’</p><h5 id="第三步-将打赏模块整合到文章中"><a href="#第三步-将打赏模块整合到文章中" class="headerlink" title="第三步 : 将打赏模块整合到文章中"></a>第三步 : 将打赏模块整合到文章中</h5><p>在layout\_partial\article.ejs的 <article></article> 标签中添加 :</p><figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;% <span class="keyword">if</span> (!index &amp;&amp; theme.donate &amp;&amp; post.donate!=<span class="keyword">false</span>)&#123; %&gt;</span><br><span class="line">&lt;%- partial(<span class="string">'donate'</span>) %&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br></pre></td></tr></table></figure><h5 id="第四步-编写配置"><a href="#第四步-编写配置" class="headerlink" title="第四步 : 编写配置"></a>第四步 : 编写配置</h5><p>修改 _config.yml 如下:</p><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#是否开启打赏功能</span><br><span class="line"><span class="selector-tag">donate</span>: <span class="selector-tag">true</span></span><br><span class="line">#打赏文案</span><br><span class="line"><span class="selector-tag">donate_message</span>: 欣赏此文？求鼓励，求支持！</span><br></pre></td></tr></table></figure><p>Over.</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;我使用的主题是yilia，在此以此为例。&lt;/p&gt;
+&lt;h4 id=&quot;第一步-编写打赏模块&quot;&gt;&lt;a href=&quot;#第一步-编写打赏模块&quot; class=&quot;headerlink&quot; title=&quot;第一步: 编写打赏模块&quot;&gt;&lt;/a&gt;第一步: 编写打赏模块&lt;/h4&gt;&lt;p&gt;主题文件 layout\_partial 下新建 donate.ejs , 内容如下 :&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;! -- 添加捐赠图标 --&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;div class =&amp;quot;post-donate&amp;quot;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;lt;div id=&amp;quot;donate_board&amp;quot; class=&amp;quot;donate_bar center&amp;quot;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;lt;a id=&amp;quot;btn_donate&amp;quot; class=&amp;quot;btn_donate&amp;quot; href=&amp;quot;javascript:;&amp;quot; title=&amp;quot;打赏&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;lt;span class=&amp;quot;donate_txt&amp;quot;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;           &amp;amp;uarr;&amp;lt;br&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		   &amp;lt;%=theme.donate_message%&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;lt;/span&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;lt;br&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      &amp;lt;/div&amp;gt;  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&amp;lt;div id=&amp;quot;donate_guide&amp;quot; class=&amp;quot;donate_bar center hidden&amp;quot; &amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		&amp;lt;!-- 支付宝打赏图案 --&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		&amp;lt;img src=&amp;quot;支付宝支付图片链接&amp;quot; alt=&amp;quot;支付宝打赏&amp;quot;&amp;gt; &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		&amp;lt;!-- 微信打赏图案 --&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		&amp;lt;img src=&amp;quot;微信支付图片链接&amp;quot; alt=&amp;quot;微信打赏&amp;quot;&amp;gt;  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;lt;/div&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		document.getElementById(&amp;apos;btn_donate&amp;apos;).onclick = function()&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;			$(&amp;apos;#donate_board&amp;apos;).addClass(&amp;apos;hidden&amp;apos;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;			$(&amp;apos;#donate_guide&amp;apos;).removeClass(&amp;apos;hidden&amp;apos;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&amp;lt;/script&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;! -- 添加捐赠图标 --&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="hexo" scheme="http://yoursite.com/tags/hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MongoDB install</title>
+    <link href="http://yoursite.com/2016/07/29/MongoDB-install/"/>
+    <id>http://yoursite.com/2016/07/29/MongoDB-install/</id>
+    <published>2016-07-29T05:54:01.000Z</published>
+    <updated>2016-07-29T05:59:14.000Z</updated>
+    
+    <content type="html"><![CDATA[<ol><li><p>创建data,log目录<br>db: C:\data\db<br>log: C:data\log\MongDB.log</p></li><li><p>创建windows服务<br>mongod –logpath C:\data\log\MongoDB.log –logappend –dbpath C:\data\db –directoryperdb –serviceName MongoDB –install</p></li><li><p>启动<br>net start MongoDB</p></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;ol&gt;
+&lt;li&gt;&lt;p&gt;创建data,log目录&lt;br&gt;db: C:\data\db&lt;br&gt;log: C:data\log\MongDB.log&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;创建windows服务&lt;br&gt;mongod –logpath C:\data\log\MongoDB
+      
+    
+    </summary>
+    
+    
+      <category term="MongoDB" scheme="http://yoursite.com/tags/MongoDB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>常用知识</title>
+    <link href="http://yoursite.com/2016/04/25/%E5%B8%B8%E7%94%A8%E7%9F%A5%E8%AF%86/"/>
+    <id>http://yoursite.com/2016/04/25/常用知识/</id>
+    <published>2016-04-25T06:31:39.000Z</published>
+    <updated>2016-07-22T00:52:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><strong>Linux基础</strong>:<br><a href="http://linuxtools-rst.readthedocs.org/zh_CN/latest/index.html" target="_blank" rel="noopener">http://linuxtools-rst.readthedocs.org/zh_CN/latest/index.html</a></p><p><strong>git基础</strong>:<br><a href="http://www.bootcss.com/p/git-guide/" target="_blank" rel="noopener">http://www.bootcss.com/p/git-guide/</a><br><a href="http://streamers.github.io/blog/20160307/git-common-command.html" target="_blank" rel="noopener">http://streamers.github.io/blog/20160307/git-common-command.html</a></p><p><strong>markdown基础:</strong><br><a href="https://gitcafe.com/riku/Markdown-Syntax-CN/blob/master/syntax.md" target="_blank" rel="noopener">https://gitcafe.com/riku/Markdown-Syntax-CN/blob/master/syntax.md</a><br><a href="http://www.appinn.com/markdown/" target="_blank" rel="noopener">http://www.appinn.com/markdown/</a></p><a id="more"></a><p><strong>Ubuntu英文版安装中文输入法:</strong></p><ol><li><p>Add fcitx ppa:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:fcitx-team/nightly</span><br></pre></td></tr></table></figure><p>or</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:fcitx-team/stable</span><br></pre></td></tr></table></figure></li><li><p>After you add the repository, you need to use:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure></li><li><p>Install googlepinyin:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install fcitx-googlepinyin</span><br></pre></td></tr></table></figure></li><li><p>Active input method :</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">im-config</span><br></pre></td></tr></table></figure></li></ol><p>Click through and select fcitx. Click through.Restart your computer. Click the keyboard in the top right corner. Press Configure Current Input Method. Press + to add a new language. De-select “Only show current language”. Type in Google-Pinyin. Press OK. To switch between keyboards press Ctrl+Space</p><p><strong>matlab 2014b vs2015</strong><br>see : <a href="http://kaba.hilvi.org/homepage/blog/vs2015_in_matlab_2015/vs_2015_in_matlab_2015.htm" target="_blank" rel="noopener">http://kaba.hilvi.org/homepage/blog/vs2015_in_matlab_2015/vs_2015_in_matlab_2015.htm</a></p><p>copy the file into:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files\MATLAB\R2015a\bin\win64\mexopts  </span><br><span class="line">C:\Program Files\MATLAB\MATLAB Production Server\R2015a\bin\win64\mexopts</span><br></pre></td></tr></table></figure></p><p><a href="http://www.linuxidc.com/Linux/2008-03/11662p3.htm" target="_blank" rel="noopener">http://www.linuxidc.com/Linux/2008-03/11662p3.htm</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;Linux基础&lt;/strong&gt;:&lt;br&gt;&lt;a href=&quot;http://linuxtools-rst.readthedocs.org/zh_CN/latest/index.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://linuxtools-rst.readthedocs.org/zh_CN/latest/index.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;git基础&lt;/strong&gt;:&lt;br&gt;&lt;a href=&quot;http://www.bootcss.com/p/git-guide/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://www.bootcss.com/p/git-guide/&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;http://streamers.github.io/blog/20160307/git-common-command.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://streamers.github.io/blog/20160307/git-common-command.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;markdown基础:&lt;/strong&gt;&lt;br&gt;&lt;a href=&quot;https://gitcafe.com/riku/Markdown-Syntax-CN/blob/master/syntax.md&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://gitcafe.com/riku/Markdown-Syntax-CN/blob/master/syntax.md&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;http://www.appinn.com/markdown/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://www.appinn.com/markdown/&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+      <category term="git" scheme="http://yoursite.com/tags/git/"/>
+    
+      <category term="Ubuntu" scheme="http://yoursite.com/tags/Ubuntu/"/>
+    
+      <category term="matlab" scheme="http://yoursite.com/tags/matlab/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>终于快毕业了</title>
+    <link href="http://yoursite.com/2016/04/09/%E7%BB%88%E4%BA%8E%E5%BF%AB%E6%AF%95%E4%B8%9A%E4%BA%86/"/>
+    <id>http://yoursite.com/2016/04/09/终于快毕业了/</id>
+    <published>2016-04-09T07:27:28.000Z</published>
+    <updated>2016-04-09T07:49:24.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>时间过的真快呀，大学浑浑噩噩度过了四年，没学到什么反而感觉身心俱疲，不该不该啊。惧于提前走向社会，而选择了读研的道路也不知道最终结果是好是坏，还有三年得熬呀。不过，凡事也得往好的地方想嘛。大学尚有诸多遗憾没完成，甚是遗憾，以后可没这么闲啊。趁着现在也不想做毕设，慢慢来去做啦。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;时间过的真快呀，大学浑浑噩噩度过了四年，没学到什么反而感觉身心俱疲，不该不该啊。惧于提前走向社会，而选择了读研的道路也不知道最终结果是好是坏，还有三年得熬呀。不过，凡事也得往好的地方想嘛。大学尚有诸多遗憾没完成，甚是遗憾，以后可没这么闲啊。趁着现在也不想做毕设，慢慢来去做啦
+      
+    
+    </summary>
+    
+    
+      <category term="生活随笔" scheme="http://yoursite.com/tags/%E7%94%9F%E6%B4%BB%E9%9A%8F%E7%AC%94/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>解决JavaWeb和Mysql中文乱码问题</title>
+    <link href="http://yoursite.com/2016/04/06/JavaWeb-Mysql/"/>
+    <id>http://yoursite.com/2016/04/06/JavaWeb-Mysql/</id>
+    <published>2016-04-06T07:14:09.000Z</published>
+    <updated>2016-04-06T07:21:54.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>首先同一采用utf-8</p><p>1.数据库属性改为utf-8<br>必要时更改mysql的配置文件：<br>default-character-set=utf8<br>character-set-server=utf8</p><p>2.连接数据库：jdbc:mysql://localhost:3306/db_bug?useUnicode=true&amp;characterEncoding=utf8</p><p>3.request中文乱码：<br>get请求的编码方式为:ISO-8859-1<br>doGet方法：例子：String spotName=new String(request.getParameter(“spotName”).getBytes(“ISO-8859-1”),”UTF-8”);<br>doPost方法:request.setCharacterEncoding(“UTF-8”);</p><p>4.response中文乱码：response.setCharacterEncoding(“UTF-8”);</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;首先同一采用utf-8&lt;/p&gt;
+&lt;p&gt;1.数据库属性改为utf-8&lt;br&gt;必要时更改mysql的配置文件：&lt;br&gt;default-character-set=utf8&lt;br&gt;character-set-server=utf8&lt;/p&gt;
+&lt;p&gt;2.连接数据库：jdbc:mysq
+      
+    
+    </summary>
+    
+    
+      <category term="JavaWeb" scheme="http://yoursite.com/tags/JavaWeb/"/>
+    
+      <category term="Mysql" scheme="http://yoursite.com/tags/Mysql/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>My Blog With Django</title>
+    <link href="http://yoursite.com/2016/04/06/My-Blog-With-Django/"/>
+    <id>http://yoursite.com/2016/04/06/My-Blog-With-Django/</id>
+    <published>2016-04-06T06:58:30.000Z</published>
+    <updated>2016-04-06T07:18:14.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Environment"><a href="#Environment" class="headerlink" title="Environment"></a>Environment</h1><ul><li>Python3.X</li><li>Django1.9.X</li><li>Sublime Text 3</li></ul><p>#Usage</p><p>You can use the example by doing step by step below:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/wqs123/my_blog.git</span><br><span class="line">$ cd my_blog</span><br><span class="line">$ pip install -r requirement.txt</span><br><span class="line">$ python manage.py runserver</span><br></pre></td></tr></table></figure><p>Then you will  see<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Performing system checks...</span><br><span class="line"></span><br><span class="line">System check identified no issues (0 silenced).</span><br><span class="line">March 18, 2016 - 19:40:42</span><br><span class="line">Django version 1.9, using settings &apos;my_blog.settings&apos;</span><br><span class="line">Starting development server at http://127.0.0.1:8000/</span><br><span class="line">Quit the server with CTRL-BREAK.</span><br></pre></td></tr></table></figure></p><p>Now open browser and input  :  <a href="http://127.0.0.1:8000/article/" target="_blank" rel="noopener">http://127.0.0.1:8000/article/</a> ,you will see the main page like below:<br><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="http://7xso5r.com2.z0.glb.clouddn.com/1458301520319.png" alt="Alt text" title="">                </div>                <div class="image-caption">Alt text</div>            </figure><br>and <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener">http://127.0.0.1:8000/admin/</a> you can see the admin page:<br><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="http://7xso5r.com2.z0.glb.clouddn.com/1458301561606.png" alt="Alt text" title="">                </div>                <div class="image-caption">Alt text</div>            </figure></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;Environment&quot;&gt;&lt;a href=&quot;#Environment&quot; class=&quot;headerlink&quot; title=&quot;Environment&quot;&gt;&lt;/a&gt;Environment&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;Python3.X&lt;/li&gt;
+&lt;li&gt;Django1.9
+      
+    
+    </summary>
+    
+    
+      <category term="Blog" scheme="http://yoursite.com/tags/Blog/"/>
+    
+      <category term="Django1.9" scheme="http://yoursite.com/tags/Django1-9/"/>
+    
+      <category term="Python3.5" scheme="http://yoursite.com/tags/Python3-5/"/>
+    
+      <category term="Bootstrap" scheme="http://yoursite.com/tags/Bootstrap/"/>
+    
+  </entry>
+  
+</feed>
