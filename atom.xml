@@ -5,9 +5,9 @@
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://yoursite.com/"/>
+  <link href="http://wuqiansheng.xyz/"/>
   <updated>2018-04-06T11:10:39.906Z</updated>
-  <id>http://yoursite.com/</id>
+  <id>http://wuqiansheng.xyz/</id>
   
   <author>
     <name>wqs</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>LightGBM原理之论文详解</title>
-    <link href="http://yoursite.com/2018/04/02/LightGBM%E5%8E%9F%E7%90%86%E4%B9%8B%E8%AE%BA%E6%96%87%E8%AF%A6%E8%A7%A3/"/>
-    <id>http://yoursite.com/2018/04/02/LightGBM原理之论文详解/</id>
+    <link href="http://wuqiansheng.xyz/2018/04/02/LightGBM%E5%8E%9F%E7%90%86%E4%B9%8B%E8%AE%BA%E6%96%87%E8%AF%A6%E8%A7%A3/"/>
+    <id>http://wuqiansheng.xyz/2018/04/02/LightGBM原理之论文详解/</id>
     <published>2018-04-02T07:14:09.000Z</published>
     <updated>2018-04-06T11:10:39.906Z</updated>
     
@@ -42,20 +42,20 @@
     </summary>
     
     
-      <category term="LightGBM" scheme="http://yoursite.com/tags/LightGBM/"/>
+      <category term="LightGBM" scheme="http://wuqiansheng.xyz/tags/LightGBM/"/>
     
-      <category term="GBDT" scheme="http://yoursite.com/tags/GBDT/"/>
+      <category term="GBDT" scheme="http://wuqiansheng.xyz/tags/GBDT/"/>
     
-      <category term="GOSS" scheme="http://yoursite.com/tags/GOSS/"/>
+      <category term="GOSS" scheme="http://wuqiansheng.xyz/tags/GOSS/"/>
     
-      <category term="EFB" scheme="http://yoursite.com/tags/EFB/"/>
+      <category term="EFB" scheme="http://wuqiansheng.xyz/tags/EFB/"/>
     
   </entry>
   
   <entry>
     <title>牛客网《剑指Offer》66题 题解</title>
-    <link href="http://yoursite.com/2017/12/22/%E5%89%91%E6%8C%87offer%E9%A2%98%E8%A7%A3/"/>
-    <id>http://yoursite.com/2017/12/22/剑指offer题解/</id>
+    <link href="http://wuqiansheng.xyz/2017/12/22/%E5%89%91%E6%8C%87offer%E9%A2%98%E8%A7%A3/"/>
+    <id>http://wuqiansheng.xyz/2017/12/22/剑指offer题解/</id>
     <published>2017-12-22T11:12:11.000Z</published>
     <updated>2018-04-06T13:17:56.595Z</updated>
     
@@ -78,16 +78,16 @@
     </summary>
     
     
-      <category term="剑指Offer" scheme="http://yoursite.com/tags/%E5%89%91%E6%8C%87Offer/"/>
+      <category term="剑指Offer" scheme="http://wuqiansheng.xyz/tags/%E5%89%91%E6%8C%87Offer/"/>
     
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+      <category term="Python" scheme="http://wuqiansheng.xyz/tags/Python/"/>
     
   </entry>
   
   <entry>
     <title>Tensorflow Solve Mnist 2</title>
-    <link href="http://yoursite.com/2017/04/03/Tensorflow-Solve-Mnist-2/"/>
-    <id>http://yoursite.com/2017/04/03/Tensorflow-Solve-Mnist-2/</id>
+    <link href="http://wuqiansheng.xyz/2017/04/03/Tensorflow-Solve-Mnist-2/"/>
+    <id>http://wuqiansheng.xyz/2017/04/03/Tensorflow-Solve-Mnist-2/</id>
     <published>2017-04-03T07:29:26.000Z</published>
     <updated>2017-04-03T07:30:22.000Z</updated>
     
@@ -104,16 +104,16 @@
     </summary>
     
     
-      <category term="tensorflow" scheme="http://yoursite.com/tags/tensorflow/"/>
+      <category term="tensorflow" scheme="http://wuqiansheng.xyz/tags/tensorflow/"/>
     
-      <category term="python" scheme="http://yoursite.com/tags/python/"/>
+      <category term="python" scheme="http://wuqiansheng.xyz/tags/python/"/>
     
   </entry>
   
   <entry>
     <title>Tensorflow Solve Mnist 1</title>
-    <link href="http://yoursite.com/2017/04/03/Tensorflow-Solve-Mnist-1/"/>
-    <id>http://yoursite.com/2017/04/03/Tensorflow-Solve-Mnist-1/</id>
+    <link href="http://wuqiansheng.xyz/2017/04/03/Tensorflow-Solve-Mnist-1/"/>
+    <id>http://wuqiansheng.xyz/2017/04/03/Tensorflow-Solve-Mnist-1/</id>
     <published>2017-04-03T07:27:44.000Z</published>
     <updated>2017-04-03T07:37:10.000Z</updated>
     
@@ -130,16 +130,16 @@
     </summary>
     
     
-      <category term="tensorflow" scheme="http://yoursite.com/tags/tensorflow/"/>
+      <category term="tensorflow" scheme="http://wuqiansheng.xyz/tags/tensorflow/"/>
     
-      <category term="python" scheme="http://yoursite.com/tags/python/"/>
+      <category term="python" scheme="http://wuqiansheng.xyz/tags/python/"/>
     
   </entry>
   
   <entry>
     <title>leetcode29. Divide Two Integers</title>
-    <link href="http://yoursite.com/2017/02/22/leetcode29-Divide-Two-Integers/"/>
-    <id>http://yoursite.com/2017/02/22/leetcode29-Divide-Two-Integers/</id>
+    <link href="http://wuqiansheng.xyz/2017/02/22/leetcode29-Divide-Two-Integers/"/>
+    <id>http://wuqiansheng.xyz/2017/02/22/leetcode29-Divide-Two-Integers/</id>
     <published>2017-02-22T11:12:11.000Z</published>
     <updated>2017-02-22T11:23:20.000Z</updated>
     
@@ -158,14 +158,14 @@
     </summary>
     
     
-      <category term="leetcode" scheme="http://yoursite.com/tags/leetcode/"/>
+      <category term="leetcode" scheme="http://wuqiansheng.xyz/tags/leetcode/"/>
     
   </entry>
   
   <entry>
     <title>A Brief Introduction To Recommender System</title>
-    <link href="http://yoursite.com/2016/12/12/A-Brief-Introduction-To-Recommender-System/"/>
-    <id>http://yoursite.com/2016/12/12/A-Brief-Introduction-To-Recommender-System/</id>
+    <link href="http://wuqiansheng.xyz/2016/12/12/A-Brief-Introduction-To-Recommender-System/"/>
+    <id>http://wuqiansheng.xyz/2016/12/12/A-Brief-Introduction-To-Recommender-System/</id>
     <published>2016-12-12T07:18:18.000Z</published>
     <updated>2018-04-06T11:47:04.384Z</updated>
     
@@ -186,14 +186,14 @@
     </summary>
     
     
-      <category term="推荐系统" scheme="http://yoursite.com/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
+      <category term="推荐系统" scheme="http://wuqiansheng.xyz/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
     
   </entry>
   
   <entry>
     <title>博客添加打赏功能</title>
-    <link href="http://yoursite.com/2016/09/23/%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0%E6%89%93%E8%B5%8F%E5%8A%9F%E8%83%BD/"/>
-    <id>http://yoursite.com/2016/09/23/博客添加打赏功能/</id>
+    <link href="http://wuqiansheng.xyz/2016/09/23/%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0%E6%89%93%E8%B5%8F%E5%8A%9F%E8%83%BD/"/>
+    <id>http://wuqiansheng.xyz/2016/09/23/博客添加打赏功能/</id>
     <published>2016-09-23T09:48:28.000Z</published>
     <updated>2016-09-23T11:42:20.000Z</updated>
     
@@ -209,14 +209,14 @@
     </summary>
     
     
-      <category term="hexo" scheme="http://yoursite.com/tags/hexo/"/>
+      <category term="hexo" scheme="http://wuqiansheng.xyz/tags/hexo/"/>
     
   </entry>
   
   <entry>
     <title>MongoDB install</title>
-    <link href="http://yoursite.com/2016/07/29/MongoDB-install/"/>
-    <id>http://yoursite.com/2016/07/29/MongoDB-install/</id>
+    <link href="http://wuqiansheng.xyz/2016/07/29/MongoDB-install/"/>
+    <id>http://wuqiansheng.xyz/2016/07/29/MongoDB-install/</id>
     <published>2016-07-29T05:54:01.000Z</published>
     <updated>2016-07-29T05:59:14.000Z</updated>
     
@@ -236,14 +236,14 @@ mongod –logpath C:.log –logappend –dbpath C
     </summary>
     
     
-      <category term="MongoDB" scheme="http://yoursite.com/tags/MongoDB/"/>
+      <category term="MongoDB" scheme="http://wuqiansheng.xyz/tags/MongoDB/"/>
     
   </entry>
   
   <entry>
     <title>常用知识</title>
-    <link href="http://yoursite.com/2016/04/25/%E5%B8%B8%E7%94%A8%E7%9F%A5%E8%AF%86/"/>
-    <id>http://yoursite.com/2016/04/25/常用知识/</id>
+    <link href="http://wuqiansheng.xyz/2016/04/25/%E5%B8%B8%E7%94%A8%E7%9F%A5%E8%AF%86/"/>
+    <id>http://wuqiansheng.xyz/2016/04/25/常用知识/</id>
     <published>2016-04-25T06:31:39.000Z</published>
     <updated>2016-07-22T00:52:32.000Z</updated>
     
@@ -259,20 +259,20 @@ http://www.appinn.com/markdown/&lt;/p&gt;
     </summary>
     
     
-      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+      <category term="Linux" scheme="http://wuqiansheng.xyz/tags/Linux/"/>
     
-      <category term="git" scheme="http://yoursite.com/tags/git/"/>
+      <category term="git" scheme="http://wuqiansheng.xyz/tags/git/"/>
     
-      <category term="Ubuntu" scheme="http://yoursite.com/tags/Ubuntu/"/>
+      <category term="Ubuntu" scheme="http://wuqiansheng.xyz/tags/Ubuntu/"/>
     
-      <category term="matlab" scheme="http://yoursite.com/tags/matlab/"/>
+      <category term="matlab" scheme="http://wuqiansheng.xyz/tags/matlab/"/>
     
   </entry>
   
   <entry>
     <title>终于快毕业了</title>
-    <link href="http://yoursite.com/2016/04/09/%E7%BB%88%E4%BA%8E%E5%BF%AB%E6%AF%95%E4%B8%9A%E4%BA%86/"/>
-    <id>http://yoursite.com/2016/04/09/终于快毕业了/</id>
+    <link href="http://wuqiansheng.xyz/2016/04/09/%E7%BB%88%E4%BA%8E%E5%BF%AB%E6%AF%95%E4%B8%9A%E4%BA%86/"/>
+    <id>http://wuqiansheng.xyz/2016/04/09/终于快毕业了/</id>
     <published>2016-04-09T07:27:28.000Z</published>
     <updated>2016-04-09T07:49:24.000Z</updated>
     
@@ -288,14 +288,14 @@ http://www.appinn.com/markdown/&lt;/p&gt;
     </summary>
     
     
-      <category term="生活随笔" scheme="http://yoursite.com/tags/%E7%94%9F%E6%B4%BB%E9%9A%8F%E7%AC%94/"/>
+      <category term="生活随笔" scheme="http://wuqiansheng.xyz/tags/%E7%94%9F%E6%B4%BB%E9%9A%8F%E7%AC%94/"/>
     
   </entry>
   
   <entry>
     <title>解决JavaWeb和Mysql中文乱码问题</title>
-    <link href="http://yoursite.com/2016/04/06/JavaWeb-Mysql/"/>
-    <id>http://yoursite.com/2016/04/06/JavaWeb-Mysql/</id>
+    <link href="http://wuqiansheng.xyz/2016/04/06/JavaWeb-Mysql/"/>
+    <id>http://wuqiansheng.xyz/2016/04/06/JavaWeb-Mysql/</id>
     <published>2016-04-06T07:14:09.000Z</published>
     <updated>2016-04-06T07:21:54.000Z</updated>
     
@@ -313,16 +313,16 @@ http://www.appinn.com/markdown/&lt;/p&gt;
     </summary>
     
     
-      <category term="JavaWeb" scheme="http://yoursite.com/tags/JavaWeb/"/>
+      <category term="JavaWeb" scheme="http://wuqiansheng.xyz/tags/JavaWeb/"/>
     
-      <category term="Mysql" scheme="http://yoursite.com/tags/Mysql/"/>
+      <category term="Mysql" scheme="http://wuqiansheng.xyz/tags/Mysql/"/>
     
   </entry>
   
   <entry>
     <title>My Blog With Django</title>
-    <link href="http://yoursite.com/2016/04/06/My-Blog-With-Django/"/>
-    <id>http://yoursite.com/2016/04/06/My-Blog-With-Django/</id>
+    <link href="http://wuqiansheng.xyz/2016/04/06/My-Blog-With-Django/"/>
+    <id>http://wuqiansheng.xyz/2016/04/06/My-Blog-With-Django/</id>
     <published>2016-04-06T06:58:30.000Z</published>
     <updated>2016-04-06T07:18:14.000Z</updated>
     
@@ -345,13 +345,13 @@ http://www.appinn.com/markdown/&lt;/p&gt;
     </summary>
     
     
-      <category term="Blog" scheme="http://yoursite.com/tags/Blog/"/>
+      <category term="Blog" scheme="http://wuqiansheng.xyz/tags/Blog/"/>
     
-      <category term="Django1.9" scheme="http://yoursite.com/tags/Django1-9/"/>
+      <category term="Django1.9" scheme="http://wuqiansheng.xyz/tags/Django1-9/"/>
     
-      <category term="Python3.5" scheme="http://yoursite.com/tags/Python3-5/"/>
+      <category term="Python3.5" scheme="http://wuqiansheng.xyz/tags/Python3-5/"/>
     
-      <category term="Bootstrap" scheme="http://yoursite.com/tags/Bootstrap/"/>
+      <category term="Bootstrap" scheme="http://wuqiansheng.xyz/tags/Bootstrap/"/>
     
   </entry>
   
