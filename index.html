@@ -159,95 +159,6 @@ ga('send', 'pageview');
     <ul class="post-list">
     
         <li class="post-list-item fade">
-            <article id="post-感知机算法"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-04-09 16:53:24" datetime="2018-04-09T08:53:24.000Z"  itemprop="datePublished">2018-04-09</time>
-
-        
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/04/09/感知机算法/">感知机算法</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <p>本文将介绍四种感知机算法，包含批量感知机、pocket感知机、在线感知机以及核化感知机。</p>
-<p>感知机算法：每发现一个错误点，就对它就行纠正。</p>
-<figure>
-<img src="/images/PLA/PLA.png" alt="PLA"><figcaption>PLA</figcaption>
-</figure>
-<p>损失函数为： <span class="math display">\[
-L(w, b) = -\sum_{x_i\in{M}}y_i(wx_i+b)
-\]</span> 其中M为误分点集合。</p>
-<h4 id="批量感知机">批量感知机</h4>
-<p>批量感知机求解的是损失函数全局最优梯度。</p>
-<p>损失函数的梯度： <span class="math display">\[
-\nabla_wL(w,b)=-\sum_{x_i\in{M}}y_ix_i \\
-\nabla_bL(w,b)=-\sum_{x_i\in{M}}y_i 
-\]</span> 每轮迭代需要用到所有样本。</p>
-<p>算法如下：</p>
-<figure>
-<img src="/images/PLA/BPLA.png" alt="BPLA"><figcaption>BPLA</figcaption>
-</figure>
-<p>####pocket感知机</p>
-<p>口袋算法基于贪心的思想。随机梯度下降，求解的是单个误分类点的梯度，用来近似全局最优梯度。</p>
-<p>更新为：</p>
-<p>随机选取一个误分类点<span class="math display">\[(x_i,y_i)\]</span> <span class="math display">\[
-w = w+\eta y_ix_i \\
-b = b+\eta y_i
-\]</span> <span class="math display">\[\eta\]</span>为更新步长，又称学习率。</p>
-<p>算法如下：</p>
-<figure>
-<img src="/images/PLA/PPLA.png" alt="PPLA"><figcaption>PPLA</figcaption>
-</figure>
-<p>####在线感知机</p>
-<p>在线算法，来一个算一个，类似随机梯度下降求解。</p>
-<p>算法如下：</p>
-<figure>
-<img src="/images/PLA/OPLA.png" alt="OPLA"><figcaption>OPLA</figcaption>
-</figure>
-<p>####核化感知机</p>
-<p>考虑最终的<span class="math display">\[w,b\]</span>是修改n次后的增量，也就是： <span class="math display">\[
-w=\sum_{i=1}^{N}\alpha_iy_ix_i \\
-b=\sum_{i=1}^{N}\alpha_iy_i \\
-\]</span> 其中<span class="math display">\[\alpha_i=n_i\eta\]</span>。</p>
-<p>最终的<span class="math display">\[f(x)\]</span>如下： <span class="math display">\[
-f(x)=\sum_{i=1}^{N}\alpha_iy_ix_i\cdot x+b 
-\]</span> 公式中存在<span class="math display">\[x_i\cdot x\]</span>项，就可以采用核化理论，这就是核化感知机算法。</p>
-<p>至此， 四种感知机算法解释完毕。</p>
-
-    
-
-        <a href="/2018/04/09/感知机算法/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PLA/">PLA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/感知机/">感知机</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
             <article id="post-dp"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -876,6 +787,54 @@ mongod –logpath C:.log –logappend –dbpath C:–directoryperdb –serviceNa
     <div class="post-footer">
         
 	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB/">MongoDB</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-常用知识"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2016-04-25 14:31:39" datetime="2016-04-25T06:31:39.000Z"  itemprop="datePublished">2016-04-25</time>
+
+        
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2016/04/25/常用知识/">常用知识</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        <p><strong>Linux基础</strong>: http://linuxtools-rst.readthedocs.org/zh_CN/latest/index.html</p>
+<p><strong>git基础</strong>: http://www.bootcss.com/p/git-guide/ http://streamers.github.io/blog/20160307/git-common-command.html</p>
+<p><strong>markdown基础:</strong> https://gitcafe.com/riku/Markdown-Syntax-CN/blob/master/syntax.md<br>
+http://www.appinn.com/markdown/</p>
+    
+
+        <a href="/2016/04/25/常用知识/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ubuntu/">Ubuntu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/matlab/">matlab</a></li></ul>
 
     </div>
     

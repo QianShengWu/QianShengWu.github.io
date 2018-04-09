@@ -214,28 +214,50 @@ ga('send', 'pageview');
 <a id="more"></a>
 <h4 id="goss">GOSS</h4>
 <p>在AdaBoost中采用权重很好诠释了样本的重要性，GBDT没有这种权重，但是我们注意到每个数据样本的梯度可以被用来做采样的信息。也就是，如果一个样本的梯度小，那么表明这个样本已经训练好了，它的训练误差很小了，我们可以丢弃这些数据。当然，改变数据分布会造成模型的精度损失。GOSS则通过保存大梯度样本，随机选取小梯度样本，并为其弥补上一个常数权重。这样，GOSS更关注训练不足的样本，同时也不会改变原始数据太多。</p>
-<p>具体算法如下： <img src="/images/LightGBM/GOSS.png" alt="GOSS"></p>
+<p>具体算法如下： <figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/LightGBM/GOSS.png" alt="GOSS" title="">
+                </div>
+                <div class="image-caption">GOSS</div>
+            </figure></p>
 <p>先根据梯度对样本进行排序，选取 a * 100% 的top样本，再从剩余数据中随机选取 b * 100% 的样本，并乘以 <span class="math display">\[\frac{1-a}{b}\]</span>的系数放大。</p>
 <p>以前计算特征j在d值点的信息增益是这样的：</p>
-<figure>
-<img src="/images/LightGBM/3.1.png" alt="3.1"><figcaption>3.1</figcaption>
-</figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/LightGBM/3.1.png" alt="3.1" title="">
+                </div>
+                <div class="image-caption">3.1</div>
+            </figure>
 <p>现在是这样的：</p>
-<figure>
-<img src="/images/LightGBM/3.2.png" alt="3.2"><figcaption>3.2</figcaption>
-</figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/LightGBM/3.2.png" alt="3.2" title="">
+                </div>
+                <div class="image-caption">3.2</div>
+            </figure>
 <p>通过证明，近似误差很好，很贴近使用所有数据的模型。</p>
 <p>这也解释了LightGBM的 leaf-wise 生成策略。</p>
 <h5 id="leaf-wise-best-first-的决策树生长策略">Leaf-wise (Best-first) 的决策树生长策略</h5>
 <p>大部分决策树的学习算法通过 level(depth)-wise 策略生长树，如下图一样：</p>
-<figure>
-<img src="http://lightgbm.apachecn.org/cn/latest/_images/level-wise.png" alt="_images/level-wise.png"><figcaption>_images/level-wise.png</figcaption>
-</figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://lightgbm.apachecn.org/cn/latest/_images/level-wise.png" alt="_images/level-wise.png" title="">
+                </div>
+                <div class="image-caption">_images/level-wise.png</div>
+            </figure>
 <p>LightGBM 通过 leaf-wise (best-first)[<a href="http://lightgbm.apachecn.org/cn/latest/Features.html#references" target="_blank" rel="noopener">6]</a> 策略来生长树。它将选取具有最大 delta loss 的叶节点来生长。 当生长相同的 <code>#leaf</code>，leaf-wise 算法可以比 level-wise 算法减少更多的损失。</p>
 <p>当 <code>#data</code> 较小的时候，leaf-wise 可能会造成过拟合。 所以，LightGBM 可以利用额外的参数 <code>max_depth</code> 来限制树的深度并避免过拟合（树的生长仍然通过 leaf-wise 策略）。</p>
-<figure>
-<img src="http://lightgbm.apachecn.org/cn/latest/_images/leaf-wise.png" alt="_images/leaf-wise.png"><figcaption>_images/leaf-wise.png</figcaption>
-</figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://lightgbm.apachecn.org/cn/latest/_images/leaf-wise.png" alt="_images/leaf-wise.png" title="">
+                </div>
+                <div class="image-caption">_images/leaf-wise.png</div>
+            </figure>
 <p>####EFB</p>
 <p>高维数据一般是稀疏的，可以设计一种损失最小的特征减少方法。并且，在稀疏特征空间中，许多特征都是互斥的，也就是它们几乎不同时取非0值。因此，我们可以安全的把这些互斥特征绑到一起形成一个特征，然后基于这些特征束构建直方图，这样又可以加速了。</p>
 <p>有两个问题待解决，如何判断哪些特征该绑到一起，如何构建绑定。这是NP难的。</p>
@@ -243,9 +265,13 @@ ga('send', 'pageview');
 <p>不互斥 =&gt; 可以同时取非0值，不能区分处理 =&gt; 冲突</p>
 <p>最后，排序就按照束的度来进行。当然，更一步优化是不够造图，直接<strong>根据非零值的数量排序</strong>，这个根据度排序很像，因为更多非0值意味着更高概率的冲突。更改了排序策略，可以避免重复。</p>
 <p>第二个问题，合并特征，从而降低训练复杂度，关键是我们可以确保原先特征值可以从特征束中识别出来。因为直方图存储的是特征的离散桶，而不是连续值，我们可以通过把互斥特征放到不同桶，从而构造一个特征束。这可以通过添加偏移实现。如，假设我们有2个特征在一个特征束中，原先特征A的范围为[0,10)，特征B的范围为[0,20)，我们给特征B加上一个偏移10，它就变成[10,30)，这样我们就可以执行安全的合并了，用特征束[0,30)代替特征A和B。具体算法如下。</p>
-<figure>
-<img src="/images/LightGBM/4.png" alt="4"><figcaption>4</figcaption>
-</figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/images/LightGBM/4.png" alt="4" title="">
+                </div>
+                <div class="image-caption">4</div>
+            </figure>
 <p>EFB算法可以把很多特征绑到一起，形成更少的稠密特征束，这样可以避免对0特征值的无用的计算。加速计算直方图还可以用一个表记录数据的非0值。</p>
 <p>这样，LightGBM的论文基本讲解结束。</p>
 <p>其他具体特性（并行，类别特征处理等）详情见：</p>
