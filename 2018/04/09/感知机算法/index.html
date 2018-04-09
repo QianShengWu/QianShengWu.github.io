@@ -32,13 +32,13 @@ ga('send', 'pageview');
     
     
     <meta name="keywords" content="机器学习,感知机,PLA">
-    <meta name="description" content="本文将介绍四种感知机算法，包含批量感知机、pocket感知机、在线感知机以及核化感知机。 感知机算法：每发现一个错误点，就对它就行纠正。                                                                                              PLA              损失函数为： \[ L(w, b)">
+    <meta name="description" content="本文将介绍四种感知机算法，包含批量感知机、pocket感知机、在线感知机以及核化感知机。 感知机算法：每发现一个错误点，就对它就行纠正。  PLA  损失函数为： \[ L(w, b) = -\sum_{x_i\in{M}}y_i(wx_i+b) \] 其中M为误分点集合。 批量感知机 批量感知机求解的是损失函数全局最优梯度。 损失函数的梯度： \[ \nabla_wL(w,">
 <meta name="keywords" content="机器学习,感知机,PLA">
 <meta property="og:type" content="article">
 <meta property="og:title" content="感知机算法">
 <meta property="og:url" content="http://wuqiansheng.xyz/2018/04/09/感知机算法/index.html">
 <meta property="og:site_name" content="wuqiansheng">
-<meta property="og:description" content="本文将介绍四种感知机算法，包含批量感知机、pocket感知机、在线感知机以及核化感知机。 感知机算法：每发现一个错误点，就对它就行纠正。                                                                                              PLA              损失函数为： \[ L(w, b)">
+<meta property="og:description" content="本文将介绍四种感知机算法，包含批量感知机、pocket感知机、在线感知机以及核化感知机。 感知机算法：每发现一个错误点，就对它就行纠正。  PLA  损失函数为： \[ L(w, b) = -\sum_{x_i\in{M}}y_i(wx_i+b) \] 其中M为误分点集合。 批量感知机 批量感知机求解的是损失函数全局最优梯度。 损失函数的梯度： \[ \nabla_wL(w,">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://wuqiansheng.xyz/images/PLA/PLA.png">
 <meta property="og:image" content="http://wuqiansheng.xyz/images/PLA/BPLA.png">
@@ -47,7 +47,7 @@ ga('send', 'pageview');
 <meta property="og:updated_time" content="2018-04-09T10:31:26.818Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="感知机算法">
-<meta name="twitter:description" content="本文将介绍四种感知机算法，包含批量感知机、pocket感知机、在线感知机以及核化感知机。 感知机算法：每发现一个错误点，就对它就行纠正。                                                                                              PLA              损失函数为： \[ L(w, b)">
+<meta name="twitter:description" content="本文将介绍四种感知机算法，包含批量感知机、pocket感知机、在线感知机以及核化感知机。 感知机算法：每发现一个错误点，就对它就行纠正。  PLA  损失函数为： \[ L(w, b) = -\sum_{x_i\in{M}}y_i(wx_i+b) \] 其中M为误分点集合。 批量感知机 批量感知机求解的是损失函数全局最优梯度。 损失函数的梯度： \[ \nabla_wL(w,">
 <meta name="twitter:image" content="http://wuqiansheng.xyz/images/PLA/PLA.png">
     
         <link rel="alternate" type="application/atom+xml" title="wuqiansheng" href="/atom.xml">
@@ -200,13 +200,9 @@ ga('send', 'pageview');
         <div class="post-content" id="post-content" itemprop="postContent">
             <p>本文将介绍四种感知机算法，包含批量感知机、pocket感知机、在线感知机以及核化感知机。</p>
 <p>感知机算法：每发现一个错误点，就对它就行纠正。</p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="/images/PLA/PLA.png" alt="PLA" title="">
-                </div>
-                <div class="image-caption">PLA</div>
-            </figure>
+<figure>
+<img src="/images/PLA/PLA.png" alt="PLA"><figcaption>PLA</figcaption>
+</figure>
 <p>损失函数为： <span class="math display">\[
 L(w, b) = -\sum_{x_i\in{M}}y_i(wx_i+b)
 \]</span> 其中M为误分点集合。</p>
@@ -217,13 +213,9 @@ L(w, b) = -\sum_{x_i\in{M}}y_i(wx_i+b)
 \nabla_bL(w,b)=-\sum_{x_i\in{M}}y_i 
 \]</span> 每轮迭代需要用到所有样本。</p>
 <p>算法如下：</p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="/images/PLA/BPLA.png" alt="BPLA" title="">
-                </div>
-                <div class="image-caption">BPLA</div>
-            </figure>
+<figure>
+<img src="/images/PLA/BPLA.png" alt="BPLA"><figcaption>BPLA</figcaption>
+</figure>
 <p>####pocket感知机</p>
 <p>口袋算法基于贪心的思想。随机梯度下降，求解的是单个误分类点的梯度，用来近似全局最优梯度。</p>
 <p>更新为：</p>
@@ -232,23 +224,15 @@ w = w+\eta y_ix_i \\
 b = b+\eta y_i
 \]</span> <span class="math display">\[\eta\]</span>为更新步长，又称学习率。</p>
 <p>算法如下：</p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="/images/PLA/PPLA.png" alt="PPLA" title="">
-                </div>
-                <div class="image-caption">PPLA</div>
-            </figure>
+<figure>
+<img src="/images/PLA/PPLA.png" alt="PPLA"><figcaption>PPLA</figcaption>
+</figure>
 <p>####在线感知机</p>
 <p>在线算法，来一个算一个，类似随机梯度下降求解。</p>
 <p>算法如下：</p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="/images/PLA/OPLA.png" alt="OPLA" title="">
-                </div>
-                <div class="image-caption">OPLA</div>
-            </figure>
+<figure>
+<img src="/images/PLA/OPLA.png" alt="OPLA"><figcaption>OPLA</figcaption>
+</figure>
 <p>####核化感知机</p>
 <p>考虑最终的<span class="math display">\[w,b\]</span>是修改n次后的增量，也就是： <span class="math display">\[
 w=\sum_{i=1}^{N}\alpha_iy_ix_i \\
