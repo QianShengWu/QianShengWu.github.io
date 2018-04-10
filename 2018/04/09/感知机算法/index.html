@@ -44,7 +44,7 @@ ga('send', 'pageview');
 <meta property="og:image" content="http://wuqiansheng.xyz/images/PLA/BPLA.png">
 <meta property="og:image" content="http://wuqiansheng.xyz/images/PLA/PPLA.png">
 <meta property="og:image" content="http://wuqiansheng.xyz/images/PLA/OPLA.png">
-<meta property="og:updated_time" content="2018-04-09T10:31:26.818Z">
+<meta property="og:updated_time" content="2018-04-10T11:42:30.840Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="感知机算法">
 <meta name="twitter:description" content="本文将介绍四种感知机算法，包含批量感知机、pocket感知机、在线感知机以及核化感知机。 感知机算法：每发现一个错误点，就对它就行纠正。                                                                                              PLA              损失函数为： \[ L(w, b)">
@@ -174,7 +174,7 @@ ga('send', 'pageview');
     <aside class="post-widget">
         <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#批量感知机"><span class="post-toc-number">1.</span> <span class="post-toc-text">批量感知机</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#批量感知机"><span class="post-toc-number">1.</span> <span class="post-toc-text">批量感知机</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#pocket感知机"><span class="post-toc-number">2.</span> <span class="post-toc-text">pocket感知机</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#在线感知机"><span class="post-toc-number">3.</span> <span class="post-toc-text">在线感知机</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#核化感知机"><span class="post-toc-number">4.</span> <span class="post-toc-text">核化感知机</span></a></li></ol>
         </nav>
     </aside>
 
@@ -224,13 +224,13 @@ L(w, b) = -\sum_{x_i\in{M}}y_i(wx_i+b)
                 </div>
                 <div class="image-caption">BPLA</div>
             </figure>
-<p>####pocket感知机</p>
+<h4 id="pocket感知机">pocket感知机</h4>
 <p>口袋算法基于贪心的思想。随机梯度下降，求解的是单个误分类点的梯度，用来近似全局最优梯度。</p>
 <p>更新为：</p>
-<p>随机选取一个误分类点<span class="math display">\[(x_i,y_i)\]</span> <span class="math display">\[
+<p>随机选取一个误分类点<span class="math inline">\((x_i,y_i)\)</span> <span class="math display">\[
 w = w+\eta y_ix_i \\
 b = b+\eta y_i
-\]</span> <span class="math display">\[\eta\]</span>为更新步长，又称学习率。</p>
+\]</span> <span class="math inline">\(\eta\)</span>为更新步长，又称学习率。</p>
 <p>算法如下：</p>
 <figure class="image-bubble">
                 <div class="img-lightbox">
@@ -239,7 +239,7 @@ b = b+\eta y_i
                 </div>
                 <div class="image-caption">PPLA</div>
             </figure>
-<p>####在线感知机</p>
+<h4 id="在线感知机">在线感知机</h4>
 <p>在线算法，来一个算一个，类似随机梯度下降求解。</p>
 <p>算法如下：</p>
 <figure class="image-bubble">
@@ -249,14 +249,14 @@ b = b+\eta y_i
                 </div>
                 <div class="image-caption">OPLA</div>
             </figure>
-<p>####核化感知机</p>
-<p>考虑最终的<span class="math display">\[w,b\]</span>是修改n次后的增量，也就是： <span class="math display">\[
+<h4 id="核化感知机">核化感知机</h4>
+<p>考虑最终的<span class="math inline">\(w,b\)</span>是修改n次后的增量，也就是： <span class="math display">\[
 w=\sum_{i=1}^{N}\alpha_iy_ix_i \\
 b=\sum_{i=1}^{N}\alpha_iy_i \\
-\]</span> 其中<span class="math display">\[\alpha_i=n_i\eta\]</span>。</p>
-<p>最终的<span class="math display">\[f(x)\]</span>如下： <span class="math display">\[
+\]</span> 其中<span class="math inline">\(\alpha_i=n_i\eta\)</span>。</p>
+<p>最终的<span class="math inline">\(f(x)\)</span>如下： <span class="math display">\[
 f(x)=\sum_{i=1}^{N}\alpha_iy_ix_i\cdot x+b 
-\]</span> 公式中存在<span class="math display">\[x_i\cdot x\]</span>项，就可以采用核化理论，这就是核化感知机算法。</p>
+\]</span> 公式中存在<span class="math inline">\(x_i\cdot x\)</span>项，就可以采用核化理论，这就是核化感知机算法。</p>
 <p>至此， 四种感知机算法解释完毕。</p>
 
         </div>
@@ -266,7 +266,7 @@ f(x)=\sum_{i=1}^{N}\alpha_iy_ix_i\cdot x+b
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2018-04-09T10:31:26.818Z" itemprop="dateUpdated">2018-04-09 18:31:26</time>
+    最后更新时间：<time datetime="2018-04-10T11:42:30.840Z" itemprop="dateUpdated">2018-04-10 19:42:30</time>
 </span><br>
 
 
