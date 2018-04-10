@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wuqiansheng.xyz/"/>
-  <updated>2018-04-07T07:29:43.009Z</updated>
+  <updated>2018-04-09T10:31:26.818Z</updated>
   <id>http://wuqiansheng.xyz/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>感知机算法</title>
+    <link href="http://wuqiansheng.xyz/2018/04/09/%E6%84%9F%E7%9F%A5%E6%9C%BA%E7%AE%97%E6%B3%95/"/>
+    <id>http://wuqiansheng.xyz/2018/04/09/感知机算法/</id>
+    <published>2018-04-09T08:53:24.000Z</published>
+    <updated>2018-04-09T10:31:26.818Z</updated>
+    
+    <content type="html"><![CDATA[<p>本文将介绍四种感知机算法，包含批量感知机、pocket感知机、在线感知机以及核化感知机。</p><p>感知机算法：每发现一个错误点，就对它就行纠正。</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="/images/PLA/PLA.png" alt="PLA" title="">                </div>                <div class="image-caption">PLA</div>            </figure><p>损失函数为： <span class="math display">\[L(w, b) = -\sum_{x_i\in{M}}y_i(wx_i+b)\]</span> 其中M为误分点集合。</p><h4 id="批量感知机">批量感知机</h4><p>批量感知机求解的是损失函数全局最优梯度。</p><p>损失函数的梯度： <span class="math display">\[\nabla_wL(w,b)=-\sum_{x_i\in{M}}y_ix_i \\\nabla_bL(w,b)=-\sum_{x_i\in{M}}y_i \]</span> 每轮迭代需要用到所有样本。</p><p>算法如下：</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="/images/PLA/BPLA.png" alt="BPLA" title="">                </div>                <div class="image-caption">BPLA</div>            </figure><p>####pocket感知机</p><p>口袋算法基于贪心的思想。随机梯度下降，求解的是单个误分类点的梯度，用来近似全局最优梯度。</p><p>更新为：</p><p>随机选取一个误分类点<span class="math display">\[(x_i,y_i)\]</span> <span class="math display">\[w = w+\eta y_ix_i \\b = b+\eta y_i\]</span> <span class="math display">\[\eta\]</span>为更新步长，又称学习率。</p><p>算法如下：</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="/images/PLA/PPLA.png" alt="PPLA" title="">                </div>                <div class="image-caption">PPLA</div>            </figure><p>####在线感知机</p><p>在线算法，来一个算一个，类似随机梯度下降求解。</p><p>算法如下：</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="/images/PLA/OPLA.png" alt="OPLA" title="">                </div>                <div class="image-caption">OPLA</div>            </figure><p>####核化感知机</p><p>考虑最终的<span class="math display">\[w,b\]</span>是修改n次后的增量，也就是： <span class="math display">\[w=\sum_{i=1}^{N}\alpha_iy_ix_i \\b=\sum_{i=1}^{N}\alpha_iy_i \\\]</span> 其中<span class="math display">\[\alpha_i=n_i\eta\]</span>。</p><p>最终的<span class="math display">\[f(x)\]</span>如下： <span class="math display">\[f(x)=\sum_{i=1}^{N}\alpha_iy_ix_i\cdot x+b \]</span> 公式中存在<span class="math display">\[x_i\cdot x\]</span>项，就可以采用核化理论，这就是核化感知机算法。</p><p>至此， 四种感知机算法解释完毕。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;本文将介绍四种感知机算法，包含批量感知机、pocket感知机、在线感知机以及核化感知机。&lt;/p&gt;
+&lt;p&gt;感知机算法：每发现一个错误点，就对它就行纠正。&lt;/p&gt;
+&lt;figure class=&quot;image-bubble&quot;&gt;
+                &lt;div clas
+      
+    
+    </summary>
+    
+    
+      <category term="机器学习" scheme="http://wuqiansheng.xyz/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="感知机" scheme="http://wuqiansheng.xyz/tags/%E6%84%9F%E7%9F%A5%E6%9C%BA/"/>
+    
+      <category term="PLA" scheme="http://wuqiansheng.xyz/tags/PLA/"/>
+    
+  </entry>
   
   <entry>
     <title>动态规划</title>
