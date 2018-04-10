@@ -197,55 +197,6 @@ ga('send', 'pageview');
 <p>损失函数为： <span class="math display">\[
 L(w, b) = -\sum_{x_i\in{M}}y_i(wx_i+b)
 \]</span> 其中M为误分点集合。</p>
-<h4 id="批量感知机">批量感知机</h4>
-<p>批量感知机求解的是损失函数全局最优梯度。</p>
-<p>损失函数的梯度： <span class="math display">\[
-\nabla_wL(w,b)=-\sum_{x_i\in{M}}y_ix_i \\
-\nabla_bL(w,b)=-\sum_{x_i\in{M}}y_i 
-\]</span> 每轮迭代需要用到所有样本。</p>
-<p>算法如下：</p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="/images/PLA/BPLA.png" alt="BPLA" title="">
-                </div>
-                <div class="image-caption">BPLA</div>
-            </figure>
-<h4 id="pocket感知机">pocket感知机</h4>
-<p>口袋算法基于贪心的思想。随机梯度下降，求解的是单个误分类点的梯度，用来近似全局最优梯度。</p>
-<p>更新为：</p>
-<p>随机选取一个误分类点<span class="math inline">\((x_i,y_i)\)</span> <span class="math display">\[
-w = w+\eta y_ix_i \\
-b = b+\eta y_i
-\]</span> <span class="math inline">\(\eta\)</span>为更新步长，又称学习率。</p>
-<p>算法如下：</p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="/images/PLA/PPLA.png" alt="PPLA" title="">
-                </div>
-                <div class="image-caption">PPLA</div>
-            </figure>
-<h4 id="在线感知机">在线感知机</h4>
-<p>在线算法，来一个算一个，类似随机梯度下降求解。</p>
-<p>算法如下：</p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="/images/PLA/OPLA.png" alt="OPLA" title="">
-                </div>
-                <div class="image-caption">OPLA</div>
-            </figure>
-<h4 id="核化感知机">核化感知机</h4>
-<p>考虑最终的<span class="math inline">\(w,b\)</span>是修改n次后的增量，也就是： <span class="math display">\[
-w=\sum_{i=1}^{N}\alpha_iy_ix_i \\
-b=\sum_{i=1}^{N}\alpha_iy_i \\
-\]</span> 其中<span class="math inline">\(\alpha_i=n_i\eta\)</span>。</p>
-<p>最终的<span class="math inline">\(f(x)\)</span>如下： <span class="math display">\[
-f(x)=\sum_{i=1}^{N}\alpha_iy_ix_i\cdot x+b 
-\]</span> 公式中存在<span class="math inline">\(x_i\cdot x\)</span>项，就可以采用核化理论，这就是核化感知机算法。</p>
-<p>至此， 四种感知机算法解释完毕。</p>
-
     
 
         <a href="/2018/04/09/感知机算法/" class="post-more waves-effect waves-button">
@@ -291,35 +242,18 @@ f(x)=\sum_{i=1}^{N}\alpha_iy_ix_i\cdot x+b
 
     
         <ol start="32" type="1">
-<li>最长有效括号</li>
-</ol>
-<pre><code>给一个只包含 `&#39;(&#39;` 和 `&#39;)&#39;` 的字符串，找出最长的有效（正确关闭）括号子串的长度。
-
-对于 `&quot;(()&quot;`，最长有效括号子串为 `&quot;()&quot;` ，它的长度是 2。
-
-另一个例子 `&quot;)()())&quot;`，最长有效括号子串为 `&quot;()()&quot;`，它的长度是 4。
-
-C++:
-
+<li><p>最长有效括号<br>
+给一个只包含 <code>'('</code> 和 <code>')'</code> 的字符串，找出最长的有效（正确关闭）括号子串的长度。</p>
+<p>对于 <code>&quot;(()&quot;</code>，最长有效括号子串为 <code>&quot;()&quot;</code> ，它的长度是 2。</p>
+<p>另一个例子 <code>&quot;)()())&quot;</code>，最长有效括号子串为 <code>&quot;()()&quot;</code>，它的长度是 4。</p>
+<p>C++:</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">longestValidParentheses</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; st;</span><br><span class="line">        <span class="keyword">int</span> _max = <span class="number">0</span>, left = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; s.length(); i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(s[i] == <span class="string">'('</span>) st.push(i);</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(st.empty())  left = i;   <span class="comment">// 前面不匹配</span></span><br><span class="line">                <span class="keyword">else</span>&#123;</span><br><span class="line">                    st.pop();</span><br><span class="line">                    <span class="keyword">if</span>(st.empty())  _max = max(_max, i - left); <span class="comment">// 前面全部匹配 ()()</span></span><br><span class="line">                    <span class="keyword">else</span> _max = max(_max, i - st.top()); <span class="comment">// 前面部分匹配 (()</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> _max;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-​
-
-Python:
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">longestValidParentheses</span><span class="params">(self, s)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type s: str</span></span><br><span class="line"><span class="string">        :rtype: int</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        v = []</span><br><span class="line">        max_len = <span class="number">0</span></span><br><span class="line">        max_i = <span class="number">-1</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(s)):</span><br><span class="line">            <span class="keyword">if</span> s[i] == <span class="string">'('</span>:</span><br><span class="line">                v.append(i)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> len(v) == <span class="number">0</span>:</span><br><span class="line">                    max_i = i</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    left = v.pop()</span><br><span class="line">                    <span class="keyword">if</span> len(v) == <span class="number">0</span>:</span><br><span class="line">                        max_len = max(max_len, i - max_i)</span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        max_len = max(max_len, i - v[<span class="number">-1</span>])</span><br><span class="line">        <span class="keyword">return</span> max_len</span><br></pre></td></tr></table></figure></code></pre>
-<p>&lt;!– more – &gt; ​</p>
-<ol start="53" type="1">
-<li><p>最大子序和</p>
-<p>给定一个序列（至少含有 1 个数），从该序列中寻找一个连续的子序列，使得子序列的和最大。</p>
-<p>例如，给定序列 <code>[-2,1,-3,4,-1,2,1,-5,4]</code>， 连续子序列 <code>[4,-1,2,1]</code> 的和最大，为 <code>6</code>。</p>
 <p>Python:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxSubArray</span><span class="params">(self, nums)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :rtype: int</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        result = <span class="number">-0x80000000</span></span><br><span class="line">        sum = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(nums)):</span><br><span class="line">            sum = max(sum+nums[i],nums[i])</span><br><span class="line">            result = max(sum,result)</span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">longestValidParentheses</span><span class="params">(self, s)</span>:</span></span><br><span class="line">            <span class="string">"""</span></span><br><span class="line"><span class="string">            :type s: str</span></span><br><span class="line"><span class="string">            :rtype: int</span></span><br><span class="line"><span class="string">            """</span></span><br><span class="line">            v = []</span><br><span class="line">            max_len = <span class="number">0</span></span><br><span class="line">            max_i = <span class="number">-1</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(len(s)):</span><br><span class="line">                <span class="keyword">if</span> s[i] == <span class="string">'('</span>:</span><br><span class="line">                    v.append(i)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">if</span> len(v) == <span class="number">0</span>:</span><br><span class="line">                        max_i = i</span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        left = v.pop()</span><br><span class="line">                        <span class="keyword">if</span> len(v) == <span class="number">0</span>:</span><br><span class="line">                            max_len = max(max_len, i - max_i)</span><br><span class="line">                        <span class="keyword">else</span>:</span><br><span class="line">                            max_len = max(max_len, i - v[<span class="number">-1</span>])</span><br><span class="line">            <span class="keyword">return</span> max_len</span><br><span class="line">    ```  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">53.</span> 最大子序和</span><br><span class="line">	给定一个序列（至少含有 <span class="number">1</span> 个数），从该序列中寻找一个连续的子序列，使得子序列的和最大。</span><br><span class="line"></span><br><span class="line">    例如，给定序列 `[<span class="number">-2</span>,<span class="number">1</span>,<span class="number">-3</span>,<span class="number">4</span>,<span class="number">-1</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">-5</span>,<span class="number">4</span>]`，</span><br><span class="line">    连续子序列 `[<span class="number">4</span>,<span class="number">-1</span>,<span class="number">2</span>,<span class="number">1</span>]` 的和最大，为 `<span class="number">6</span>`。</span><br><span class="line"></span><br><span class="line">    Python:</span><br><span class="line"></span><br><span class="line">    ```python</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">maxSubArray</span><span class="params">(self, nums)</span>:</span></span><br><span class="line">            <span class="string">"""</span></span><br><span class="line"><span class="string">            :type nums: List[int]</span></span><br><span class="line"><span class="string">            :rtype: int</span></span><br><span class="line"><span class="string">            """</span></span><br><span class="line">            result = <span class="number">-0x80000000</span></span><br><span class="line">            sum = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(len(nums)):</span><br><span class="line">                sum = max(sum+nums[i],nums[i])</span><br><span class="line">                result = max(sum,result)</span><br><span class="line">            <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
 <p>C++:</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxSubArray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = nums.size();</span><br><span class="line">        <span class="keyword">int</span> _max = <span class="number">-0x80000000</span>, _sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> num : nums)&#123;</span><br><span class="line">            _sum += num;</span><br><span class="line">            _max = max(_max, _sum);</span><br><span class="line">            <span class="keyword">if</span>(_sum &lt; <span class="number">0</span>)&#123;</span><br><span class="line">                _sum = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> _max;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>​</p></li>
-<li><p>爬楼梯</p>
-<p>你正在爬楼梯。需要 <em>n</em> 步你才能到达顶部。</p>
+<li><p>爬楼梯 你正在爬楼梯。需要 <em>n</em> 步你才能到达顶部。</p>
 <p>每次你可以爬 1 或 2 个台阶。你有多少种不同的方式可以爬到楼顶呢？</p>
 <p><strong>注意：</strong>给定 <em>n</em> 将是一个正整数。</p>
 <p><strong>示例 1：</strong></p>
