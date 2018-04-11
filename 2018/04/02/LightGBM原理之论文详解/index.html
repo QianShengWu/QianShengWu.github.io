@@ -46,7 +46,7 @@ ga('send', 'pageview');
 <meta property="og:image" content="http://lightgbm.apachecn.org/cn/latest/_images/level-wise.png">
 <meta property="og:image" content="http://lightgbm.apachecn.org/cn/latest/_images/leaf-wise.png">
 <meta property="og:image" content="http://wuqiansheng.xyz/images/LightGBM/4.png">
-<meta property="og:updated_time" content="2018-04-06T11:10:39.906Z">
+<meta property="og:updated_time" content="2018-04-11T00:52:18.952Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LightGBM原理之论文详解">
 <meta name="twitter:description" content="提升树是利用加模型与前向分布算法实现学习的优化过程，它有一些高效实现，如XGBoost, pGBRT，GBDT等。其中GBDT采用负梯度作为划分的指标（信息增益），XGBoost则利用到二阶导数。他们共同的不足是，计算信息增益需要扫描所有样本，从而找到最优划分点。在面对大量数据或者特征维度很高时，他们的效率和扩展性很难使人满意。微软开源的LightGBM（基于GBDT的）则很好的解决这些问题，它主">
@@ -176,7 +176,7 @@ ga('send', 'pageview');
     <aside class="post-widget">
         <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#goss"><span class="post-toc-number">1.</span> <span class="post-toc-text">GOSS</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#leaf-wise-best-first-的决策树生长策略"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">Leaf-wise (Best-first) 的决策树生长策略</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#goss"><span class="post-toc-number">1.</span> <span class="post-toc-text">GOSS</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#leaf-wise-best-first-的决策树生长策略"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">Leaf-wise (Best-first) 的决策树生长策略</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#efb"><span class="post-toc-number">2.</span> <span class="post-toc-text">EFB</span></a></li></ol>
         </nav>
     </aside>
 
@@ -245,23 +245,23 @@ ga('send', 'pageview');
 <figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
-                    <img src="http://lightgbm.apachecn.org/cn/latest/_images/level-wise.png" alt="_images/level-wise.png" title="">
+                    <img src="http://lightgbm.apachecn.org/cn/latest/_images/level-wise.png" alt="level-wise.png" title="">
                 </div>
-                <div class="image-caption">_images/level-wise.png</div>
+                <div class="image-caption">level-wise.png</div>
             </figure>
 <p>LightGBM 通过 leaf-wise (best-first)[<a href="http://lightgbm.apachecn.org/cn/latest/Features.html#references" target="_blank" rel="noopener">6]</a> 策略来生长树。它将选取具有最大 delta loss 的叶节点来生长。 当生长相同的 <code>#leaf</code>，leaf-wise 算法可以比 level-wise 算法减少更多的损失。</p>
 <p>当 <code>#data</code> 较小的时候，leaf-wise 可能会造成过拟合。 所以，LightGBM 可以利用额外的参数 <code>max_depth</code> 来限制树的深度并避免过拟合（树的生长仍然通过 leaf-wise 策略）。</p>
 <figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
-                    <img src="http://lightgbm.apachecn.org/cn/latest/_images/leaf-wise.png" alt="_images/leaf-wise.png" title="">
+                    <img src="http://lightgbm.apachecn.org/cn/latest/_images/leaf-wise.png" alt="leaf-wise.png" title="">
                 </div>
-                <div class="image-caption">_images/leaf-wise.png</div>
+                <div class="image-caption">leaf-wise.png</div>
             </figure>
-<p>####EFB</p>
+<h4 id="efb">EFB</h4>
 <p>高维数据一般是稀疏的，可以设计一种损失最小的特征减少方法。并且，在稀疏特征空间中，许多特征都是互斥的，也就是它们几乎不同时取非0值。因此，我们可以安全的把这些互斥特征绑到一起形成一个特征，然后基于这些特征束构建直方图，这样又可以加速了。</p>
 <p>有两个问题待解决，如何判断哪些特征该绑到一起，如何构建绑定。这是NP难的。</p>
-<p>首先，转换到图着色问题。G=(V, E)，把关联矩阵G的每一行看成特征，从而得到|V|个特征，互斥束就图中颜色相同的顶点。图中点就是特征，边代表两个特征不互斥，也就是特征之间的冲突。如果算法允许小的冲突，可以得到更小的特征束数量，计算效率会更高。证明发现随机污染一小部分特征值，最多影响训练精度 <span class="math display">\[O([(1-\gamma)n]^{-2/3})\]</span>，<span class="math display">\[\gamma\]</span>是所有束中冲突最大的。通过选取合适的<span class="math display">\[\gamma\]</span>，我们可以很好的在效率和精度之间寻找平衡。</p>
+<p>首先，转换到图着色问题。G=(V, E)，把关联矩阵G的每一行看成特征，从而得到|V|个特征，互斥束就图中颜色相同的顶点。图中点就是特征，边代表两个特征不互斥，也就是特征之间的冲突。如果算法允许小的冲突，可以得到更小的特征束数量，计算效率会更高。证明发现随机污染一小部分特征值，最多影响训练精度 <span class="math inline">\(O([(1-\gamma)n]^{-2/3})\)</span>，<span class="math inline">\(\gamma\)</span>是所有束中冲突最大的。通过选取合适的<span class="math inline">\(\gamma\)</span>，我们可以很好的在效率和精度之间寻找平衡。</p>
 <p>不互斥 =&gt; 可以同时取非0值，不能区分处理 =&gt; 冲突</p>
 <p>最后，排序就按照束的度来进行。当然，更一步优化是不够造图，直接<strong>根据非零值的数量排序</strong>，这个根据度排序很像，因为更多非0值意味着更高概率的冲突。更改了排序策略，可以避免重复。</p>
 <p>第二个问题，合并特征，从而降低训练复杂度，关键是我们可以确保原先特征值可以从特征束中识别出来。因为直方图存储的是特征的离散桶，而不是连续值，我们可以通过把互斥特征放到不同桶，从而构造一个特征束。这可以通过添加偏移实现。如，假设我们有2个特征在一个特征束中，原先特征A的范围为[0,10)，特征B的范围为[0,20)，我们给特征B加上一个偏移10，它就变成[10,30)，这样我们就可以执行安全的合并了，用特征束[0,30)代替特征A和B。具体算法如下。</p>
@@ -284,7 +284,7 @@ ga('send', 'pageview');
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2018-04-06T11:10:39.906Z" itemprop="dateUpdated">2018-04-06 19:10:39</time>
+    最后更新时间：<time datetime="2018-04-11T00:52:18.952Z" itemprop="dateUpdated">2018-04-11 08:52:18</time>
 </span><br>
 
 
