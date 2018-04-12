@@ -159,6 +159,60 @@ ga('send', 'pageview');
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-二分查找"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-04-12 17:00:00" datetime="2018-04-12T09:00:00.000Z"  itemprop="datePublished">2018-04-12</time>
+
+        
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/04/12/二分查找/">二分查找</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        <p>二分查找的三种写法：</p>
+<ol type="1">
+<li><p>正常写法，返回正好等于那个数的位置： <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bisect_normal</span><span class="params">(a, x)</span>:</span>  </span><br><span class="line">	l, h = <span class="number">0</span>, len(a) - <span class="number">1</span></span><br><span class="line">	<span class="keyword">while</span> l &lt;= h:</span><br><span class="line">		m = (l + h) // <span class="number">2</span></span><br><span class="line">		<span class="keyword">if</span> x == a[m]: <span class="keyword">return</span> m</span><br><span class="line">		<span class="keyword">elif</span> x &gt; a[m]: l = m + <span class="number">1</span></span><br><span class="line">		<span class="keyword">else</span>: h = m - <span class="number">1</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span></span><br></pre></td></tr></table></figure></p></li>
+<li><p>返回大于等于x的第一个位置<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bisect_left</span><span class="params">(a, x, lo=<span class="number">0</span>, hi=None)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> lo &lt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">'lo must be non-negative'</span>)</span><br><span class="line">    <span class="keyword">if</span> hi <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        hi = len(a)</span><br><span class="line">    <span class="keyword">while</span> lo &lt; hi:</span><br><span class="line">        mid = (lo+hi)//<span class="number">2</span></span><br><span class="line">        <span class="keyword">if</span> a[mid] &lt; x: lo = mid+<span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>: hi = mid</span><br><span class="line">    <span class="keyword">return</span> lo</span><br></pre></td></tr></table></figure></p></li>
+<li><p>返回小于等于x的最后一个位置<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bisect_right</span><span class="params">(a, x, lo=<span class="number">0</span>, hi=None)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> lo &lt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">'lo must be non-negative'</span>)</span><br><span class="line">    <span class="keyword">if</span> hi <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        hi = len(a)</span><br><span class="line">    <span class="keyword">while</span> lo &lt; hi:</span><br><span class="line">        mid = (lo+hi)//<span class="number">2</span></span><br><span class="line">        <span class="keyword">if</span> x &lt; a[mid]: hi = mid</span><br><span class="line">        <span class="keyword">else</span>: lo = mid+<span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> lo</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<p><strong>注意：m = ( l + h) // 2 会溢出 （虽然python不会），建议采用 m = l + (h - l) // 2 </strong></p>
+
+    
+
+        <a href="/2018/04/12/二分查找/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/二分查找/">二分查找</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-正则化"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -185,10 +239,10 @@ ga('send', 'pageview');
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        <p><strong>正则化</strong>(regularization)，是指在线性代数理论中，不适定问题通常是由一组线性代数方程定义的，而且这组方程组通常来源于有着很大的条件数的不适定反问题。大条件数意味着舍入误差或其它误差会严重地影响问题的结果。(百度百科:) 主要解决的问题：<br>
-1. 正则化就是对最小化经验误差函数上加约束，这样的约束可以解释为先验知识(<strong>正则化参数等价于对参数引入先验分布</strong>)。约束有引导作用，在优化误差函数的时候倾向于选择满足约束的梯度减少的方向，使最终的解倾向于符合先验知识(如一般的l-norm先验，表示原问题更可能是比较简单的，这样的优化倾向于产生参数值量级小的解，一般对应于稀疏参数的平滑解)。</p>
-<ol start="2" type="1">
-<li>同时，正则化解决了逆问题的不适定性，产生的解是存在，唯一同时也依赖于数据的，噪声对不适定的影响就弱，解就不会过拟合，而且如果先验(正则化)合适，则解就倾向于是符合真解(更不会过拟合了)，即使训练集中彼此间不相关的样本数很少。</li>
+        <p><strong>正则化</strong>(regularization)，是指在线性代数理论中，不适定问题通常是由一组线性代数方程定义的，而且这组方程组通常来源于有着很大的条件数的不适定反问题。大条件数意味着舍入误差或其它误差会严重地影响问题的结果。(百度百科:) 主要解决的问题：</p>
+<ol type="1">
+<li><p>正则化就是对最小化经验误差函数上加约束，这样的约束可以解释为先验知识(<strong>正则化参数等价于对参数引入先验分布</strong>)。约束有引导作用，在优化误差函数的时候倾向于选择满足约束的梯度减少的方向，使最终的解倾向于符合先验知识(如一般的l-norm先验，表示原问题更可能是比较简单的，这样的优化倾向于产生参数值量级小的解，一般对应于稀疏参数的平滑解)。</p></li>
+<li><p>同时，正则化解决了逆问题的不适定性，产生的解是存在，唯一同时也依赖于数据的，噪声对不适定的影响就弱，解就不会过拟合，而且如果先验(正则化)合适，则解就倾向于是符合真解(更不会过拟合了)，即使训练集中彼此间不相关的样本数很少。</p></li>
 </ol>
 <p>总之：</p>
 <ol type="1">
@@ -629,85 +683,6 @@ L(w, b) = -\sum_{x_i\in{M}}y_i(wx_i+b)
     <div class="post-footer">
         
 	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-A-Brief-Introduction-To-Recommender-System"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2016-12-12 15:18:18" datetime="2016-12-12T07:18:18.000Z"  itemprop="datePublished">2016-12-12</time>
-
-        
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/12/12/A-Brief-Introduction-To-Recommender-System/">A Brief Introduction To Recommender System</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <h2 id="推荐系统简介一">推荐系统简介（一）</h2>
-<h3 id="为什么需要需要系统">为什么需要需要系统</h3>
-<ol type="1">
-<li>信息复杂，不同的用户偏好；</li>
-<li>提高驻留时间、长尾、转化率和收益。</li>
-</ol>
-<h3 id="历史">历史</h3>
-<ol type="1">
-<li>信息检索和信息过滤</li>
-<li>手动协同过滤，Tapestry</li>
-<li>自动协同过滤，GroupLens</li>
-</ol>
-<h3 id="分析框架">分析框架</h3>
-<ol type="1">
-<li>领域：商业</li>
-<li>目的：推荐商品、信息</li>
-<li>推荐内容：情景相关</li>
-<li>谁的建议：专家、普通人</li>
-<li>个性化水平：基于人口统计的，非个性化的，个性化的</li>
-<li>隐私和可靠性：隐私保护和推荐是否被商业利用</li>
-<li>接口：输入（清楚|模糊）和输出接口</li>
-<li>推荐算法：基于内容、知识、协同过滤等。</li>
-</ol>
-<h3 id="构成">构成</h3>
-<ol type="1">
-<li><p>用户</p></li>
-<li><p>物品</p></li>
-<li><p>评价</p></li>
-<li><p>社区</p>
-<figure>
-<img src="/images/Component_in_RS.png" alt="Component_in_RS"><figcaption>Component_in_RS</figcaption>
-</figure></li>
-</ol>
-<p>待续。。。</p>
-
-    
-
-        <a href="/2016/12/12/A-Brief-Introduction-To-Recommender-System/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/推荐系统/">推荐系统</a></li></ul>
 
     </div>
     

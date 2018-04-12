@@ -25,27 +25,25 @@ ga('send', 'pageview');
     
     
     
-    <title>正则化 | wuqiansheng</title>
+    <title>二分查找 | wuqiansheng</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="机器学习,正则化">
-    <meta name="description" content="正则化(regularization)，是指在线性代数理论中，不适定问题通常是由一组线性代数方程定义的，而且这组方程组通常来源于有着很大的条件数的不适定反问题。大条件数意味着舍入误差或其它误差会严重地影响问题的结果。(百度百科:) 主要解决的问题：  正则化就是对最小化经验误差函数上加约束，这样的约束可以解释为先验知识(正则化参数等价于对参数引入先验分布)。约束有引导作用，在优化误差函数的时候">
-<meta name="keywords" content="机器学习,正则化">
+    <meta name="keywords" content="python,二分查找,算法">
+    <meta name="description" content="二分查找的三种写法：  正常写法，返回正好等于那个数的位置： 12345678def bisect_normal(a, x):  	l, h = 0, len(a) - 1	while l &amp;lt;= h:		m = (l + h) // 2		if x == a[m]: return m		elif x &amp;gt; a[m]: l = m + 1		else: h = m - 1	return">
+<meta name="keywords" content="python,二分查找,算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="正则化">
-<meta property="og:url" content="http://wuqiansheng.xyz/2018/04/11/正则化/index.html">
+<meta property="og:title" content="二分查找">
+<meta property="og:url" content="http://wuqiansheng.xyz/2018/04/12/二分查找/index.html">
 <meta property="og:site_name" content="wuqiansheng">
-<meta property="og:description" content="正则化(regularization)，是指在线性代数理论中，不适定问题通常是由一组线性代数方程定义的，而且这组方程组通常来源于有着很大的条件数的不适定反问题。大条件数意味着舍入误差或其它误差会严重地影响问题的结果。(百度百科:) 主要解决的问题：  正则化就是对最小化经验误差函数上加约束，这样的约束可以解释为先验知识(正则化参数等价于对参数引入先验分布)。约束有引导作用，在优化误差函数的时候">
+<meta property="og:description" content="二分查找的三种写法：  正常写法，返回正好等于那个数的位置： 12345678def bisect_normal(a, x):  	l, h = 0, len(a) - 1	while l &amp;lt;= h:		m = (l + h) // 2		if x == a[m]: return m		elif x &amp;gt; a[m]: l = m + 1		else: h = m - 1	return">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://wuqiansheng.xyz/images/l1-l2-sl.png">
-<meta property="og:updated_time" content="2018-04-12T02:40:37.587Z">
+<meta property="og:updated_time" content="2018-04-12T09:11:37.339Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="正则化">
-<meta name="twitter:description" content="正则化(regularization)，是指在线性代数理论中，不适定问题通常是由一组线性代数方程定义的，而且这组方程组通常来源于有着很大的条件数的不适定反问题。大条件数意味着舍入误差或其它误差会严重地影响问题的结果。(百度百科:) 主要解决的问题：  正则化就是对最小化经验误差函数上加约束，这样的约束可以解释为先验知识(正则化参数等价于对参数引入先验分布)。约束有引导作用，在优化误差函数的时候">
-<meta name="twitter:image" content="http://wuqiansheng.xyz/images/l1-l2-sl.png">
+<meta name="twitter:title" content="二分查找">
+<meta name="twitter:description" content="二分查找的三种写法：  正常写法，返回正好等于那个数的位置： 12345678def bisect_normal(a, x):  	l, h = 0, len(a) - 1	while l &amp;lt;= h:		m = (l + h) // 2		if x == a[m]: return m		elif x &amp;gt; a[m]: l = m + 1		else: h = m - 1	return">
     
         <link rel="alternate" type="application/atom+xml" title="wuqiansheng" href="/atom.xml">
     
@@ -126,7 +124,7 @@ ga('send', 'pageview');
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">正则化</div>
+        <div class="flex-col header-title ellipsis">二分查找</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -148,11 +146,11 @@ ga('send', 'pageview');
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">正则化</h1>
+        <h1 class="title">二分查找</h1>
         <h5 class="subtitle">
             
-                <time datetime="2018-04-11T01:31:00.000Z" itemprop="datePublished" class="page-time">
-  2018-04-11
+                <time datetime="2018-04-12T09:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-04-12
 </time>
 
 
@@ -169,13 +167,13 @@ ga('send', 'pageview');
 <div class="container body-wrap">
     
 
-<article id="post-正则化"
+<article id="post-二分查找"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">正则化</h1>
+        <h1 class="post-card-title">二分查找</h1>
         <div class="post-meta">
-            <time class="post-time" title="2018-04-11 09:31:00" datetime="2018-04-11T01:31:00.000Z"  itemprop="datePublished">2018-04-11</time>
+            <time class="post-time" title="2018-04-12 17:00:00" datetime="2018-04-12T09:00:00.000Z"  itemprop="datePublished">2018-04-12</time>
 
             
 
@@ -188,38 +186,15 @@ ga('send', 'pageview');
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p><strong>正则化</strong>(regularization)，是指在线性代数理论中，不适定问题通常是由一组线性代数方程定义的，而且这组方程组通常来源于有着很大的条件数的不适定反问题。大条件数意味着舍入误差或其它误差会严重地影响问题的结果。(百度百科:) 主要解决的问题：</p>
+            <p>二分查找的三种写法：</p>
 <ol type="1">
-<li><p>正则化就是对最小化经验误差函数上加约束，这样的约束可以解释为先验知识(<strong>正则化参数等价于对参数引入先验分布</strong>)。约束有引导作用，在优化误差函数的时候倾向于选择满足约束的梯度减少的方向，使最终的解倾向于符合先验知识(如一般的l-norm先验，表示原问题更可能是比较简单的，这样的优化倾向于产生参数值量级小的解，一般对应于稀疏参数的平滑解)。</p></li>
-<li><p>同时，正则化解决了逆问题的不适定性，产生的解是存在，唯一同时也依赖于数据的，噪声对不适定的影响就弱，解就不会过拟合，而且如果先验(正则化)合适，则解就倾向于是符合真解(更不会过拟合了)，即使训练集中彼此间不相关的样本数很少。</p></li>
+<li><p>正常写法，返回正好等于那个数的位置： <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bisect_normal</span><span class="params">(a, x)</span>:</span>  </span><br><span class="line">	l, h = <span class="number">0</span>, len(a) - <span class="number">1</span></span><br><span class="line">	<span class="keyword">while</span> l &lt;= h:</span><br><span class="line">		m = (l + h) // <span class="number">2</span></span><br><span class="line">		<span class="keyword">if</span> x == a[m]: <span class="keyword">return</span> m</span><br><span class="line">		<span class="keyword">elif</span> x &gt; a[m]: l = m + <span class="number">1</span></span><br><span class="line">		<span class="keyword">else</span>: h = m - <span class="number">1</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span></span><br></pre></td></tr></table></figure></p></li>
+<li><p>返回大于等于x的第一个位置<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bisect_left</span><span class="params">(a, x, lo=<span class="number">0</span>, hi=None)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> lo &lt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">'lo must be non-negative'</span>)</span><br><span class="line">    <span class="keyword">if</span> hi <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        hi = len(a)</span><br><span class="line">    <span class="keyword">while</span> lo &lt; hi:</span><br><span class="line">        mid = (lo+hi)//<span class="number">2</span></span><br><span class="line">        <span class="keyword">if</span> a[mid] &lt; x: lo = mid+<span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>: hi = mid</span><br><span class="line">    <span class="keyword">return</span> lo</span><br></pre></td></tr></table></figure></p></li>
+<li><p>返回小于等于x的最后一个位置<br>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bisect_right</span><span class="params">(a, x, lo=<span class="number">0</span>, hi=None)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> lo &lt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">'lo must be non-negative'</span>)</span><br><span class="line">    <span class="keyword">if</span> hi <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        hi = len(a)</span><br><span class="line">    <span class="keyword">while</span> lo &lt; hi:</span><br><span class="line">        mid = (lo+hi)//<span class="number">2</span></span><br><span class="line">        <span class="keyword">if</span> x &lt; a[mid]: hi = mid</span><br><span class="line">        <span class="keyword">else</span>: lo = mid+<span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> lo</span><br></pre></td></tr></table></figure></p></li>
 </ol>
-<p>总之：</p>
-<ol type="1">
-<li>正则化的目的：防止过拟合。<br>
-</li>
-<li>正则化的本质：约束（限制）要优化的参数。</li>
-</ol>
-<p>因此，引入正则化项，也就是<span class="math inline">\(L_p\)</span>范数。</p>
-<p>具体有：</p>
-<ol type="1">
-<li>L0范数：非零元素的个数，稀疏解，但不连续不可导。<br>
-</li>
-<li>L1范数：绝对值之和，稀疏解，连续但部分可导(与坐标轴相交的部分)。<br>
-</li>
-<li><span class="math inline">\(L_p\)</span>范数：<span class="math inline">\((\sum\limits_{\rm{i}} {x_i^p}) {^{\frac{1}{p}}}\)</span></li>
-<li><span class="math inline">\(L\infty\)</span>范数：<span class="math inline">\({\left\| x \right\|_\infty } = \max (| x_i |)\)</span></li>
-</ol>
-<p>考虑线性模型,损失函数为平方损失：<br>
-<span class="math display">\[f(x)=w^Tx\]</span> 则优化目标为： <span class="math display">\[\min _w \sum_{i=1}^m (y_i-w^Tx_i)^2\]</span></p>
-<p>引入正则化项则变成： <span class="math display">\[\min _w \sum_{i=1}^m (y_i-w^Tx_i)^2 + \lambda||w||_p^p\]</span></p>
-<p>L2的叫<strong>岭回归</strong>，可以直接求解，因为逆存在。<br>
-L1的叫<strong>LASSO</strong>，可以使用近端梯度下降(PGD)求解，泰勒二阶展开。</p>
-<p>那么，为什么L1更容易获得稀疏解呢：<br>
-首先我们看图：<br>
-<img src="/images/l1-l2-sl.png" alt="L1&amp;L"></p>
-<p>最优解的位置在<span class="math inline">\(\nabla {E_{in}}\)</span>和w平行的位置。<br>
-而在L1范数的坐标限中，<span class="math inline">\(\nabla {E_{in}}\)</span>和w往往不共线，它还有一个下降的分量拉扯它到坐标轴的交点上。</p>
-<p>至此，正则化讲解完毕。</p>
+<p><strong>注意：m = ( l + h) // 2 会溢出 （虽然python不会），建议采用 m = l + (h - l) // 2 </strong></p>
 
         </div>
 
@@ -228,12 +203,12 @@ L1的叫<strong>LASSO</strong>，可以使用近端梯度下降(PGD)求解，泰
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2018-04-12T02:40:37.587Z" itemprop="dateUpdated">2018-04-12 10:40:37</time>
+    最后更新时间：<time datetime="2018-04-12T09:11:37.339Z" itemprop="dateUpdated">2018-04-12 17:11:37</time>
 </span><br>
 
 
         
-        本文链接：<a href="/2018/04/11/正则化/" target="_blank" rel="external">http://wuqiansheng.xyz/2018/04/11/正则化/</a>
+        本文链接：<a href="/2018/04/12/二分查找/" target="_blank" rel="external">http://wuqiansheng.xyz/2018/04/12/二分查找/</a>
         
     </div>
     
@@ -254,7 +229,7 @@ L1的叫<strong>LASSO</strong>，可以使用近端梯度下降(PGD)求解，泰
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/正则化/">正则化</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/二分查找/">二分查找</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
 
 
             
@@ -264,7 +239,7 @@ L1的叫<strong>LASSO</strong>，可以使用近端梯度下降(PGD)求解，泰
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wuqiansheng.xyz/2018/04/11/正则化/&title=《正则化》 — wuqiansheng&pic=http://7xso5r.com1.z0.glb.clouddn.com/avstar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wuqiansheng.xyz/2018/04/12/二分查找/&title=《二分查找》 — wuqiansheng&pic=http://7xso5r.com1.z0.glb.clouddn.com/avstar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -274,22 +249,22 @@ L1的叫<strong>LASSO</strong>，可以使用近端梯度下降(PGD)求解，泰
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wuqiansheng.xyz/2018/04/11/正则化/&title=《正则化》 — wuqiansheng&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wuqiansheng.xyz/2018/04/12/二分查找/&title=《二分查找》 — wuqiansheng&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wuqiansheng.xyz/2018/04/11/正则化/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wuqiansheng.xyz/2018/04/12/二分查找/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《正则化》 — wuqiansheng&url=http://wuqiansheng.xyz/2018/04/11/正则化/&via=http://wuqiansheng.xyz" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《二分查找》 — wuqiansheng&url=http://wuqiansheng.xyz/2018/04/12/二分查找/&via=http://wuqiansheng.xyz" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wuqiansheng.xyz/2018/04/11/正则化/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wuqiansheng.xyz/2018/04/12/二分查找/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -309,21 +284,14 @@ L1的叫<strong>LASSO</strong>，可以使用近端梯度下降(PGD)求解，泰
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between">
-  
-    <div class="waves-block waves-effect prev">
-      <a href="/2018/04/12/二分查找/" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">二分查找</h4>
-      </a>
-    </div>
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
   
 
   
     <div class="waves-block waves-effect next">
-      <a href="/2018/04/10/leetcode-树/" id="post-next" class="post-nav-link">
+      <a href="/2018/04/11/正则化/" id="post-next" class="post-nav-link">
         <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">leetcode-树</h4>
+        <h4 class="title">正则化</h4>
       </a>
     </div>
   
@@ -428,7 +396,7 @@ L1的叫<strong>LASSO</strong>，可以使用近端梯度下降(PGD)求解，泰
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wuqiansheng.xyz/2018/04/11/正则化/&title=《正则化》 — wuqiansheng&pic=http://7xso5r.com1.z0.glb.clouddn.com/avstar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wuqiansheng.xyz/2018/04/12/二分查找/&title=《二分查找》 — wuqiansheng&pic=http://7xso5r.com1.z0.glb.clouddn.com/avstar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -438,22 +406,22 @@ L1的叫<strong>LASSO</strong>，可以使用近端梯度下降(PGD)求解，泰
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wuqiansheng.xyz/2018/04/11/正则化/&title=《正则化》 — wuqiansheng&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wuqiansheng.xyz/2018/04/12/二分查找/&title=《二分查找》 — wuqiansheng&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wuqiansheng.xyz/2018/04/11/正则化/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wuqiansheng.xyz/2018/04/12/二分查找/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《正则化》 — wuqiansheng&url=http://wuqiansheng.xyz/2018/04/11/正则化/&via=http://wuqiansheng.xyz" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《二分查找》 — wuqiansheng&url=http://wuqiansheng.xyz/2018/04/12/二分查找/&via=http://wuqiansheng.xyz" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wuqiansheng.xyz/2018/04/11/正则化/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wuqiansheng.xyz/2018/04/12/二分查找/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -464,7 +432,7 @@ L1的叫<strong>LASSO</strong>，可以使用近端梯度下降(PGD)求解，泰
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://wuqiansheng.xyz/2018/04/11/正则化/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://wuqiansheng.xyz/2018/04/12/二分查找/" alt="微信分享二维码">
 </div>
 
 
