@@ -41,7 +41,7 @@ ga('send', 'pageview');
 <meta property="og:description" content="正则化(regularization)，是指在线性代数理论中，不适定问题通常是由一组线性代数方程定义的，而且这组方程组通常来源于有着很大的条件数的不适定反问题。大条件数意味着舍入误差或其它误差会严重地影响问题的结果。(百度百科:) 主要解决的问题：  正则化就是对最小化经验误差函数上加约束，这样的约束可以解释为先验知识(正则化参数等价于对参数引入先验分布)。约束有引导作用，在优化误差函数的时候">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://wuqiansheng.xyz/images/l1-l2-sl.png">
-<meta property="og:updated_time" content="2018-04-12T02:40:37.587Z">
+<meta property="og:updated_time" content="2018-04-16T02:44:29.061Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="正则化">
 <meta name="twitter:description" content="正则化(regularization)，是指在线性代数理论中，不适定问题通常是由一组线性代数方程定义的，而且这组方程组通常来源于有着很大的条件数的不适定反问题。大条件数意味着舍入误差或其它误差会严重地影响问题的结果。(百度百科:) 主要解决的问题：  正则化就是对最小化经验误差函数上加约束，这样的约束可以解释为先验知识(正则化参数等价于对参数引入先验分布)。约束有引导作用，在优化误差函数的时候">
@@ -217,7 +217,7 @@ L1的叫<strong>LASSO</strong>，可以使用近端梯度下降(PGD)求解，泰
 <p>那么，为什么L1更容易获得稀疏解呢：<br>
 首先我们看图：<br>
 <img src="/images/l1-l2-sl.png" alt="L1&amp;L"></p>
-<p>最优解的位置在<span class="math inline">\(\nabla {E_{in}}\)</span>和w平行的位置。<br>
+<p>最优解的位置在<span class="math inline">\(-\nabla {E_{in}}\)</span>和w平行的位置。<br>
 而在L1范数的坐标限中，<span class="math inline">\(\nabla {E_{in}}\)</span>和w往往不共线，它还有一个下降的分量拉扯它到坐标轴的交点上。</p>
 <p>至此，正则化讲解完毕。</p>
 
@@ -228,7 +228,7 @@ L1的叫<strong>LASSO</strong>，可以使用近端梯度下降(PGD)求解，泰
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2018-04-12T02:40:37.587Z" itemprop="dateUpdated">2018-04-12 10:40:37</time>
+    最后更新时间：<time datetime="2018-04-16T02:44:29.061Z" itemprop="dateUpdated">2018-04-16 10:44:29</time>
 </span><br>
 
 
