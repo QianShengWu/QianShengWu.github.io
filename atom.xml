@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wuqiansheng.xyz/"/>
-  <updated>2018-04-16T02:47:17.506Z</updated>
+  <updated>2018-04-18T07:10:08.700Z</updated>
   <id>http://wuqiansheng.xyz/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>机器学习线性模型</title>
+    <link href="http://wuqiansheng.xyz/2018/04/18/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/"/>
+    <id>http://wuqiansheng.xyz/2018/04/18/机器学习线性模型/</id>
+    <published>2018-04-18T02:28:00.000Z</published>
+    <updated>2018-04-18T07:10:08.700Z</updated>
+    
+    <content type="html"><![CDATA[<p>线性模型是机器学习最基础的模型，但却十分强大，很多复杂模型都是线性模型的变体。</p><p>首先，最基础的线性模型为<span class="math inline">\(h=w^Tx+b\)</span>。</p><p>根据数据算出一个分数(score),这就是回归模型，再加上一个阈值判断，如</p><p><span class="math display">\[{\rm{h}} = \theta ({w^T}x) = \left\{ {\begin{array}{*{20}{c}}{1,{w^T}x \ge 0.5}\\{0,{w^T}x &lt; 0.5}\end{array}} \right.\]</span></p><p>接下来我们分析不同的模型（主要从损失函数分析）：</p><h3 id="回归模型">回归模型</h3><ol type="1"><li><p>线性回归：</p><p>损失函数采用<strong>平方损失</strong><br><span class="math display">\[     L = \sum\limits_{i = 1}^N {({y_i} - {w^T}{x_i})} \]</span> 求解，可以采用梯度下降法。</p><p>写成向量的形式：</p><p><span class="math display">\[L = (y-Xw)^T(y-Xw)\]</span></p><p>对<span class="math inline">\(w\)</span>求导：</p><p><span class="math display">\[ \frac{\partial L}{\partial w} = 2{X^T}(Xw - y)\]</span></p><p>当<span class="math inline">\(X^TX\)</span>为满秩矩阵或正定矩阵，也就是可逆，得：</p><p><span class="math display">\[w^*=(X^TX)^{-1}X^Ty\]</span></p><p>最终的线性模型为：</p><p><span class="math display">\[g = (X^TX)^{-1}X^Tyx\]</span></p></li></ol><h3 id="分类模型">分类模型</h3><p>如何分类？直接讲，如果概率大于0.5，我们就认为他是1类，否则就是0类。</p><ol type="1"><li><p>感知机<br>更多的感知机算法，详情见: <a href="http://wuqiansheng.xyz/2018/04/09/感知机算法/" class="uri">http://wuqiansheng.xyz/2018/04/09/感知机算法/</a>。<br>这里主要从损失函数方向推导：</p><p>空间一个点到超平面的距离为：<br><span class="math display">\[ \frac{1}{||w||}|w^Tx_i+b|\]</span></p><p>对于误分类的点<span class="math inline">\((x_i,y_i)\)</span>：</p><p>什么叫误分类呢，感知机的阈值定为0，其实0.5,0都一样，只不过是在<span class="math inline">\(b\)</span>上加个偏移。</p><p>误分就是：<br><span class="math display">\[-y_i(w^Tx_i+b)&gt;0\]</span></p><p>那么损失函数为：</p><p><span class="math display">\[L=\sum_{i}^{N} \max(0, y_i(w^Tx_i+b))\]</span></p><p>换成另外一种形式，极小化：<br><span class="math display">\[L=-\sum_{x_i \in M}{y_i(w^Tx_i+b)}\]</span></p><p>采用梯度下降求解。 <span class="math display">\[ w = w+\eta y_ix_i \\ b = b+\eta y_i \]</span> <span class="math inline">\(\eta\)</span>为更新步长，又称学习率。</p><p>考虑它的对偶模型为：</p><p>考虑最终的<span class="math inline">\(w,b\)</span>是修改n次后的增量，也就是： <span class="math display">\[ w=\sum_{i=1}^{N}\alpha_iy_ix_i \\ b=\sum_{i=1}^{N}\alpha_iy_i \\ \]</span> 其中<span class="math inline">\(\alpha_i=n_i\eta\)</span>。</p><p>最终的<span class="math inline">\(h\)</span>如下： <span class="math display">\[ h=\sum_{i=1}^{N}\alpha_iy_ix_i\cdot x+b  \]</span></p></li><li><p>逻辑回归</p><p>逻辑回归想解决的问题：把回归得到的结果转化为0,1的分类。上面介绍了一种粗略的解法， 用0.5做阈值，但是这样太过粗暴，不可导，不连续，求解比较困难。因此，引入sigmod函数 进行近似。<br>看图：<br><img src="/images/pasted-7.png"></p><p>sigmod函数为： <span class="math inline">\(\theta = \frac{1}{1+e^{-z}}\)</span></p><p>则对于逻辑回归问题，hypothesis就是这样的形式：</p><p><span class="math display">\[h(x)=\frac {1}{e^{−w^Tx}}\]</span></p><p>那我们的目标就是求出这个预测函数h(x)，使它接近目标函数f(x)。</p><p>我们令目标函数为<span class="math inline">\(f(y=+1|x)=\)</span>，则</p><p><span class="math display">\[ p(y|x) = \left\{ {\begin{array}{*{20}{c}} {f(x),y =  + 1}\\ {1 - f(x),y =  - 1} \end{array}} \right.\]</span></p><p>sigmod函数满足一个性质： <span class="math inline">\(h(-x)=1-h(x)\)</span></p><p>那么似然函数为：</p><p><span class="math display">\[likehood(h)=p(x_1)h(+x_1)\times        p(x_2)h(-x_x) \times \cdots p(x_N)h(-  x_N)\]</span></p><p><span class="math inline">\(p(x_N)\)</span>对所有的h来说都是一样的，可以忽 略，再加上log, 那么损失函数为：</p><p><span class="math display">\[ \mathop {\max }\limits_h =   \log \prod\limits_{i = 1}^N {h({y_i}{x_i})}\]</span></p><p>带入<span class="math inline">\(w\)</span>，</p><p><span class="math display">\[\mathop {\max }\limits_w =    \log \prod\limits_{i = 1}^N {\theta({y_i}{w^T}{x_i})}\]</span></p><p>接着，我们将maximize问题转化为minimize问题，添加一个负号就行，并引入平均数操作<span class="math inline">\(\frac{1}{N}\)</span>：</p><p><span class="math display">\[ \mathop {\min }\limits_w \frac{1}{N}\sum\limits_{i = 1}^N { - \ln \theta ({y_i}{w^T}{x_i})}\]</span></p><p>带入<span class="math inline">\(\theta(s)=\frac{1}{1+exp(-s)}\)</span></p><p>得到:</p><p><span class="math display">\[ \mathop {\min }\limits_w \frac{1}{N}\sum\limits_{i = 1}^N {\ln (1 + \exp ( - {y_i}{w^T}{x_i}))}\]</span></p><p>其中<strong><span class="math inline">\(\ln (1 + \exp ( - {y_i}{w^T}{x_i})\)</span></strong> 叫做交叉熵。</p><p>当然还有其他的推导方法，周志华老师书上采用另外一种推导方法(p59)，</p><p>也就是：</p><p><span class="math display">\[\sum_i {y_i p(y=1|x_i) + (1-y_i)p(y=0|x_i)}\]</span></p></li><li><p>支持向量机</p><p>支持向量机求解的是获得最大支撑面。</p><p>巴啦巴拉求解之后得到：</p><p><span class="math display">\[\min_{w,b}\frac{1}{2}||w||^2 \\s.t.\; y_i(w^Tx_i+b) \ge 1, \; i = 1,2,...,N.\]</span></p><p>损失函数就是:</p><p><span class="math display">\[\sum_{i=1}^{N} \frac{1}{2}||w||^2 + max(0, 1-y_i(w^Tx_i+b))\]</span></p><p>那SVM为什么不采用求解这个损失函数呢，因为部分不可导，求解也会失去核技巧的便利，以及svm对偶求解可以获得稀疏解，仅保存支撑向量即可。</p><p>令<span class="math inline">\(s=w^Tx+b\)</span>,</p><p>分类模型都是用连续可导函数去近似01损失函数，并且都是它的上界，图中还缺少了AdaBoost的指数损失函数<span class="math inline">\(e^{-ys}\)</span>。 <figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="\images\pasted-6.png" alt="" title="">                </div>                <div class="image-caption"></div>            </figure></p></li></ol><p>至此，线性模型介绍完毕。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;线性模型是机器学习最基础的模型，但却十分强大，很多复杂模型都是线性模型的变体。&lt;/p&gt;
+&lt;p&gt;首先，最基础的线性模型为&lt;span class=&quot;math inline&quot;&gt;\(h=w^Tx+b\)&lt;/span&gt;。&lt;/p&gt;
+&lt;p&gt;根据数据算出一个分数(score),这就是回
+      
+    
+    </summary>
+    
+    
+      <category term="机器学习" scheme="http://wuqiansheng.xyz/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="线性模型" scheme="http://wuqiansheng.xyz/tags/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/"/>
+    
+  </entry>
   
   <entry>
     <title>leetcode-深度优先遍历</title>
@@ -39,9 +66,9 @@
     </summary>
     
     
-      <category term="python" scheme="http://wuqiansheng.xyz/tags/python/"/>
-    
       <category term="leetcode" scheme="http://wuqiansheng.xyz/tags/leetcode/"/>
+    
+      <category term="python" scheme="http://wuqiansheng.xyz/tags/python/"/>
     
       <category term="dfs" scheme="http://wuqiansheng.xyz/tags/dfs/"/>
     
@@ -117,9 +144,9 @@
     </summary>
     
     
-      <category term="python" scheme="http://wuqiansheng.xyz/tags/python/"/>
-    
       <category term="leetcode" scheme="http://wuqiansheng.xyz/tags/leetcode/"/>
+    
+      <category term="python" scheme="http://wuqiansheng.xyz/tags/python/"/>
     
       <category term="树" scheme="http://wuqiansheng.xyz/tags/%E6%A0%91/"/>
     
@@ -180,13 +207,13 @@ L(w, b) = -\sum_{x_i\in{M}}y_i(wx_i+b)
     </summary>
     
     
-      <category term="python" scheme="http://wuqiansheng.xyz/tags/python/"/>
-    
       <category term="leetcode" scheme="http://wuqiansheng.xyz/tags/leetcode/"/>
     
       <category term="动态规划" scheme="http://wuqiansheng.xyz/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
     
       <category term="C++" scheme="http://wuqiansheng.xyz/tags/C/"/>
+    
+      <category term="python" scheme="http://wuqiansheng.xyz/tags/python/"/>
     
   </entry>
   
@@ -278,9 +305,9 @@ L(w, b) = -\sum_{x_i\in{M}}y_i(wx_i+b)
     </summary>
     
     
-      <category term="tensorflow" scheme="http://wuqiansheng.xyz/tags/tensorflow/"/>
-    
       <category term="python" scheme="http://wuqiansheng.xyz/tags/python/"/>
+    
+      <category term="tensorflow" scheme="http://wuqiansheng.xyz/tags/tensorflow/"/>
     
   </entry>
   
@@ -304,9 +331,9 @@ L(w, b) = -\sum_{x_i\in{M}}y_i(wx_i+b)
     </summary>
     
     
-      <category term="tensorflow" scheme="http://wuqiansheng.xyz/tags/tensorflow/"/>
-    
       <category term="python" scheme="http://wuqiansheng.xyz/tags/python/"/>
+    
+      <category term="tensorflow" scheme="http://wuqiansheng.xyz/tags/tensorflow/"/>
     
   </entry>
   

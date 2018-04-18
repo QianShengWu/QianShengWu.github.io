@@ -159,6 +159,187 @@ ga('send', 'pageview');
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-机器学习线性模型"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-04-18 10:28:00" datetime="2018-04-18T02:28:00.000Z"  itemprop="datePublished">2018-04-18</time>
+
+        
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/04/18/机器学习线性模型/">机器学习线性模型</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        <p>线性模型是机器学习最基础的模型，但却十分强大，很多复杂模型都是线性模型的变体。</p>
+<p>首先，最基础的线性模型为<span class="math inline">\(h=w^Tx+b\)</span>。</p>
+<p>根据数据算出一个分数(score),这就是回归模型，再加上一个阈值判断，如</p>
+<p><span class="math display">\[
+{\rm{h}} = \theta ({w^T}x) = \left\{ {\begin{array}{*{20}{c}}
+{1,{w^T}x \ge 0.5}\\
+{0,{w^T}x &lt; 0.5}
+\end{array}} \right.
+\]</span></p>
+<p>接下来我们分析不同的模型（主要从损失函数分析）：</p>
+<h3 id="回归模型">回归模型</h3>
+<ol type="1">
+<li><p>线性回归：</p>
+<p>损失函数采用<strong>平方损失</strong><br>
+<span class="math display">\[
+     L = \sum\limits_{i = 1}^N {({y_i} - {w^T}{x_i})}
+ \]</span> 求解，可以采用梯度下降法。</p>
+<p>写成向量的形式：</p>
+<p><span class="math display">\[
+L = (y-Xw)^T(y-Xw)
+\]</span></p>
+<p>对<span class="math inline">\(w\)</span>求导：</p>
+<p><span class="math display">\[
+ \frac{\partial L}{\partial w} = 2{X^T}(Xw - y)
+\]</span></p>
+<p>当<span class="math inline">\(X^TX\)</span>为满秩矩阵或正定矩阵，也就是可逆，得：</p>
+<p><span class="math display">\[
+w^*=(X^TX)^{-1}X^Ty
+\]</span></p>
+<p>最终的线性模型为：</p>
+<p><span class="math display">\[
+g = (X^TX)^{-1}X^Tyx
+\]</span></p></li>
+</ol>
+<h3 id="分类模型">分类模型</h3>
+<p>如何分类？直接讲，如果概率大于0.5，我们就认为他是1类，否则就是0类。</p>
+<ol type="1">
+<li><p>感知机<br>
+更多的感知机算法，详情见: <a href="http://wuqiansheng.xyz/2018/04/09/感知机算法/" class="uri">http://wuqiansheng.xyz/2018/04/09/感知机算法/</a>。<br>
+这里主要从损失函数方向推导：</p>
+<p>空间一个点到超平面的距离为：<br>
+<span class="math display">\[
+ \frac{1}{||w||}|w^Tx_i+b|
+\]</span></p>
+<p>对于误分类的点<span class="math inline">\((x_i,y_i)\)</span>：</p>
+<p>什么叫误分类呢，感知机的阈值定为0，其实0.5,0都一样，只不过是在<span class="math inline">\(b\)</span>上加个偏移。</p>
+<p>误分就是：<br>
+<span class="math display">\[
+-y_i(w^Tx_i+b)&gt;0
+\]</span></p>
+<p>那么损失函数为：</p>
+<p><span class="math display">\[
+L=\sum_{i}^{N} \max(0, y_i(w^Tx_i+b))
+\]</span></p>
+<p>换成另外一种形式，极小化：<br>
+<span class="math display">\[
+L=-\sum_{x_i \in M}{y_i(w^Tx_i+b)}
+\]</span></p>
+<p>采用梯度下降求解。 <span class="math display">\[
+ w = w+\eta y_ix_i \\
+ b = b+\eta y_i
+ \]</span> <span class="math inline">\(\eta\)</span>为更新步长，又称学习率。</p>
+<p>考虑它的对偶模型为：</p>
+<p>考虑最终的<span class="math inline">\(w,b\)</span>是修改n次后的增量，也就是： <span class="math display">\[
+ w=\sum_{i=1}^{N}\alpha_iy_ix_i \\
+ b=\sum_{i=1}^{N}\alpha_iy_i \\
+ \]</span> 其中<span class="math inline">\(\alpha_i=n_i\eta\)</span>。</p>
+<p>最终的<span class="math inline">\(h\)</span>如下： <span class="math display">\[
+ h=\sum_{i=1}^{N}\alpha_iy_ix_i\cdot x+b 
+ \]</span></p></li>
+<li><p>逻辑回归</p>
+<p>逻辑回归想解决的问题：把回归得到的结果转化为0,1的分类。上面介绍了一种粗略的解法， 用0.5做阈值，但是这样太过粗暴，不可导，不连续，求解比较困难。因此，引入sigmod函数 进行近似。<br>
+看图：<br>
+<img src="/images/pasted-7.png"></p>
+<p>sigmod函数为： <span class="math inline">\(\theta = \frac{1}{1+e^{-z}}\)</span></p>
+<p>则对于逻辑回归问题，hypothesis就是这样的形式：</p>
+<p><span class="math display">\[h(x)=\frac {1}{e^{−w^Tx}}\]</span></p>
+<p>那我们的目标就是求出这个预测函数h(x)，使它接近目标函数f(x)。</p>
+<p>我们令目标函数为<span class="math inline">\(f(y=+1|x)=\)</span>，则</p>
+<p><span class="math display">\[
+ p(y|x) = \left\{ {\begin{array}{*{20}{c}}
+ {f(x),y =  + 1}\\
+ {1 - f(x),y =  - 1}
+ \end{array}} \right.
+\]</span></p>
+<p>sigmod函数满足一个性质： <span class="math inline">\(h(-x)=1-h(x)\)</span></p>
+<p>那么似然函数为：</p>
+<p><span class="math display">\[likehood(h)=p(x_1)h(+x_1)\times        p(x_2)h(-x_x) \times \cdots p(x_N)h(-  
+x_N)\]</span></p>
+<p><span class="math inline">\(p(x_N)\)</span>对所有的h来说都是一样的，可以忽 略，再加上log, 那么损失函数为：</p>
+<p><span class="math display">\[
+ \mathop {\max }\limits_h =  
+ \log \prod\limits_{i = 1}^N {h({y_i}{x_i})}
+\]</span></p>
+<p>带入<span class="math inline">\(w\)</span>，</p>
+<p><span class="math display">\[
+\mathop {\max }\limits_w =   
+ \log \prod\limits_{i = 1}^N {\theta({y_i}{w^T}{x_i})}
+\]</span></p>
+<p>接着，我们将maximize问题转化为minimize问题，添加一个负号就行，并引入平均数操作<span class="math inline">\(\frac{1}{N}\)</span>：</p>
+<p><span class="math display">\[
+ \mathop {\min }\limits_w \frac{1}{N}\sum\limits_{i = 1}^N { - \ln \theta ({y_i}{w^T}{x_i})}
+\]</span></p>
+<p>带入<span class="math inline">\(\theta(s)=\frac{1}{1+exp(-s)}\)</span></p>
+<p>得到:</p>
+<p><span class="math display">\[
+ \mathop {\min }\limits_w \frac{1}{N}\sum\limits_{i = 1}^N {\ln (1 + \exp ( - {y_i}{w^T}{x_i}))}
+\]</span></p>
+<p>其中<strong><span class="math inline">\(\ln (1 + \exp ( - {y_i}{w^T}{x_i})\)</span></strong> 叫做交叉熵。</p>
+<p>当然还有其他的推导方法，周志华老师书上采用另外一种推导方法(p59)，</p>
+<p>也就是：</p>
+<p><span class="math display">\[
+\sum_i {y_i p(y=1|x_i) + (1-y_i)p(y=0|x_i)}
+\]</span></p></li>
+<li><p>支持向量机</p>
+<p>支持向量机求解的是获得最大支撑面。</p>
+<p>巴啦巴拉求解之后得到：</p>
+<p><span class="math display">\[
+\min_{w,b}\frac{1}{2}||w||^2 \\
+s.t.\; y_i(w^Tx_i+b) \ge 1, \; i = 1,2,...,N.
+\]</span></p>
+<p>损失函数就是:</p>
+<p><span class="math display">\[
+\sum_{i=1}^{N} \frac{1}{2}||w||^2 + max(0, 1-y_i(w^Tx_i+b))
+\]</span></p>
+<p>那SVM为什么不采用求解这个损失函数呢，因为部分不可导，求解也会失去核技巧的便利，以及svm对偶求解可以获得稀疏解，仅保存支撑向量即可。</p>
+<p>令<span class="math inline">\(s=w^Tx+b\)</span>,</p>
+<p>分类模型都是用连续可导函数去近似01损失函数，并且都是它的上界，图中还缺少了AdaBoost的指数损失函数<span class="math inline">\(e^{-ys}\)</span>。 <figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="\images\pasted-6.png" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure></p></li>
+</ol>
+<p>至此，线性模型介绍完毕。</p>
+
+    
+
+        <a href="/2018/04/18/机器学习线性模型/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/线性模型/">线性模型</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-leetcode-深度优先遍历"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -670,53 +851,6 @@ L(w, b) = -\sum_{x_i\in{M}}y_i(wx_i+b)
     
 
         <a href="/2017/04/03/Tensorflow-Solve-Mnist-2/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorflow/">tensorflow</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-Tensorflow-Solve-Mnist-1"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-04-03 15:27:44" datetime="2017-04-03T07:27:44.000Z"  itemprop="datePublished">2017-04-03</time>
-
-        
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/04/03/Tensorflow-Solve-Mnist-1/">Tensorflow Solve Mnist 1</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <h4 id="单层神经网络解决mnist识别">单层神经网络解决MNIST识别</h4>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line">mnist = input_data.read_data_sets(<span class="string">"MNIST_data/"</span>, one_hot=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">x = tf.placeholder(<span class="string">"float"</span>, [<span class="keyword">None</span>, <span class="number">784</span>])</span><br><span class="line">W = tf.Variable(tf.zeros([<span class="number">784</span>,<span class="number">10</span>]))</span><br><span class="line">b = tf.Variable(tf.zeros([<span class="number">10</span>]))</span><br><span class="line">y = tf.nn.softmax(tf.matmul(x,W) + b)</span><br><span class="line"></span><br><span class="line">y_ = tf.placeholder(<span class="string">"float"</span>, [<span class="keyword">None</span>,<span class="number">10</span>])</span><br><span class="line">cross_entropy = -tf.reduce_sum(y_*tf.log(y))</span><br><span class="line">train_step = tf.train.GradientDescentOptimizer(<span class="number">0.01</span>).minimize(cross_entropy)</span><br><span class="line"></span><br><span class="line">init = tf.initialize_all_variables()</span><br><span class="line">sess = tf.Session()</span><br><span class="line">sess.run(init)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">  batch_xs, batch_ys = mnist.train.next_batch(<span class="number">100</span>)</span><br><span class="line">  sess.run(train_step, feed_dict=&#123;x: batch_xs, y_: batch_ys&#125;)</span><br><span class="line"></span><br><span class="line">correct_prediction = tf.equal(tf.argmax(y,<span class="number">1</span>), tf.argmax(y_,<span class="number">1</span>))</span><br><span class="line">accuracy = tf.reduce_mean(tf.cast(correct_prediction, <span class="string">"float"</span>))</span><br><span class="line">print(sess.run(accuracy, feed_dict=&#123;x: mnist.test.images, y_: mnist.test.labels&#125;))</span><br></pre></td></tr></table></figure>
-
-    
-
-        <a href="/2017/04/03/Tensorflow-Solve-Mnist-1/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>

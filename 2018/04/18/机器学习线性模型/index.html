@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+<!-- Google Analytics -->
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'true', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    <meta name="google-site-verification" content="true">
+    
+    
+    
+    
+    <title>机器学习线性模型 | wuqiansheng</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="机器学习,线性模型">
+    <meta name="description" content="线性模型是机器学习最基础的模型，但却十分强大，很多复杂模型都是线性模型的变体。 首先，最基础的线性模型为\(h=w^Tx+b\)。 根据数据算出一个分数(score),这就是回归模型，再加上一个阈值判断，如 \[ {\rm{h}} = \theta ({w^T}x) = \left\{ {\begin{array}{*{20}{c}} {1,{w^T}x \ge 0.5}\\ {0,{">
+<meta name="keywords" content="机器学习,线性模型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习线性模型">
+<meta property="og:url" content="http://wuqiansheng.xyz/2018/04/18/机器学习线性模型/index.html">
+<meta property="og:site_name" content="wuqiansheng">
+<meta property="og:description" content="线性模型是机器学习最基础的模型，但却十分强大，很多复杂模型都是线性模型的变体。 首先，最基础的线性模型为\(h=w^Tx+b\)。 根据数据算出一个分数(score),这就是回归模型，再加上一个阈值判断，如 \[ {\rm{h}} = \theta ({w^T}x) = \left\{ {\begin{array}{*{20}{c}} {1,{w^T}x \ge 0.5}\\ {0,{">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://wuqiansheng.xyz/images/pasted-7.png">
+<meta property="og:image" content="http://wuqiansheng.xyz/images/pasted-6.png">
+<meta property="og:updated_time" content="2018-04-18T07:10:08.700Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习线性模型">
+<meta name="twitter:description" content="线性模型是机器学习最基础的模型，但却十分强大，很多复杂模型都是线性模型的变体。 首先，最基础的线性模型为\(h=w^Tx+b\)。 根据数据算出一个分数(score),这就是回归模型，再加上一个阈值判断，如 \[ {\rm{h}} = \theta ({w^T}x) = \left\{ {\begin{array}{*{20}{c}} {1,{w^T}x \ge 0.5}\\ {0,{">
+<meta name="twitter:image" content="http://wuqiansheng.xyz/images/pasted-7.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="wuqiansheng" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(https://avatars2.githubusercontent.com/u/7495016?s=460&v=4)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="http://7xso5r.com1.z0.glb.clouddn.com/avstar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">wqs</h5>
+          <a href="mailto:wuqiansheng@foxmail.com" title="wuqiansheng@foxmail.com" class="mail">wuqiansheng@foxmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/QianShengWu" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/friends"  >
+                <i class="icon icon-lg icon-link"></i>
+                友链
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">机器学习线性模型</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">机器学习线性模型</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-04-18T02:28:00.000Z" itemprop="datePublished" class="page-time">
+  2018-04-18
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#回归模型"><span class="post-toc-number">1.</span> <span class="post-toc-text">回归模型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#分类模型"><span class="post-toc-number">2.</span> <span class="post-toc-text">分类模型</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-机器学习线性模型"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">机器学习线性模型</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-04-18 10:28:00" datetime="2018-04-18T02:28:00.000Z"  itemprop="datePublished">2018-04-18</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>线性模型是机器学习最基础的模型，但却十分强大，很多复杂模型都是线性模型的变体。</p>
+<p>首先，最基础的线性模型为<span class="math inline">\(h=w^Tx+b\)</span>。</p>
+<p>根据数据算出一个分数(score),这就是回归模型，再加上一个阈值判断，如</p>
+<p><span class="math display">\[
+{\rm{h}} = \theta ({w^T}x) = \left\{ {\begin{array}{*{20}{c}}
+{1,{w^T}x \ge 0.5}\\
+{0,{w^T}x &lt; 0.5}
+\end{array}} \right.
+\]</span></p>
+<p>接下来我们分析不同的模型（主要从损失函数分析）：</p>
+<h3 id="回归模型">回归模型</h3>
+<ol type="1">
+<li><p>线性回归：</p>
+<p>损失函数采用<strong>平方损失</strong><br>
+<span class="math display">\[
+     L = \sum\limits_{i = 1}^N {({y_i} - {w^T}{x_i})}
+ \]</span> 求解，可以采用梯度下降法。</p>
+<p>写成向量的形式：</p>
+<p><span class="math display">\[
+L = (y-Xw)^T(y-Xw)
+\]</span></p>
+<p>对<span class="math inline">\(w\)</span>求导：</p>
+<p><span class="math display">\[
+ \frac{\partial L}{\partial w} = 2{X^T}(Xw - y)
+\]</span></p>
+<p>当<span class="math inline">\(X^TX\)</span>为满秩矩阵或正定矩阵，也就是可逆，得：</p>
+<p><span class="math display">\[
+w^*=(X^TX)^{-1}X^Ty
+\]</span></p>
+<p>最终的线性模型为：</p>
+<p><span class="math display">\[
+g = (X^TX)^{-1}X^Tyx
+\]</span></p></li>
+</ol>
+<h3 id="分类模型">分类模型</h3>
+<p>如何分类？直接讲，如果概率大于0.5，我们就认为他是1类，否则就是0类。</p>
+<ol type="1">
+<li><p>感知机<br>
+更多的感知机算法，详情见: <a href="http://wuqiansheng.xyz/2018/04/09/感知机算法/" class="uri">http://wuqiansheng.xyz/2018/04/09/感知机算法/</a>。<br>
+这里主要从损失函数方向推导：</p>
+<p>空间一个点到超平面的距离为：<br>
+<span class="math display">\[
+ \frac{1}{||w||}|w^Tx_i+b|
+\]</span></p>
+<p>对于误分类的点<span class="math inline">\((x_i,y_i)\)</span>：</p>
+<p>什么叫误分类呢，感知机的阈值定为0，其实0.5,0都一样，只不过是在<span class="math inline">\(b\)</span>上加个偏移。</p>
+<p>误分就是：<br>
+<span class="math display">\[
+-y_i(w^Tx_i+b)&gt;0
+\]</span></p>
+<p>那么损失函数为：</p>
+<p><span class="math display">\[
+L=\sum_{i}^{N} \max(0, y_i(w^Tx_i+b))
+\]</span></p>
+<p>换成另外一种形式，极小化：<br>
+<span class="math display">\[
+L=-\sum_{x_i \in M}{y_i(w^Tx_i+b)}
+\]</span></p>
+<p>采用梯度下降求解。 <span class="math display">\[
+ w = w+\eta y_ix_i \\
+ b = b+\eta y_i
+ \]</span> <span class="math inline">\(\eta\)</span>为更新步长，又称学习率。</p>
+<p>考虑它的对偶模型为：</p>
+<p>考虑最终的<span class="math inline">\(w,b\)</span>是修改n次后的增量，也就是： <span class="math display">\[
+ w=\sum_{i=1}^{N}\alpha_iy_ix_i \\
+ b=\sum_{i=1}^{N}\alpha_iy_i \\
+ \]</span> 其中<span class="math inline">\(\alpha_i=n_i\eta\)</span>。</p>
+<p>最终的<span class="math inline">\(h\)</span>如下： <span class="math display">\[
+ h=\sum_{i=1}^{N}\alpha_iy_ix_i\cdot x+b 
+ \]</span></p></li>
+<li><p>逻辑回归</p>
+<p>逻辑回归想解决的问题：把回归得到的结果转化为0,1的分类。上面介绍了一种粗略的解法， 用0.5做阈值，但是这样太过粗暴，不可导，不连续，求解比较困难。因此，引入sigmod函数 进行近似。<br>
+看图：<br>
+<img src="/images/pasted-7.png"></p>
+<p>sigmod函数为： <span class="math inline">\(\theta = \frac{1}{1+e^{-z}}\)</span></p>
+<p>则对于逻辑回归问题，hypothesis就是这样的形式：</p>
+<p><span class="math display">\[h(x)=\frac {1}{e^{−w^Tx}}\]</span></p>
+<p>那我们的目标就是求出这个预测函数h(x)，使它接近目标函数f(x)。</p>
+<p>我们令目标函数为<span class="math inline">\(f(y=+1|x)=\)</span>，则</p>
+<p><span class="math display">\[
+ p(y|x) = \left\{ {\begin{array}{*{20}{c}}
+ {f(x),y =  + 1}\\
+ {1 - f(x),y =  - 1}
+ \end{array}} \right.
+\]</span></p>
+<p>sigmod函数满足一个性质： <span class="math inline">\(h(-x)=1-h(x)\)</span></p>
+<p>那么似然函数为：</p>
+<p><span class="math display">\[likehood(h)=p(x_1)h(+x_1)\times        p(x_2)h(-x_x) \times \cdots p(x_N)h(-  
+x_N)\]</span></p>
+<p><span class="math inline">\(p(x_N)\)</span>对所有的h来说都是一样的，可以忽 略，再加上log, 那么损失函数为：</p>
+<p><span class="math display">\[
+ \mathop {\max }\limits_h =  
+ \log \prod\limits_{i = 1}^N {h({y_i}{x_i})}
+\]</span></p>
+<p>带入<span class="math inline">\(w\)</span>，</p>
+<p><span class="math display">\[
+\mathop {\max }\limits_w =   
+ \log \prod\limits_{i = 1}^N {\theta({y_i}{w^T}{x_i})}
+\]</span></p>
+<p>接着，我们将maximize问题转化为minimize问题，添加一个负号就行，并引入平均数操作<span class="math inline">\(\frac{1}{N}\)</span>：</p>
+<p><span class="math display">\[
+ \mathop {\min }\limits_w \frac{1}{N}\sum\limits_{i = 1}^N { - \ln \theta ({y_i}{w^T}{x_i})}
+\]</span></p>
+<p>带入<span class="math inline">\(\theta(s)=\frac{1}{1+exp(-s)}\)</span></p>
+<p>得到:</p>
+<p><span class="math display">\[
+ \mathop {\min }\limits_w \frac{1}{N}\sum\limits_{i = 1}^N {\ln (1 + \exp ( - {y_i}{w^T}{x_i}))}
+\]</span></p>
+<p>其中<strong><span class="math inline">\(\ln (1 + \exp ( - {y_i}{w^T}{x_i})\)</span></strong> 叫做交叉熵。</p>
+<p>当然还有其他的推导方法，周志华老师书上采用另外一种推导方法(p59)，</p>
+<p>也就是：</p>
+<p><span class="math display">\[
+\sum_i {y_i p(y=1|x_i) + (1-y_i)p(y=0|x_i)}
+\]</span></p></li>
+<li><p>支持向量机</p>
+<p>支持向量机求解的是获得最大支撑面。</p>
+<p>巴啦巴拉求解之后得到：</p>
+<p><span class="math display">\[
+\min_{w,b}\frac{1}{2}||w||^2 \\
+s.t.\; y_i(w^Tx_i+b) \ge 1, \; i = 1,2,...,N.
+\]</span></p>
+<p>损失函数就是:</p>
+<p><span class="math display">\[
+\sum_{i=1}^{N} \frac{1}{2}||w||^2 + max(0, 1-y_i(w^Tx_i+b))
+\]</span></p>
+<p>那SVM为什么不采用求解这个损失函数呢，因为部分不可导，求解也会失去核技巧的便利，以及svm对偶求解可以获得稀疏解，仅保存支撑向量即可。</p>
+<p>令<span class="math inline">\(s=w^Tx+b\)</span>,</p>
+<p>分类模型都是用连续可导函数去近似01损失函数，并且都是它的上界，图中还缺少了AdaBoost的指数损失函数<span class="math inline">\(e^{-ys}\)</span>。 <figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="\images\pasted-6.png" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure></p></li>
+</ol>
+<p>至此，线性模型介绍完毕。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-18T07:10:08.700Z" itemprop="dateUpdated">2018-04-18 15:10:08</time>
+</span><br>
+
+
+        
+        本文链接：<a href="/2018/04/18/机器学习线性模型/" target="_blank" rel="external">http://wuqiansheng.xyz/2018/04/18/机器学习线性模型/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="http://wuqiansheng.xyz">
+            <img src="http://7xso5r.com1.z0.glb.clouddn.com/avstar.jpg" alt="wqs">
+            wqs
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/线性模型/">线性模型</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wuqiansheng.xyz/2018/04/18/机器学习线性模型/&title=《机器学习线性模型》 — wuqiansheng&pic=http://7xso5r.com1.z0.glb.clouddn.com/avstar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wuqiansheng.xyz/2018/04/18/机器学习线性模型/&title=《机器学习线性模型》 — wuqiansheng&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wuqiansheng.xyz/2018/04/18/机器学习线性模型/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《机器学习线性模型》 — wuqiansheng&url=http://wuqiansheng.xyz/2018/04/18/机器学习线性模型/&via=http://wuqiansheng.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wuqiansheng.xyz/2018/04/18/机器学习线性模型/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/04/16/leetcode-深度优先遍历/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">leetcode-深度优先遍历</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'wqs';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢支持~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="http://7xso5r.com1.z0.glb.clouddn.com/weixin.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="http://7xso5r.com1.z0.glb.clouddn.com/weixin.png" data-alipay="http://7xso5r.com1.z0.glb.clouddn.com/zhifubao.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>wqs &copy; 2015 - 2018</span>
+            <span>
+                
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wuqiansheng.xyz/2018/04/18/机器学习线性模型/&title=《机器学习线性模型》 — wuqiansheng&pic=http://7xso5r.com1.z0.glb.clouddn.com/avstar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wuqiansheng.xyz/2018/04/18/机器学习线性模型/&title=《机器学习线性模型》 — wuqiansheng&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wuqiansheng.xyz/2018/04/18/机器学习线性模型/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《机器学习线性模型》 — wuqiansheng&url=http://wuqiansheng.xyz/2018/04/18/机器学习线性模型/&via=http://wuqiansheng.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wuqiansheng.xyz/2018/04/18/机器学习线性模型/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://wuqiansheng.xyz/2018/04/18/机器学习线性模型/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '一路走好！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '欢迎再来!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
