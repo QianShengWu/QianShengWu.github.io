@@ -159,6 +159,61 @@ ga('send', 'pageview');
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-剑指offer题解"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-12-22 19:12:00" datetime="2017-12-22T11:12:00.000Z"  itemprop="datePublished">2017-12-22</time>
+
+        
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/12/22/剑指offer题解/">牛客网《剑指Offer》66题 题解</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        <ol type="1">
+<li><p>字符串的排列</p>
+<blockquote>
+<p>输入一个字符串,按字典序打印出该字符串中字符的所有排列。例如输入字符串abc,则打印出由字符a,b,c所能排列出来的所有字符串abc,acb,bac,bca,cab和cba。</p>
+<p>输入描述:</p>
+<p>输入一个字符串,长度不超过9(可能有字符重复),字符只包括大小写字母。</p>
+</blockquote>
+<p>dfs， 但是牛客网有些尴尬，list的顺序还得保障，所以结果得sort一下。为了防止重复，用了set。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">Permutation</span><span class="params">(self, ss)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> ss: <span class="keyword">return</span> []</span><br><span class="line">        res = set()</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">dfs</span><span class="params">(res, ss, s)</span>:</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> ss: res.add(s)</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(len(ss)):</span><br><span class="line">                s = s + ss[i]</span><br><span class="line">                dfs(res, ss[:i] + ss[i + <span class="number">1</span>:], s)</span><br><span class="line">                s = s[:<span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line">        dfs(res, ss, <span class="string">''</span>)</span><br><span class="line">        <span class="keyword">return</span> sorted(list(res))</span><br></pre></td></tr></table></figure>
+<p>当然，这只是简单得写法。高级得用swap实现，详情见STL中得permutation经典算法。</p></li>
+</ol>
+    
+
+        <a href="/2017/12/22/剑指offer题解/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/剑指Offer/">剑指Offer</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-Tensorflow-Solve-Mnist-2"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -626,80 +681,12 @@ http://www.appinn.com/markdown/</p>
 
         </li>
     
-        <li class="post-list-item fade">
-            <article id="post-My-Blog-With-Django"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2016-04-06 14:58:30" datetime="2016-04-06T06:58:30.000Z"  itemprop="datePublished">2016-04-06</time>
-
-        
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/04/06/My-Blog-With-Django/">My Blog With Django</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <h1 id="environment">Environment</h1>
-<ul>
-<li>Python3.X</li>
-<li>Django1.9.X</li>
-<li>Sublime Text 3</li>
-</ul>
-<p>#Usage</p>
-<p>You can use the example by doing step by step below:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/wqs123/my_blog.git</span><br><span class="line">$ cd my_blog</span><br><span class="line">$ pip install -r requirement.txt</span><br><span class="line">$ python manage.py runserver</span><br></pre></td></tr></table></figure>
-<p>Then you will see <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Performing system checks...</span><br><span class="line"></span><br><span class="line">System check identified no issues (0 silenced).</span><br><span class="line">March 18, 2016 - 19:40:42</span><br><span class="line">Django version 1.9, using settings &apos;my_blog.settings&apos;</span><br><span class="line">Starting development server at http://127.0.0.1:8000/</span><br><span class="line">Quit the server with CTRL-BREAK.</span><br></pre></td></tr></table></figure></p>
-<p>Now open browser and input : http://127.0.0.1:8000/article/ ,you will see the main page like below: <figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="http://7xso5r.com2.z0.glb.clouddn.com/1458301520319.png" alt="Alt text" title="">
-                </div>
-                <div class="image-caption">Alt text</div>
-            </figure> and http://127.0.0.1:8000/admin/ you can see the admin page: <figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="http://7xso5r.com2.z0.glb.clouddn.com/1458301561606.png" alt="Alt text" title="">
-                </div>
-                <div class="image-caption">Alt text</div>
-            </figure></p>
-
-    
-
-        <a href="/2016/04/06/My-Blog-With-Django/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Blog/">Blog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Bootstrap/">Bootstrap</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Django1-9/">Django1.9</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python3-5/">Python3.5</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
     </ul>
 
     
 <nav id="page-nav">
     <div class="inner">
-    <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">下一页</a>
     </div>
 </nav>
 
