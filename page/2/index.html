@@ -159,6 +159,61 @@ ga('send', 'pageview');
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-LightGBM原理之论文详解"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-04-02 15:14:09" datetime="2018-04-02T07:14:09.000Z"  itemprop="datePublished">2018-04-02</time>
+
+        
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/04/02/LightGBM原理之论文详解/">LightGBM原理之论文详解</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        <p>提升树是利用加模型与前向分布算法实现学习的优化过程，它有一些高效实现，如XGBoost, pGBRT，GBDT等。其中GBDT采用负梯度作为划分的指标（信息增益），XGBoost则利用到二阶导数。他们共同的不足是，计算信息增益需要扫描所有样本，从而找到最优划分点。在面对大量数据或者特征维度很高时，他们的效率和扩展性很难使人满意。微软开源的LightGBM（基于GBDT的）则很好的解决这些问题，它主要包含两个算法：</p>
+<ol type="1">
+<li>GOSS（从减少样本角度）：排除大部分小梯度的样本，仅用剩下的样本计算信息增益。</li>
+<li>EFB（从减少特征角度）：捆绑互斥特征，也就是他们很少同时取非零值（也就是用一个合成特征代替）。</li>
+</ol>
+<p>前言：</p>
+<p>GBDT是基于决策树的集成算法，采用前向分布算法，在每次迭代中，都是通过负梯度拟合残差，从而学习一颗决策树，最耗时的步骤就是找最优划分点。一种流行的方法就是预排序，核心是在已经排好序的特征值上枚举所有可能的特征点。另一种改进则是直方图算法，他把连续特征值划分到k个桶中取，划分点则在这k个点中选取。k&lt;&lt;d，所以在内存消耗和训练速度都更佳，且在实际的数据集上表明，离散化的分裂点对最终的精度影响并不大，甚至会好一些。原因在于决策树本身就是一个弱学习器，采用Histogram算法会起到正则化的效果，有效地防止模型的过拟合。LightGBM也是基于直方图的。</p>
+<p>为了减少训练数据，最直接的方法就是欠采样(down sample)，比如说过滤掉权重低于阈值的样本。SGB(随机梯度下降)采用的是在每轮迭代中选取随机子集进行训练弱分类器，AdaBoost则采用的是动态调整采样率。SGB可以应用到GBDT，但会影响精度，其他的则不能直接引入，因为GBDT中没有这种内在的权重。</p>
+<p>为了减少特征，通常做的是PCA降维，但是这些方法都假设特征是冗余的，这并不一直正确。</p>
+<p>一般大型数据集都是稀疏的，基于pre-sorted的GBDT可以通过忽略零值特征，从而减少训练代价。但是，基于histogram的则没有针对稀疏特性的优化方案，它只是计算累加值，不管你是0还是非0。所以，利用稀疏性的GBDT是很必要的。</p>
+<p>接下来就要细细说说这两个算法。</p>
+    
+
+        <a href="/2018/04/02/LightGBM原理之论文详解/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/EFB/">EFB</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GBDT/">GBDT</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GOSS/">GOSS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LightGBM/">LightGBM</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-剑指offer题解"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -624,56 +679,6 @@ http://www.appinn.com/markdown/</p>
     <div class="post-footer">
         
 	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生活随笔/">生活随笔</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-JavaWeb-Mysql"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2016-04-06 15:14:09" datetime="2016-04-06T07:14:09.000Z"  itemprop="datePublished">2016-04-06</time>
-
-        
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/04/06/JavaWeb-Mysql/">解决JavaWeb和Mysql中文乱码问题</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <p>首先同一采用utf-8</p>
-<p>1.数据库属性改为utf-8 必要时更改mysql的配置文件： default-character-set=utf8 character-set-server=utf8</p>
-<p>2.连接数据库：jdbc:mysql://localhost:3306/db_bug?useUnicode=true&amp;characterEncoding=utf8</p>
-<p>3.request中文乱码： get请求的编码方式为:ISO-8859-1 doGet方法：例子：String spotName=new String(request.getParameter(“spotName”).getBytes(“ISO-8859-1”),“UTF-8”); doPost方法:request.setCharacterEncoding(“UTF-8”);</p>
-<p>4.response中文乱码：response.setCharacterEncoding(“UTF-8”);</p>
-
-    
-
-        <a href="/2016/04/06/JavaWeb-Mysql/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaWeb/">JavaWeb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mysql/">Mysql</a></li></ul>
 
     </div>
     

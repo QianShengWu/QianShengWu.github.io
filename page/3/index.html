@@ -159,6 +159,56 @@ ga('send', 'pageview');
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-JavaWeb-Mysql"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2016-04-06 15:14:09" datetime="2016-04-06T07:14:09.000Z"  itemprop="datePublished">2016-04-06</time>
+
+        
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2016/04/06/JavaWeb-Mysql/">解决JavaWeb和Mysql中文乱码问题</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        <p>首先同一采用utf-8</p>
+<p>1.数据库属性改为utf-8 必要时更改mysql的配置文件： default-character-set=utf8 character-set-server=utf8</p>
+<p>2.连接数据库：jdbc:mysql://localhost:3306/db_bug?useUnicode=true&amp;characterEncoding=utf8</p>
+<p>3.request中文乱码： get请求的编码方式为:ISO-8859-1 doGet方法：例子：String spotName=new String(request.getParameter(“spotName”).getBytes(“ISO-8859-1”),“UTF-8”); doPost方法:request.setCharacterEncoding(“UTF-8”);</p>
+<p>4.response中文乱码：response.setCharacterEncoding(“UTF-8”);</p>
+
+    
+
+        <a href="/2016/04/06/JavaWeb-Mysql/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaWeb/">JavaWeb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mysql/">Mysql</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-My-Blog-With-Django"
   class="article-card article-type-post" itemprop="blogPost">
 

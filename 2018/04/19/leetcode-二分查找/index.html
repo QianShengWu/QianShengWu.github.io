@@ -40,7 +40,7 @@ ga('send', 'pageview');
 <meta property="og:description" content="二分查找  寻找旋转排序数组中的最小值 假设一个按照升序排列的有序数组从某未知的位置旋转。 （比如 0 1 2 4 5 6 7 可能变成 4 5 6 7 0 1 2）。 找到其中最小的元素。 你可以假设数组中不存在重复的元素。  首先判断\(m\) 在左侧蓝色区域，还是右侧橙色区域，在蓝色区域说明最小值在右侧，令\(l=m+1\)，在橙色区域说明最小值在左侧，令\(h=m\)。这里">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://wuqiansheng.xyz/images/binarysearch.png">
-<meta property="og:updated_time" content="2018-04-19T06:34:54.196Z">
+<meta property="og:updated_time" content="2018-04-20T09:26:04.973Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="leetcode-二分查找">
 <meta name="twitter:description" content="二分查找  寻找旋转排序数组中的最小值 假设一个按照升序排列的有序数组从某未知的位置旋转。 （比如 0 1 2 4 5 6 7 可能变成 4 5 6 7 0 1 2）。 找到其中最小的元素。 你可以假设数组中不存在重复的元素。  首先判断\(m\) 在左侧蓝色区域，还是右侧橙色区域，在蓝色区域说明最小值在右侧，令\(l=m+1\)，在橙色区域说明最小值在左侧，令\(h=m\)。这里">
@@ -208,7 +208,7 @@ ga('send', 'pageview');
 <p>也就是说：<span class="math inline">\(nums[m]==nums[h]\)</span></p>
 <p>此时只需简单的令<span class="math inline">\(h=h-1\)</span>即可，继续查找剩下的部分。</p>
 <p>当然，如果数组没有旋转会怎样，直接返回<span class="math inline">\(nums[l]\)</span>就行，上述的算法可以进行优化，</p>
-<p><span class="math inline">\(return \;nums[l] if nums[l] \le nums[h]\)</span></p>
+<p><span class="math inline">\(return \; nums[l] \; if\; nums[l] \le nums[h]\)</span></p>
 <p>Python:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findMin</span><span class="params">(self, nums)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type nums: List[int]</span></span><br><span class="line"><span class="string">        :rtype: int</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        l, h = <span class="number">0</span>, len(nums) <span class="number">-1</span></span><br><span class="line">        <span class="keyword">while</span> l &lt; h:</span><br><span class="line">            m = (l + h) &gt;&gt; <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> nums[m] &gt; nums[h]: l = m + <span class="number">1</span></span><br><span class="line">            <span class="keyword">elif</span> nums[m] &lt; nums[h]: h = m</span><br><span class="line">        <span class="keyword">return</span> nums[l]</span><br></pre></td></tr></table></figure>
 <p>​</p></li>
@@ -267,7 +267,7 @@ ga('send', 'pageview');
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2018-04-19T06:34:54.196Z" itemprop="dateUpdated">2018-04-19 14:34:54</time>
+    最后更新时间：<time datetime="2018-04-20T09:26:04.973Z" itemprop="dateUpdated">2018-04-20 17:26:04</time>
 </span><br>
 
 
@@ -350,7 +350,14 @@ ga('send', 'pageview');
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/04/20/概率问题求解/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">概率题求解</h4>
+      </a>
+    </div>
   
 
   
