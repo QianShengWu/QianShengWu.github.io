@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wuqiansheng.xyz/"/>
-  <updated>2018-04-24T03:05:51.472Z</updated>
+  <updated>2018-04-24T03:17:11.424Z</updated>
   <id>http://wuqiansheng.xyz/</id>
   
   <author>
@@ -21,17 +21,17 @@
     <link href="http://wuqiansheng.xyz/2018/04/24/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97-%E7%89%B9%E5%BE%81%E9%87%8D%E8%A6%81%E6%80%A7%E8%AE%A1%E7%AE%97/"/>
     <id>http://wuqiansheng.xyz/2018/04/24/随机森林-特征重要性计算/</id>
     <published>2018-04-24T02:42:00.000Z</published>
-    <updated>2018-04-24T03:05:51.472Z</updated>
+    <updated>2018-04-24T03:17:11.424Z</updated>
     
-    <content type="html"><![CDATA[<p>特征重要性的计算是维度约简的一种方法，对于随机森林，通常可以用基尼指数（Gini index）或者袋外数据（OOB）错误率作为评价指标来衡量。</p><p>基于Gini指数的评价 <figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="\images\pasted-9.png" alt="" title="">                </div>                <div class="image-caption"></div>            </figure></p><p>接着我们看看sklearn中是怎样实现的：</p><p><strong>scikit-learn-master/sklearn/tree</strong></p><pre><code>cpdef compute_feature_importances(self, normalize=True):        &quot;&quot;&quot;Computes the importance of each feature (aka variable).&quot;&quot;&quot;        cdef Node* left        cdef Node* right        cdef Node* nodes = self.nodes        cdef Node* node = nodes        cdef Node* end_node = node + self.node_count        cdef double normalizer = 0.        cdef np.ndarray[np.float64_t, ndim=1] importances        importances = np.zeros((self.n_features,))        cdef DOUBLE_t* importance_data = &lt;DOUBLE_t*&gt;importances.data        with nogil:            while node != end_node:                if node.left_child != _TREE_LEAF:                    # ... and node.right_child != _TREE_LEAF:                    left = &amp;nodes[node.left_child]                    right = &amp;nodes[node.right_child]                    importance_data[node.feature] += (                        node.weighted_n_node_samples * node.impurity -                        left.weighted_n_node_samples * left.impurity -                        right.weighted_n_node_samples * right.impurity)                node += 1        importances /= nodes[0].weighted_n_node_samples        if normalize:            normalizer = np.sum(importances)            if normalizer &gt; 0.0:                # Avoid dividing by zero (e.g., when root is pure)                importances /= normalizer        return importances</code></pre>]]></content>
+    <content type="html"><![CDATA[<p>特征重要性的计算是维度约简的一种方法，对于随机森林，通常可以用基尼指数（Gini index）或者袋外数据（OOB）错误率作为评价指标来衡量。</p><h3 id="基于gini指数的评价">基于Gini指数的评价</h3><p><img src="\images\pasted-9.png"></p><p>接着我们看看sklearn中是怎样实现的：</p><p><strong>scikit-learn-master/sklearn/tree</strong></p><pre><code>cpdef compute_feature_importances(self, normalize=True):        &quot;&quot;&quot;Computes the importance of each feature (aka variable).&quot;&quot;&quot;        cdef Node* left        cdef Node* right        cdef Node* nodes = self.nodes        cdef Node* node = nodes        cdef Node* end_node = node + self.node_count        cdef double normalizer = 0.        cdef np.ndarray[np.float64_t, ndim=1] importances        importances = np.zeros((self.n_features,))        cdef DOUBLE_t* importance_data = &lt;DOUBLE_t*&gt;importances.data        with nogil:            while node != end_node:                if node.left_child != _TREE_LEAF:                    # ... and node.right_child != _TREE_LEAF:                    left = &amp;nodes[node.left_child]                    right = &amp;nodes[node.right_child]                    importance_data[node.feature] += (                        node.weighted_n_node_samples * node.impurity -                        left.weighted_n_node_samples * left.impurity -                        right.weighted_n_node_samples * right.impurity)                node += 1        importances /= nodes[0].weighted_n_node_samples        if normalize:            normalizer = np.sum(importances)            if normalizer &gt; 0.0:                # Avoid dividing by zero (e.g., when root is pure)                importances /= normalizer        return importances</code></pre><h3 id="基于袋外估计的评价">基于袋外估计的评价:</h3><p>在评价oob中第j个特征时，替换<span class="math inline">\(X_ij\)</span>为随机排列，然后得到第j个特征的重要性。</p><p><img src="\images\pasted-12.png"></p>]]></content>
     
     <summary type="html">
     
       
       
         &lt;p&gt;特征重要性的计算是维度约简的一种方法，对于随机森林，通常可以用基尼指数（Gini index）或者袋外数据（OOB）错误率作为评价指标来衡量。&lt;/p&gt;
-&lt;p&gt;基于Gini指数的评价 &lt;figure class=&quot;image-bubble&quot;&gt;
-               
+&lt;h3 id=&quot;基于gini指数的评价&quot;&gt;基于Gini指数的评价&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;\images\
       
     
     </summary>
@@ -269,9 +269,9 @@
     
       <category term="leetcode" scheme="http://wuqiansheng.xyz/tags/leetcode/"/>
     
-      <category term="树" scheme="http://wuqiansheng.xyz/tags/%E6%A0%91/"/>
-    
       <category term="dfs" scheme="http://wuqiansheng.xyz/tags/dfs/"/>
+    
+      <category term="树" scheme="http://wuqiansheng.xyz/tags/%E6%A0%91/"/>
     
       <category term="c++" scheme="http://wuqiansheng.xyz/tags/c/"/>
     

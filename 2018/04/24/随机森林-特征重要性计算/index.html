@@ -32,19 +32,20 @@ ga('send', 'pageview');
     
     
     <meta name="keywords" content="随机森林,特征重要性">
-    <meta name="description" content="特征重要性的计算是维度约简的一种方法，对于随机森林，通常可以用基尼指数（Gini index）或者袋外数据（OOB）错误率作为评价指标来衡量。 基于Gini指数的评价                                                                                                            接着我们看看s">
+    <meta name="description" content="特征重要性的计算是维度约简的一种方法，对于随机森林，通常可以用基尼指数（Gini index）或者袋外数据（OOB）错误率作为评价指标来衡量。 基于Gini指数的评价  接着我们看看sklearn中是怎样实现的： scikit-learn-master/sklearn/tree cpdef compute_feature_importances(self, normalize=True)">
 <meta name="keywords" content="随机森林,特征重要性">
 <meta property="og:type" content="article">
 <meta property="og:title" content="随机森林-特征重要性计算">
 <meta property="og:url" content="http://wuqiansheng.xyz/2018/04/24/随机森林-特征重要性计算/index.html">
 <meta property="og:site_name" content="wuqiansheng">
-<meta property="og:description" content="特征重要性的计算是维度约简的一种方法，对于随机森林，通常可以用基尼指数（Gini index）或者袋外数据（OOB）错误率作为评价指标来衡量。 基于Gini指数的评价                                                                                                            接着我们看看s">
+<meta property="og:description" content="特征重要性的计算是维度约简的一种方法，对于随机森林，通常可以用基尼指数（Gini index）或者袋外数据（OOB）错误率作为评价指标来衡量。 基于Gini指数的评价  接着我们看看sklearn中是怎样实现的： scikit-learn-master/sklearn/tree cpdef compute_feature_importances(self, normalize=True)">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://wuqiansheng.xyz/images/pasted-9.png">
-<meta property="og:updated_time" content="2018-04-24T03:05:51.472Z">
+<meta property="og:image" content="http://wuqiansheng.xyz/images/pasted-12.png">
+<meta property="og:updated_time" content="2018-04-24T03:17:11.424Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="随机森林-特征重要性计算">
-<meta name="twitter:description" content="特征重要性的计算是维度约简的一种方法，对于随机森林，通常可以用基尼指数（Gini index）或者袋外数据（OOB）错误率作为评价指标来衡量。 基于Gini指数的评价                                                                                                            接着我们看看s">
+<meta name="twitter:description" content="特征重要性的计算是维度约简的一种方法，对于随机森林，通常可以用基尼指数（Gini index）或者袋外数据（OOB）错误率作为评价指标来衡量。 基于Gini指数的评价  接着我们看看sklearn中是怎样实现的： scikit-learn-master/sklearn/tree cpdef compute_feature_importances(self, normalize=True)">
 <meta name="twitter:image" content="http://wuqiansheng.xyz/images/pasted-9.png">
     
         <link rel="alternate" type="application/atom+xml" title="wuqiansheng" href="/atom.xml">
@@ -168,6 +169,13 @@ ga('send', 'pageview');
 
 <div class="container body-wrap">
     
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#基于gini指数的评价"><span class="post-toc-number">1.</span> <span class="post-toc-text">基于Gini指数的评价</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#基于袋外估计的评价"><span class="post-toc-number">2.</span> <span class="post-toc-text">基于袋外估计的评价:</span></a></li></ol>
+        </nav>
+    </aside>
+
 
 <article id="post-随机森林-特征重要性计算"
   class="post-article article-type-post fade" itemprop="blogPost">
@@ -189,13 +197,8 @@ ga('send', 'pageview');
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <p>特征重要性的计算是维度约简的一种方法，对于随机森林，通常可以用基尼指数（Gini index）或者袋外数据（OOB）错误率作为评价指标来衡量。</p>
-<p>基于Gini指数的评价 <figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="\images\pasted-9.png" alt="" title="">
-                </div>
-                <div class="image-caption"></div>
-            </figure></p>
+<h3 id="基于gini指数的评价">基于Gini指数的评价</h3>
+<p><img src="\images\pasted-9.png"></p>
 <p>接着我们看看sklearn中是怎样实现的：</p>
 <p><strong>scikit-learn-master/sklearn/tree</strong></p>
 <pre><code>cpdef compute_feature_importances(self, normalize=True):
@@ -235,6 +238,9 @@ ga('send', 'pageview');
                 importances /= normalizer
 
         return importances</code></pre>
+<h3 id="基于袋外估计的评价">基于袋外估计的评价:</h3>
+<p>在评价oob中第j个特征时，替换<span class="math inline">\(X_ij\)</span>为随机排列，然后得到第j个特征的重要性。</p>
+<p><img src="\images\pasted-12.png"></p>
 
         </div>
 
@@ -243,7 +249,7 @@ ga('send', 'pageview');
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2018-04-24T03:05:51.472Z" itemprop="dateUpdated">2018-04-24 11:05:51</time>
+    最后更新时间：<time datetime="2018-04-24T03:17:11.424Z" itemprop="dateUpdated">2018-04-24 11:17:11</time>
 </span><br>
 
 
@@ -556,5 +562,5 @@ MathJax.Hub.Queue(function() {
 
 
 
-</body>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/"});</script></body>
 </html>
