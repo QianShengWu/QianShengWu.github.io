@@ -25,24 +25,31 @@ ga('send', 'pageview');
     
     
     
-    <title>概率题求解 | wuqiansheng</title>
+    <title>正则化为什么能防止过拟合 | wuqiansheng</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="">
-    <meta name="description" content="设随机变量\(x_1,x_2,\cdots,x_n\)相互独立,且都服从(0,1)上的均匀分布. 求\(U=\max\{x_1,x_2,\cdots,x_n\}\)数学期望. 令\(x_i \le u \; for \; all \; i = 1,2,\cdots, n\) 分布函数 \(F(u)=P(U \le u)=P(x_1 \le u)\times P(x_2 \le u) \ti">
+    <meta name="description" content="正则化就是控制模型复杂度的一种办法 解释1：PAC学习泛化界解释 奥坎姆剃刀理论：优先选择拟合数据的最简单的假设。 简单的模型才是最好的。 解释2：偏差方差分解 过拟合发生在模型完美拟合训练数据，对新的数据效果不好。 正则化通过简化模型降低方差，会增加偏差。 解释3：贝叶斯先验 先验知识在数据少的时候，可以防止过拟合 通俗的解释： 过拟合的时候，拟合函数的系数往往非常大，需要顾忌每">
 <meta property="og:type" content="article">
-<meta property="og:title" content="概率题求解">
-<meta property="og:url" content="http://wuqiansheng.xyz/2018/04/20/概率问题求解/index.html">
+<meta property="og:title" content="正则化为什么能防止过拟合">
+<meta property="og:url" content="http://wuqiansheng.xyz/2018/08/14/正则化为什么能防止过拟合/index.html">
 <meta property="og:site_name" content="wuqiansheng">
-<meta property="og:description" content="设随机变量\(x_1,x_2,\cdots,x_n\)相互独立,且都服从(0,1)上的均匀分布. 求\(U=\max\{x_1,x_2,\cdots,x_n\}\)数学期望. 令\(x_i \le u \; for \; all \; i = 1,2,\cdots, n\) 分布函数 \(F(u)=P(U \le u)=P(x_1 \le u)\times P(x_2 \le u) \ti">
+<meta property="og:description" content="正则化就是控制模型复杂度的一种办法 解释1：PAC学习泛化界解释 奥坎姆剃刀理论：优先选择拟合数据的最简单的假设。 简单的模型才是最好的。 解释2：偏差方差分解 过拟合发生在模型完美拟合训练数据，对新的数据效果不好。 正则化通过简化模型降低方差，会增加偏差。 解释3：贝叶斯先验 先验知识在数据少的时候，可以防止过拟合 通俗的解释： 过拟合的时候，拟合函数的系数往往非常大，需要顾忌每">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-14T07:21:47.633Z">
+<meta property="og:image" content="http://wuqiansheng.xyz/images/pasted-14.png">
+<meta property="og:image" content="http://wuqiansheng.xyz/images/pasted-15.png">
+<meta property="og:image" content="http://wuqiansheng.xyz/images/pasted-16.png">
+<meta property="og:image" content="http://wuqiansheng.xyz/images/pasted-17.png">
+<meta property="og:image" content="http://wuqiansheng.xyz/images/pasted-18.png">
+<meta property="og:image" content="http://wuqiansheng.xyz/images/pasted-19.png">
+<meta property="og:updated_time" content="2018-08-14T07:26:39.594Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="概率题求解">
-<meta name="twitter:description" content="设随机变量\(x_1,x_2,\cdots,x_n\)相互独立,且都服从(0,1)上的均匀分布. 求\(U=\max\{x_1,x_2,\cdots,x_n\}\)数学期望. 令\(x_i \le u \; for \; all \; i = 1,2,\cdots, n\) 分布函数 \(F(u)=P(U \le u)=P(x_1 \le u)\times P(x_2 \le u) \ti">
+<meta name="twitter:title" content="正则化为什么能防止过拟合">
+<meta name="twitter:description" content="正则化就是控制模型复杂度的一种办法 解释1：PAC学习泛化界解释 奥坎姆剃刀理论：优先选择拟合数据的最简单的假设。 简单的模型才是最好的。 解释2：偏差方差分解 过拟合发生在模型完美拟合训练数据，对新的数据效果不好。 正则化通过简化模型降低方差，会增加偏差。 解释3：贝叶斯先验 先验知识在数据少的时候，可以防止过拟合 通俗的解释： 过拟合的时候，拟合函数的系数往往非常大，需要顾忌每">
+<meta name="twitter:image" content="http://wuqiansheng.xyz/images/pasted-14.png">
     
         <link rel="alternate" type="application/atom+xml" title="wuqiansheng" href="/atom.xml">
     
@@ -123,7 +130,7 @@ ga('send', 'pageview');
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">概率题求解</div>
+        <div class="flex-col header-title ellipsis">正则化为什么能防止过拟合</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -145,11 +152,11 @@ ga('send', 'pageview');
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">概率题求解</h1>
+        <h1 class="title">正则化为什么能防止过拟合</h1>
         <h5 class="subtitle">
             
-                <time datetime="2018-04-20T09:26:31.000Z" itemprop="datePublished" class="page-time">
-  2018-04-20
+                <time datetime="2018-08-14T07:22:36.000Z" itemprop="datePublished" class="page-time">
+  2018-08-14
 </time>
 
 
@@ -165,14 +172,21 @@ ga('send', 'pageview');
 
 <div class="container body-wrap">
     
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#解释1pac学习泛化界解释"><span class="post-toc-number">1.</span> <span class="post-toc-text">解释1：PAC学习泛化界解释</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#解释2偏差方差分解"><span class="post-toc-number">2.</span> <span class="post-toc-text">解释2：偏差方差分解</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#解释3贝叶斯先验"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">解释3：贝叶斯先验</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#通俗的解释"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">通俗的解释：</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
 
-<article id="post-概率问题求解"
+
+<article id="post-正则化为什么能防止过拟合"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">概率题求解</h1>
+        <h1 class="post-card-title">正则化为什么能防止过拟合</h1>
         <div class="post-meta">
-            <time class="post-time" title="2018-04-20 17:26:31" datetime="2018-04-20T09:26:31.000Z"  itemprop="datePublished">2018-04-20</time>
+            <time class="post-time" title="2018-08-14 15:22:36" datetime="2018-08-14T07:22:36.000Z"  itemprop="datePublished">2018-08-14</time>
 
             
 
@@ -185,19 +199,25 @@ ga('send', 'pageview');
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>设随机变量<span class="math inline">\(x_1,x_2,\cdots,x_n\)</span>相互独立,且都服从(0,1)上的均匀分布.<br>
-求<span class="math inline">\(U=\max\{x_1,x_2,\cdots,x_n\}\)</span>数学期望.</p>
-<p>令<span class="math inline">\(x_i \le u \; for \; all \; i = 1,2,\cdots, n\)</span></p>
-<p>分布函数</p>
-<p><span class="math inline">\(F(u)=P(U \le u)=P(x_1 \le u)\times P(x_2 \le u) \times \cdots P(x_n \le u)\)</span></p>
-<p>因为 <span class="math inline">\(P(x_i \le u)=u\)</span></p>
-<p>所以 <span class="math inline">\(F(u)=u^n\)</span></p>
-<p>概率密度为:</p>
-<p><span class="math inline">\(f(u)=nu^{n-1}\)</span></p>
-<p>然后求[0,1]上的积分，也就是期望(注意u都是(0,1)上面的)：</p>
-<p><span class="math display">\[
-\int_0^1 {n{u^{n - 1}}udu}=\frac{n}{n+1}
-\]</span></p>
+            <p>正则化就是控制模型复杂度的一种办法</p>
+<h3 id="解释1pac学习泛化界解释">解释1：PAC学习泛化界解释</h3>
+<p>奥坎姆剃刀理论：优先选择拟合数据的最简单的假设。 简单的模型才是最好的。</p>
+<h3 id="解释2偏差方差分解">解释2：偏差方差分解</h3>
+<p>过拟合发生在模型完美拟合训练数据，对新的数据效果不好。 正则化通过简化模型降低方差，会增加偏差。</p>
+<h4 id="解释3贝叶斯先验">解释3：贝叶斯先验</h4>
+<p>先验知识在数据少的时候，可以防止过拟合</p>
+<h4 id="通俗的解释">通俗的解释：</h4>
+<p>过拟合的时候，拟合函数的系数往往非常大，需要顾忌每一个点，最终形成的拟合函数波动很大。在某些很小的区间里，函数值的变化很剧烈。这就意味着函数在某些小区间里的导数值（绝对值）非常大，由于自变量值可大可小，所以只有系数足够大，才能保证导数值很大。 而正则化是通过约束参数的范数使其不要太大，所以可以在一定程度上减少过拟合情况。</p>
+<p>L2权重衰减</p>
+<p><img src="/images/pasted-14.png"></p>
+<p><img src="/images/pasted-15.png"></p>
+<p><img src="/images/pasted-16.png"></p>
+<p>1−ηλ/n小于1，它的效果是减小w，这也就是权重衰减（weight decay）的由来。</p>
+<p>L1正则</p>
+<p><img src="/images/pasted-17.png"></p>
+<p><img src="/images/pasted-18.png"></p>
+<p><img src="/images/pasted-19.png"></p>
+<p>η * λ * sgn(w)/n这一项。当w为正时，更新后的w变小。当w为负时，更新后的w变大——因此它的效果就是让w往0靠，使网络中的权重尽可能为0，也就相当于减小了网络复杂度，防止过拟合。可以规定sgn(0)=0。</p>
 
         </div>
 
@@ -206,12 +226,12 @@ ga('send', 'pageview');
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2018-08-14T07:21:47.633Z" itemprop="dateUpdated">2018-08-14 15:21:47</time>
+    最后更新时间：<time datetime="2018-08-14T07:26:39.594Z" itemprop="dateUpdated">2018-08-14 15:26:39</time>
 </span><br>
 
 
         
-        本文链接：<a href="/2018/04/20/概率问题求解/" target="_blank" rel="external">http://wuqiansheng.xyz/2018/04/20/概率问题求解/</a>
+        本文链接：<a href="/2018/08/14/正则化为什么能防止过拟合/" target="_blank" rel="external">http://wuqiansheng.xyz/2018/08/14/正则化为什么能防止过拟合/</a>
         
     </div>
     
@@ -240,7 +260,7 @@ ga('send', 'pageview');
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wuqiansheng.xyz/2018/04/20/概率问题求解/&title=《概率题求解》 — wuqiansheng&pic=http://7xso5r.com1.z0.glb.clouddn.com/avstar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wuqiansheng.xyz/2018/08/14/正则化为什么能防止过拟合/&title=《正则化为什么能防止过拟合》 — wuqiansheng&pic=http://7xso5r.com1.z0.glb.clouddn.com/avstar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -250,22 +270,22 @@ ga('send', 'pageview');
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wuqiansheng.xyz/2018/04/20/概率问题求解/&title=《概率题求解》 — wuqiansheng&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wuqiansheng.xyz/2018/08/14/正则化为什么能防止过拟合/&title=《正则化为什么能防止过拟合》 — wuqiansheng&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wuqiansheng.xyz/2018/04/20/概率问题求解/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wuqiansheng.xyz/2018/08/14/正则化为什么能防止过拟合/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《概率题求解》 — wuqiansheng&url=http://wuqiansheng.xyz/2018/04/20/概率问题求解/&via=http://wuqiansheng.xyz" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《正则化为什么能防止过拟合》 — wuqiansheng&url=http://wuqiansheng.xyz/2018/08/14/正则化为什么能防止过拟合/&via=http://wuqiansheng.xyz" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wuqiansheng.xyz/2018/04/20/概率问题求解/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wuqiansheng.xyz/2018/08/14/正则化为什么能防止过拟合/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -285,21 +305,14 @@ ga('send', 'pageview');
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between">
-  
-    <div class="waves-block waves-effect prev">
-      <a href="/2018/04/24/随机森林-特征重要性计算/" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">随机森林-特征重要性计算</h4>
-      </a>
-    </div>
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
   
 
   
     <div class="waves-block waves-effect next">
-      <a href="/2018/04/19/leetcode-二分查找/" id="post-next" class="post-nav-link">
+      <a href="/2018/06/12/梯度下降取负梯度的简单证明/" id="post-next" class="post-nav-link">
         <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">leetcode-二分查找</h4>
+        <h4 class="title">梯度下降取负梯度的简单证明</h4>
       </a>
     </div>
   
@@ -404,7 +417,7 @@ ga('send', 'pageview');
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wuqiansheng.xyz/2018/04/20/概率问题求解/&title=《概率题求解》 — wuqiansheng&pic=http://7xso5r.com1.z0.glb.clouddn.com/avstar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wuqiansheng.xyz/2018/08/14/正则化为什么能防止过拟合/&title=《正则化为什么能防止过拟合》 — wuqiansheng&pic=http://7xso5r.com1.z0.glb.clouddn.com/avstar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -414,22 +427,22 @@ ga('send', 'pageview');
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wuqiansheng.xyz/2018/04/20/概率问题求解/&title=《概率题求解》 — wuqiansheng&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wuqiansheng.xyz/2018/08/14/正则化为什么能防止过拟合/&title=《正则化为什么能防止过拟合》 — wuqiansheng&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wuqiansheng.xyz/2018/04/20/概率问题求解/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wuqiansheng.xyz/2018/08/14/正则化为什么能防止过拟合/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《概率题求解》 — wuqiansheng&url=http://wuqiansheng.xyz/2018/04/20/概率问题求解/&via=http://wuqiansheng.xyz" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《正则化为什么能防止过拟合》 — wuqiansheng&url=http://wuqiansheng.xyz/2018/08/14/正则化为什么能防止过拟合/&via=http://wuqiansheng.xyz" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wuqiansheng.xyz/2018/04/20/概率问题求解/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wuqiansheng.xyz/2018/08/14/正则化为什么能防止过拟合/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -440,7 +453,7 @@ ga('send', 'pageview');
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://wuqiansheng.xyz/2018/04/20/概率问题求解/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://wuqiansheng.xyz/2018/08/14/正则化为什么能防止过拟合/" alt="微信分享二维码">
 </div>
 
 
